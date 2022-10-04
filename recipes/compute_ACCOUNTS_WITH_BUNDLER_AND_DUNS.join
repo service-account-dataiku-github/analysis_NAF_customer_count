@@ -1,0 +1,124 @@
+{
+  "joins": [
+    {
+      "table2": 1,
+      "table1": 0,
+      "conditionsMode": "AND",
+      "type": "LEFT",
+      "outerJoinOnTheLeft": true,
+      "on": []
+    }
+  ],
+  "selectedColumns": [
+    {
+      "name": "CUSTOMER_ACCOUNT_ID",
+      "table": 0
+    },
+    {
+      "name": "CUSTOMER_ACCOUNT_NAME",
+      "table": 0
+    },
+    {
+      "name": "EDW_CUSTOMER_NAME",
+      "table": 0
+    },
+    {
+      "name": "DUNS",
+      "table": 0
+    },
+    {
+      "name": "IS_BUNDLER",
+      "table": 0
+    },
+    {
+      "name": "DNB_GLOBAL_ULT_NUMBER",
+      "table": 1
+    },
+    {
+      "name": "DNB_GLOBAL_ULT_NAME",
+      "table": 1
+    },
+    {
+      "name": "DNB_DOMESTIC_ULT_NUMBER",
+      "table": 1
+    },
+    {
+      "name": "DNB_DOMESTIC_ULTIMATE_NAME",
+      "table": 1
+    },
+    {
+      "name": "DNB_HQ_NUMBER",
+      "table": 1
+    },
+    {
+      "name": "DNB_HQ_NAME",
+      "table": 1
+    },
+    {
+      "name": "DNB_DUNS_NUMBER",
+      "table": 1
+    },
+    {
+      "name": "DNB_BUSINESS_NAME",
+      "table": 1
+    }
+  ],
+  "resolvedSelectedColumns": [],
+  "engineParams": {
+    "hive": {
+      "skipPrerunValidate": false,
+      "hiveconf": [],
+      "inheritConf": "default",
+      "addDkuUdf": false,
+      "executionEngine": "HIVESERVER2"
+    },
+    "sqlPipelineParams": {
+      "pipelineAllowMerge": true,
+      "pipelineAllowStart": true
+    },
+    "impala": {
+      "forceStreamMode": true
+    },
+    "lowerCaseSchemaIfEngineRequiresIt": true,
+    "sparkSQL": {
+      "skipPrerunValidate": false,
+      "pipelineAllowMerge": true,
+      "useGlobalMetastore": false,
+      "pipelineAllowStart": true,
+      "readParams": {
+        "mode": "AUTO",
+        "autoModeRepartitionInto": 10,
+        "map": {}
+      },
+      "overwriteOutputSchema": false,
+      "executionEngine": "SPARK_SUBMIT",
+      "sparkConfig": {
+        "inheritConf": "default",
+        "conf": []
+      }
+    }
+  },
+  "virtualInputs": [
+    {
+      "preFilter": {
+        "distinct": false,
+        "enabled": false
+      },
+      "autoSelectColumns": false,
+      "originLabel": "ACCOUNTS_WITH_BUNDLER",
+      "index": 0,
+      "computedColumns": []
+    },
+    {
+      "preFilter": {
+        "distinct": false,
+        "enabled": false
+      },
+      "autoSelectColumns": false,
+      "originLabel": "CUST_NAF_DNB_LIST_DATA",
+      "index": 1,
+      "computedColumns": []
+    }
+  ],
+  "enableAutoCastInJoinConditions": false
+}
