@@ -37,18 +37,18 @@
       "items": [
         {
           "ref": "ACCOUNTS_WITH_BUNDLER",
-          "appendMode": false
+          "appendMode": true
         }
       ]
     }
   },
   "labels": [],
   "versionTag": {
-    "versionNumber": 3,
+    "versionNumber": 4,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1664927470336
+    "lastModifiedOn": 1664927890837
   },
   "creationTag": {
     "versionNumber": 0,
