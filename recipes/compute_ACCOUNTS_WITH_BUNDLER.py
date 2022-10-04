@@ -10,17 +10,9 @@ NAFCUSTOMER_C360_ACCOUNTS_df = NAFCUSTOMER_C360_ACCOUNTS.get_dataframe()
 ACCOUNT_BUNDLER_LIST = dataiku.Dataset("ACCOUNT_BUNDLER_LIST")
 ACCOUNT_BUNDLER_LIST_df = ACCOUNT_BUNDLER_LIST.get_dataframe()
 
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 ACCOUNT_BUNDLER_LIST_df['IS_BUNDLER'] = True
-
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 ACCOUNT_BUNDLER_LIST_df = ACCOUNT_BUNDLER_LIST_df[['EDW_CUSTOMER_NAME','IS_BUNDLER']]
 
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-print(len(NAFCUSTOMER_C360_ACCOUNTS_df))
-print(len(ACCOUNT_BUNDLER_LIST_df))
-
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 ACCOUNT_BUNDLER_LIST_df.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
