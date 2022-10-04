@@ -16,6 +16,7 @@ ACCOUNT_BUNDLER_LIST_df = ACCOUNT_BUNDLER_LIST_df[['EDW_CUSTOMER_NAME','IS_BUNDL
 df = pd.merge(NAFCUSTOMER_C360_ACCOUNTS_df,ACCOUNT_BUNDLER_LIST_df, how='left', on='EDW_CUSTOMER_NAME')
 df['DUNS'] = df['DUNS'].astype('Int64', errors='ignore')
 
+df.loc[df["IS_BUNDLER"]] = np.nan
 ACCOUNTS_WITH_BUNDLER_df = df
 
 # Write recipe outputs
