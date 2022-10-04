@@ -128,6 +128,7 @@
   },
   "name": "NAF Customer",
   "projectStatus": "Sandbox",
+  "imgPattern": 2,
   "metrics": {
     "probes": [],
     "engineConfig": {
@@ -182,6 +183,13 @@
       "checks": []
     }
   },
+  "versionTag": {
+    "versionNumber": 1,
+    "lastModifiedBy": {
+      "login": "Daniel.Vandermeer"
+    },
+    "lastModifiedOn": 1664881911707
+  },
   "creationTag": {
     "versionNumber": 0,
     "lastModifiedBy": {
@@ -189,45 +197,11 @@
     },
     "lastModifiedOn": 1664881533617
   },
+  "description": "Customer Hiearchy for NAF\n\nThe NAF Customer Hiearchy groups Tandem and Siebel source accounts together into logical customers using the following data sources:\n- Customer 360\n- DUNS\n- EBX\n- CLC Algorithm",
   "shortDesc": "The project *NAF Customer* was created by Daniel Vandermeer on Oct 04th 2022",
   "tags": [],
   "customFields": {},
   "checklists": {
-    "checklists": [
-      {
-        "title": "Your new project\u0027s Todo",
-        "createdOn": 0,
-        "items": [
-          {
-            "done": true,
-            "text": "Create the project",
-            "createdOn": 1664881533617,
-            "createdBy": "Daniel.Vandermeer",
-            "stateChangedOn": 0
-          },
-          {
-            "done": false,
-            "text": "Set a project image (click on the color next to the project title)",
-            "createdOn": 1664881533617,
-            "createdBy": "Daniel.Vandermeer",
-            "stateChangedOn": 0
-          },
-          {
-            "done": false,
-            "text": "Import your [first dataset](projects/NAFCUSTOMER/datasets/new/)",
-            "createdOn": 1664881533617,
-            "createdBy": "Daniel.Vandermeer",
-            "stateChangedOn": 0
-          },
-          {
-            "done": false,
-            "text": "Organize your work by replacing this with a real todo",
-            "createdOn": 1664881533617,
-            "createdBy": "Daniel.Vandermeer",
-            "stateChangedOn": 0
-          }
-        ]
-      }
-    ]
+    "checklists": []
   }
 }
