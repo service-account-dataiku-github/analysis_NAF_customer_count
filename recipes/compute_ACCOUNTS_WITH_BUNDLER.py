@@ -14,7 +14,7 @@ ACCOUNT_BUNDLER_LIST_df['IS_BUNDLER'] = True
 ACCOUNT_BUNDLER_LIST_df = ACCOUNT_BUNDLER_LIST_df[['EDW_CUSTOMER_NAME','IS_BUNDLER']]
 
 df = pd.merge(NAFCUSTOMER_C360_ACCOUNTS_df,ACCOUNT_BUNDLER_LIST_df, how='left', on='EDW_CUSTOMER_NAME')
-df['DUNS'] = df['DUNS'].astype('Int64')
+df['DUNS'] = df['DUNS'].astype('Int64', errors='coerce')
 
 df.loc[df["IS_BUNDLER"].isnull(),'IS_BUNDLER'] = False
 df.loc[df["IS_BUNDLER"],'EDW_CUSTOMER_NAME'] = np.nan
