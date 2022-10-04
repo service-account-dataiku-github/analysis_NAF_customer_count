@@ -13,13 +13,9 @@ ACCOUNT_BUNDLER_LIST_df = ACCOUNT_BUNDLER_LIST.get_dataframe()
 ACCOUNT_BUNDLER_LIST_df['IS_BUNDLER'] = True
 ACCOUNT_BUNDLER_LIST_df = ACCOUNT_BUNDLER_LIST_df[['EDW_CUSTOMER_NAME','IS_BUNDLER']]
 
-ACCOUNT_BUNDLER_LIST_df.head()
-
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-print(len(NAFCUSTOMER_C360_ACCOUNTS_df))
 df = pd.merge(NAFCUSTOMER_C360_ACCOUNTS_df,ACCOUNT_BUNDLER_LIST_df, how='left', on='EDW_CUSTOMER_NAME')
-print(len(df))
-df.head()
+df['DUNS'] = df['DUNS'].astype('Int64', errors='ignore')
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 # Compute recipe outputs
