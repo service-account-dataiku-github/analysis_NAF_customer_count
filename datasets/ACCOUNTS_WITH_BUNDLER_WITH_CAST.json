@@ -28,11 +28,11 @@
     "dimensions": []
   },
   "versionTag": {
-    "versionNumber": 0,
+    "versionNumber": 1,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1664928134543
+    "lastModifiedOn": 1664928162362
   },
   "creationTag": {
     "versionNumber": 0,
@@ -60,7 +60,7 @@
       {"name":"CUSTOMER_ACCOUNT_ID","type":"bigint"},
       {"name":"CUSTOMER_ACCOUNT_NAME","type":"string","maxLength":4194304},
       {"name":"EDW_CUSTOMER_NAME","type":"string","maxLength":4194304},
-      {"name":"DUNS","type":"double"},
+      {"name":"DUNS","type":"double","meaning":"LongMeaning"},
       {"name":"IS_BUNDLER","type":"boolean"}
     ],
     "userModified": true
