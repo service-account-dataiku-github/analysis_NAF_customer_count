@@ -10,12 +10,16 @@ ACCOUNT_BUNDLER_LIST = dataiku.Dataset("ACCOUNT_BUNDLER_LIST")
 ACCOUNT_BUNDLER_LIST_df = ACCOUNT_BUNDLER_LIST.get_dataframe()
 
 
-# Compute recipe outputs
-# TODO: Write here your actual code that computes the outputs
-# NB: DSS supports several kinds of APIs for reading and writing data. Please see doc.
+ACCOUNT_BUNDLER_LIST_df['IS_BUNDLER'] = True
+ACCOUNT_BUNDLER_LIST_df = ACCOUNT_BUNDLER_LIST_df[['EDW_CUSTOMER_NAME','IS_BUNDLER']]
 
-ACCOUNTS_WITH_BUNDLER_df = ... # Compute a Pandas dataframe to write into ACCOUNTS_WITH_BUNDLER
+df = pd.merge(NAFCUSTOMER_C360_ACCOUNTS_df,ACCOUNT_BUNDLER_LIST_df, how='left', on='EDW_CUSTOMER_NAME')
+df['DUNS'] = df['DUNS'].astype('Int64', errors='ignore')
 
+df.loc[df["IS_BUNDLER"].isnull(),'IS_BUNDLER'] = False
+df.loc[df["IS_BUNDLER"],'EDW_CUSTOMER_NAME'] = np.nan
+
+ACCOUNTS_WITH_BUNDLER_df = df
 
 # Write recipe outputs
 ACCOUNTS_WITH_BUNDLER = dataiku.Dataset("ACCOUNTS_WITH_BUNDLER")
