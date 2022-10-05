@@ -61,7 +61,7 @@ df.loc[df["CUSTOMER"].isnull(),'CUSTOMER'] = df["CUSTOMER_ACCOUNT_NAME"]
 df.CUSTOMER.value_counts(dropna=False)
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-#ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS_df = 
+ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS_df = df
 
 # Write recipe outputs
 ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS = dataiku.Dataset("ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS")
