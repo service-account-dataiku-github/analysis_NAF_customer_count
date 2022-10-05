@@ -6,60 +6,86 @@
       "conditionsMode": "AND",
       "type": "LEFT",
       "outerJoinOnTheLeft": true,
-      "on": []
+      "on": [
+        {
+          "column1": {
+            "name": "DUNS",
+            "table": 0
+          },
+          "dateDiffUnit": "SECOND",
+          "column2": {
+            "name": "DNB_DUNS_NUMBER",
+            "table": 1
+          },
+          "type": "EQ"
+        }
+      ]
     }
   ],
   "selectedColumns": [
     {
       "name": "CUSTOMER_ACCOUNT_ID",
+      "type": "bigint",
       "table": 0
     },
     {
       "name": "CUSTOMER_ACCOUNT_NAME",
+      "type": "string",
       "table": 0
     },
     {
       "name": "EDW_CUSTOMER_NAME",
+      "type": "string",
       "table": 0
     },
     {
       "name": "DUNS",
+      "type": "double",
       "table": 0
     },
     {
       "name": "IS_BUNDLER",
+      "type": "boolean",
       "table": 0
     },
     {
       "name": "DNB_GLOBAL_ULT_NUMBER",
+      "type": "bigint",
       "table": 1
     },
     {
       "name": "DNB_GLOBAL_ULT_NAME",
+      "type": "string",
       "table": 1
     },
     {
       "name": "DNB_DOMESTIC_ULT_NUMBER",
+      "type": "bigint",
       "table": 1
     },
     {
       "name": "DNB_DOMESTIC_ULTIMATE_NAME",
+      "type": "string",
       "table": 1
     },
     {
       "name": "DNB_HQ_NUMBER",
+      "type": "bigint",
       "table": 1
     },
     {
       "name": "DNB_HQ_NAME",
+      "type": "string",
       "table": 1
     },
     {
       "name": "DNB_DUNS_NUMBER",
+      "type": "bigint",
       "table": 1
     },
     {
       "name": "DNB_BUSINESS_NAME",
+      "type": "string",
       "table": 1
     }
   ],
@@ -120,5 +146,81 @@
       "computedColumns": []
     }
   ],
+  "computedColumns": [],
+  "postFilter": {
+    "$status": {
+      "schema": {
+        "columns": [
+          {
+            "name": "CUSTOMER_ACCOUNT_ID",
+            "type": "bigint"
+          },
+          {
+            "name": "CUSTOMER_ACCOUNT_NAME",
+            "type": "string",
+            "maxLength": 4194304
+          },
+          {
+            "name": "EDW_CUSTOMER_NAME",
+            "type": "string",
+            "maxLength": 4194304
+          },
+          {
+            "name": "DUNS",
+            "type": "double"
+          },
+          {
+            "name": "IS_BUNDLER",
+            "type": "boolean"
+          },
+          {
+            "originalType": "NUMBER",
+            "name": "DNB_GLOBAL_ULT_NUMBER",
+            "type": "bigint"
+          },
+          {
+            "originalType": "VARCHAR",
+            "name": "DNB_GLOBAL_ULT_NAME",
+            "type": "string",
+            "maxLength": 16777216
+          },
+          {
+            "originalType": "NUMBER",
+            "name": "DNB_DOMESTIC_ULT_NUMBER",
+            "type": "bigint"
+          },
+          {
+            "originalType": "VARCHAR",
+            "name": "DNB_DOMESTIC_ULTIMATE_NAME",
+            "type": "string",
+            "maxLength": 16777216
+          },
+          {
+            "originalType": "NUMBER",
+            "name": "DNB_HQ_NUMBER",
+            "type": "bigint"
+          },
+          {
+            "originalType": "VARCHAR",
+            "name": "DNB_HQ_NAME",
+            "type": "string",
+            "maxLength": 16777216
+          },
+          {
+            "originalType": "NUMBER",
+            "name": "DNB_DUNS_NUMBER",
+            "type": "bigint"
+          },
+          {
+            "originalType": "VARCHAR",
+            "name": "DNB_BUSINESS_NAME",
+            "type": "string",
+            "maxLength": 16777216
+          }
+        ],
+        "userModified": false
+      }
+    }
+  },
   "enableAutoCastInJoinConditions": false
 }
