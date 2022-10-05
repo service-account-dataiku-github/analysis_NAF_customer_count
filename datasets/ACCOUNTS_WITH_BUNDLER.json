@@ -28,11 +28,11 @@
     "dimensions": []
   },
   "versionTag": {
-    "versionNumber": 0,
+    "versionNumber": 1,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1664928907385
+    "lastModifiedOn": 1664928937836
   },
   "creationTag": {
     "versionNumber": 0,
@@ -47,7 +47,7 @@
     "notReadyIfEmpty": false,
     "mode": "table",
     "partitioningType": "custom",
-    "normalizeDoubles": true,
+    "normalizeDoubles": false,
     "table": "${projectKey}_ACCOUNTS_WITH_BUNDLER",
     "tableCreationMode": "auto",
     "writeInsertBatchSize": 10000,
