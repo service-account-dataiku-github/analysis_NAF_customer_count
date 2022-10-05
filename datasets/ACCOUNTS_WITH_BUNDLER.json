@@ -28,11 +28,11 @@
     "dimensions": []
   },
   "versionTag": {
-    "versionNumber": 5,
+    "versionNumber": 6,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1664927930512
+    "lastModifiedOn": 1664928310911
   },
   "creationTag": {
     "versionNumber": 0,
@@ -47,7 +47,7 @@
     "notReadyIfEmpty": false,
     "mode": "table",
     "partitioningType": "custom",
-    "normalizeDoubles": true,
+    "normalizeDoubles": false,
     "table": "${projectKey}_ACCOUNTS_WITH_BUNDLER",
     "tableCreationMode": "auto",
     "writeInsertBatchSize": 10000,
@@ -63,7 +63,7 @@
       {"name":"DUNS","type":"double"},
       {"name":"IS_BUNDLER","type":"boolean"}
     ],
-    "userModified": false
+    "userModified": true
   },
   "dkuProperties": [],
   "metrics": {
