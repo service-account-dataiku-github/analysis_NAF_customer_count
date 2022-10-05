@@ -28,11 +28,11 @@
     "dimensions": []
   },
   "versionTag": {
-    "versionNumber": 2,
+    "versionNumber": 3,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1664930195337
+    "lastModifiedOn": 1664930333755
   },
   "creationTag": {
     "versionNumber": 0,
@@ -60,16 +60,16 @@
       {"name":"CUSTOMER_ACCOUNT_ID","type":"bigint"},
       {"name":"CUSTOMER_ACCOUNT_NAME","type":"string","maxLength":4194304},
       {"name":"EDW_CUSTOMER_NAME","type":"string","maxLength":4194304},
-      {"name":"DUNS","type":"double"},
+      {"name":"DUNS","type":"bigint"},
       {"name":"IS_BUNDLER","type":"boolean"},
-      {"name":"DNB_GLOBAL_ULT_NUMBER","type":"bigint","originalType":"NUMBER"},
-      {"name":"DNB_GLOBAL_ULT_NAME","type":"string","originalType":"VARCHAR","maxLength":16777216},
-      {"name":"DNB_DOMESTIC_ULT_NUMBER","type":"bigint","originalType":"NUMBER"},
-      {"name":"DNB_DOMESTIC_ULTIMATE_NAME","type":"string","originalType":"VARCHAR","maxLength":16777216},
-      {"name":"DNB_HQ_NUMBER","type":"bigint","originalType":"NUMBER"},
-      {"name":"DNB_HQ_NAME","type":"string","originalType":"VARCHAR","maxLength":16777216},
-      {"name":"DNB_DUNS_NUMBER","type":"bigint","originalType":"NUMBER"},
-      {"name":"DNB_BUSINESS_NAME","type":"string","originalType":"VARCHAR","maxLength":16777216}
+      {"name":"DNB_GLOBAL_ULT_NUMBER","type":"bigint"},
+      {"name":"DNB_GLOBAL_ULT_NAME","type":"string","maxLength":16777216},
+      {"name":"DNB_DOMESTIC_ULT_NUMBER","type":"bigint"},
+      {"name":"DNB_DOMESTIC_ULTIMATE_NAME","type":"string","maxLength":16777216},
+      {"name":"DNB_HQ_NUMBER","type":"bigint"},
+      {"name":"DNB_HQ_NAME","type":"string","maxLength":16777216},
+      {"name":"DNB_DUNS_NUMBER","type":"bigint"},
+      {"name":"DNB_BUSINESS_NAME","type":"string","maxLength":16777216}
     ],
     "userModified": true
   },
