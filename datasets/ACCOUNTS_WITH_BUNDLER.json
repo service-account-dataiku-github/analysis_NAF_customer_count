@@ -28,11 +28,11 @@
     "dimensions": []
   },
   "versionTag": {
-    "versionNumber": 3,
+    "versionNumber": 4,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1664929397168
+    "lastModifiedOn": 1664929443403
   },
   "creationTag": {
     "versionNumber": 0,
@@ -49,7 +49,8 @@
     "partitioningType": "custom",
     "normalizeDoubles": false,
     "table": "${projectKey}_ACCOUNTS_WITH_BUNDLER",
-    "tableCreationMode": "auto",
+    "tableCreationMode": "custom",
+    "customCreateStatement": "CREATE TABLE \"NAFCUSTOMER_ACCOUNTS_WITH_BUNDLER\" (\n\t\"CUSTOMER_ACCOUNT_ID\" bigint,\n\t\"CUSTOMER_ACCOUNT_NAME\" varchar(4194304),\n\t\"EDW_CUSTOMER_NAME\" varchar(4194304),\n\t\"DUNS\" int,\n\t\"IS_BUNDLER\" boolean\n)",
     "writeInsertBatchSize": 10000,
     "writeJDBCBadDataBehavior": "DISCARD_ROW",
     "readColsWithUnknownTzAsDates": false,
