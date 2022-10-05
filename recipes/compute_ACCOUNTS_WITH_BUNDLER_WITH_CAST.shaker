@@ -27,7 +27,10 @@
     "autoRefreshSample": false
   },
   "explorationFilters": [],
-  "exploreUIParams": {},
+  "origin": "PREPARE_RECIPE",
+  "exploreUIParams": {
+    "autoRefresh": true
+  },
   "steps": [],
   "maxProcessedMemTableBytes": -1,
   "previewMode": "ALL_ROWS",
@@ -54,7 +57,13 @@
     "autoRefreshSample": false
   },
   "analysisColumnData": {},
-  "columnWidthsByName": {},
+  "columnWidthsByName": {
+    "DUNS": 100,
+    "CUSTOMER_ACCOUNT_NAME": 295,
+    "IS_BUNDLER": 100,
+    "EDW_CUSTOMER_NAME": 169,
+    "CUSTOMER_ACCOUNT_ID": 183
+  },
   "sorting": [],
   "globalSearchQuery": "",
   "coloring": {
