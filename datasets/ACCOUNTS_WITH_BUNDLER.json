@@ -28,11 +28,11 @@
     "dimensions": []
   },
   "versionTag": {
-    "versionNumber": 8,
+    "versionNumber": 9,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1664928578398
+    "lastModifiedOn": 1664928615405
   },
   "creationTag": {
     "versionNumber": 0,
@@ -57,11 +57,11 @@
   },
   "schema": {
     "columns": [
-      {"name":"CUSTOMER_ACCOUNT_ID","type":"bigint"},
-      {"name":"CUSTOMER_ACCOUNT_NAME","type":"string","maxLength":4194304},
-      {"name":"EDW_CUSTOMER_NAME","type":"string","maxLength":4194304},
-      {"name":"DUNS","type":"bigint"},
-      {"name":"IS_BUNDLER","type":"boolean"}
+      {"name":"CUSTOMER_ACCOUNT_ID","type":"bigint","originalType":"NUMBER"},
+      {"name":"CUSTOMER_ACCOUNT_NAME","type":"string","originalType":"VARCHAR","maxLength":4194304},
+      {"name":"EDW_CUSTOMER_NAME","type":"string","originalType":"VARCHAR","maxLength":4194304},
+      {"name":"DUNS","type":"bigint","originalType":"DOUBLE"},
+      {"name":"IS_BUNDLER","type":"boolean","originalType":"BOOLEAN"}
     ],
     "userModified": true
   },
