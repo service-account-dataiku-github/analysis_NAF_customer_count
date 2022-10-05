@@ -28,11 +28,11 @@
     "dimensions": []
   },
   "versionTag": {
-    "versionNumber": 6,
+    "versionNumber": 7,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1664928310911
+    "lastModifiedOn": 1664928329630
   },
   "creationTag": {
     "versionNumber": 0,
@@ -63,7 +63,7 @@
       {"name":"DUNS","type":"double"},
       {"name":"IS_BUNDLER","type":"boolean"}
     ],
-    "userModified": true
+    "userModified": false
   },
   "dkuProperties": [],
   "metrics": {
