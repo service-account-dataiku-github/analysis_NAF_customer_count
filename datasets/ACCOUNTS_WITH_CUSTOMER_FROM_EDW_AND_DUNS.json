@@ -28,11 +28,11 @@
     "dimensions": []
   },
   "versionTag": {
-    "versionNumber": 1,
+    "versionNumber": 2,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1664984997110
+    "lastModifiedOn": 1665051905802
   },
   "creationTag": {
     "versionNumber": 0,
@@ -75,7 +75,7 @@
       {"name":"EDW_STATE","type":"string","maxLength":4194304},
       {"name":"CUSTOMER","type":"string","maxLength":4194304}
     ],
-    "userModified": false
+    "userModified": true
   },
   "dkuProperties": [],
   "metrics": {
