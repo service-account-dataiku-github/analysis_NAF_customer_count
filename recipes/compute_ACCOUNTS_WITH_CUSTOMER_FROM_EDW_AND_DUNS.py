@@ -64,27 +64,36 @@ df.loc[df["CUSTOMER"].isnull(),'CUSTOMER'] = df["CUSTOMER_ACCOUNT_NAME"]
 
 # RULE SETs
 def apply_rule(df, rule_name,filter_name_list,final_name):
-    
+
     df.loc[df['CUSTOMER'].isin(filter_name_list),"CUST_CALC_SOURCE"] = rule_name
     df.loc[df['CUSTOMER'].isin(filter_name_list),"CUSTOMER"] = final_name
-    
+
     return(df)
 
-df = apply_rule("RULE 001", ['QUANTA SERVICES INC','QUANTA SERVICES'], 'QUANTA SERVICES INC')
+# this set of rules represents high card count mappings
+# these rules have been manually verified
+# as they impact large numbers of cards (and in turn gallons, spend and revenue)
+df = apply_rule(df, "RULE 001", ['QUANTA SERVICES INC','QUANTA SERVICES'], 'QUANTA SERVICES INC')
+df = apply_rule(df, "RULE 002", ['0113 WINDSTREAM COMM','0113 WINDSTREAM COMM (2)'], '0113 WINDSTREAM COMM')
+df = apply_rule(df, "RULE 003", ['1033 MONSANTO COMPANY (25)','1033 MONSANTO COMPANY (32)'], '1033 MONSANTO COMPANY')
+df = apply_rule(df, "RULE 004", ['2536 HOME DEPOT','2536 HOME DEPOT 5'], '2536 HOME DEPOT')
+df = apply_rule(df, "RULE 005", ['3274 MEDTRONIC 2','3274 MEDTRONIC','3274 MEDTRONIC AD'], '3274 MEDTRONIC')
+df = apply_rule(df, "RULE 006", ['3373 BASF','3373 BASF AD'], '3373 BASF')
+df = apply_rule(df, "RULE 007", ['5929-TESLA (2)','5929-TESLA','5929-TESLA (3)'], '5929-TESLA')
+
+df = apply_rule(df, "RULE 000", ['6220-KONE INC','6220-KONE INC','6220-KONE INC (3)'], '6220-KONE INC')
+df = apply_rule(df, "RULE 000", ['7325 ADVANCE STORES COMPANY 4','7325 ADVANCE AUTO','7325 ADVANCE STORES COMP','7325 ADVANCE STORES COMP 2'], '')
+df = apply_rule(df, "RULE 000", ['',''], '')
+df = apply_rule(df, "RULE 000", ['',''], '')
+df = apply_rule(df, "RULE 000", ['',''], '')
+df = apply_rule(df, "RULE 000", ['',''], '')
+df = apply_rule(df, "RULE 000", ['',''], '')
+df = apply_rule(df, "RULE 000", ['',''], '')
+df = apply_rule(df, "RULE 000", ['',''], '')
+df = apply_rule(df, "RULE 000", ['',''], '')
 
 
-#rule_name = "RULE 001"
-#name_candidates = ['QUANTA SERVICES INC','QUANTA SERVICES']
-#name_consolidation = 'QUANTA SERVICES INC'
-#df.loc[df['CUSTOMER'].isin(name_candidates),"CUST_CALC_SOURCE"] = rule_name
-#df.loc[df['CUSTOMER'].isin(name_candidates),"CUSTOMER"] = name_consolidation
-
-#rule_name = "RULE 002"
-#name_candidates = ['0113 WINDSTREAM COMM','0113 WINDSTREAM COMM (2)']
-#name_consolidation = '0113 WINDSTREAM COMM'
-#df.loc[df['CUSTOMER'].isin(name_candidates),"CUST_CALC_SOURCE"] = rule_name
-#df.loc[df['CUSTOMER'].isin(name_candidates),"CUSTOMER"] = name_consolidation
-
+#df = apply_rule(df, "RULE 000", ['',''], '')
 
 print(len(df))
 df.CUST_CALC_SOURCE.value_counts()
