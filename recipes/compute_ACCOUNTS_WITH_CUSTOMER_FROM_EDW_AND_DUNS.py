@@ -63,18 +63,28 @@ df.loc[df["CUSTOMER"].isnull(),'CUST_CALC_SOURCE'] = 'ACCOUNT'
 df.loc[df["CUSTOMER"].isnull(),'CUSTOMER'] = df["CUSTOMER_ACCOUNT_NAME"]
 
 # RULE SETs
+def apply_rule(df, rule_name,filter_name_list,final_name):
+    
+    df.loc[df['CUSTOMER'].isin(filter_name_list),"CUST_CALC_SOURCE"] = rule_name
+    df.loc[df['CUSTOMER'].isin(filter_name_list),"CUSTOMER"] = final_name
+    
+    return(df)
 
-rule_name = "RULE 001"
-name_candidates = ['QUANTA SERVICES INC','QUANTA SERVICES']
-name_consolidation = 'QUANTA SERVICES INC'
-df.loc[df['CUSTOMER'].isin(name_candidates),"CUST_CALC_SOURCE"] = rule_name
-df.loc[df['CUSTOMER'].isin(name_candidates),"CUSTOMER"] = name_consolidation
+df = apply_rule("RULE 001", ['QUANTA SERVICES INC','QUANTA SERVICES'], 'QUANTA SERVICES INC')
 
-rule_name = "RULE 002"
-name_candidates = ['0113 WINDSTREAM COMM','0113 WINDSTREAM COMM (2)']
-name_consolidation = '0113 WINDSTREAM COMM'
-df.loc[df['CUSTOMER'].isin(name_candidates),"CUST_CALC_SOURCE"] = rule_name
-df.loc[df['CUSTOMER'].isin(name_candidates),"CUSTOMER"] = name_consolidation
+
+#rule_name = "RULE 001"
+#name_candidates = ['QUANTA SERVICES INC','QUANTA SERVICES']
+#name_consolidation = 'QUANTA SERVICES INC'
+#df.loc[df['CUSTOMER'].isin(name_candidates),"CUST_CALC_SOURCE"] = rule_name
+#df.loc[df['CUSTOMER'].isin(name_candidates),"CUSTOMER"] = name_consolidation
+
+#rule_name = "RULE 002"
+#name_candidates = ['0113 WINDSTREAM COMM','0113 WINDSTREAM COMM (2)']
+#name_consolidation = '0113 WINDSTREAM COMM'
+#df.loc[df['CUSTOMER'].isin(name_candidates),"CUST_CALC_SOURCE"] = rule_name
+#df.loc[df['CUSTOMER'].isin(name_candidates),"CUSTOMER"] = name_consolidation
+
 
 print(len(df))
 df.CUST_CALC_SOURCE.value_counts()
