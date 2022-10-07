@@ -28,11 +28,11 @@
     "dimensions": []
   },
   "versionTag": {
-    "versionNumber": 6,
+    "versionNumber": 7,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1665052292916
+    "lastModifiedOn": 1665143783887
   },
   "creationTag": {
     "versionNumber": 0,
@@ -73,7 +73,8 @@
       {"name":"DNB_LEVEL","type":"string","maxLength":4194304},
       {"name":"DNB_CUSTOMER_NAME","type":"string","maxLength":4194304},
       {"name":"EDW_STATE","type":"string","maxLength":4194304},
-      {"name":"CUSTOMER","type":"string","maxLength":4194304}
+      {"name":"CUSTOMER","type":"string","maxLength":4194304},
+      {"name":"CUST_CALC_SOURCE","type":"string","maxLength":4194304}
     ],
     "userModified": false
   },
