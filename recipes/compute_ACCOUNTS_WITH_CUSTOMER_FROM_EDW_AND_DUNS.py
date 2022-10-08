@@ -187,6 +187,7 @@ def apply_rule_contains(df, rule_name, compares_to, contains_string,final_name):
 
 df = apply_rule_starts_with(df, "RULE 073",'CUSTOMER',"BIMBO" , "BIMBO BAKERIES USA INC")
 df = apply_rule_starts_with(df, "RULE 074",'CUSTOMER',"AT  T" , "AT&T")
+df = apply_rule_starts_with(df, "RULE 075",'CUSTOMER',"FEDEX" , "FEDEX")
 
 df.['EDW_CUSTOMER_NAME'] = df.['EDW_CUSTOMER_NAME_ORIGINAL']
 
