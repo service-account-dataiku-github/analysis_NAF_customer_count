@@ -145,8 +145,8 @@ df = apply_rule(df, "RULE 061", ['XTO ENERGY (2M33)','XTO ENERGY (2M33)(1)','XTO
 df.loc[df['CUSTOMER'].str.startswith("MANSFIELD OIL", na=False),"CUST_CALC_SOURCE"] = "RULE 062"
 df.loc[df['CUSTOMER'].str.startswith("MANSFIELD OIL", na=False),"CUSTOMER"] = "MANSFIELD OIL"
 
-print(len(df))
-df.CUST_CALC_SOURCE.value_counts()
+#print(len(df))
+#df.CUST_CALC_SOURCE.value_counts()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS_df = df
