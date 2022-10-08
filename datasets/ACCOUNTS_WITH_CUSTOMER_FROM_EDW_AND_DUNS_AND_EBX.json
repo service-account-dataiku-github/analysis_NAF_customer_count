@@ -28,11 +28,11 @@
     "dimensions": []
   },
   "versionTag": {
-    "versionNumber": 2,
+    "versionNumber": 3,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1665268531941
+    "lastModifiedOn": 1665268715801
   },
   "creationTag": {
     "versionNumber": 0,
@@ -47,7 +47,7 @@
     "notReadyIfEmpty": false,
     "mode": "table",
     "partitioningType": "custom",
-    "normalizeDoubles": true,
+    "normalizeDoubles": false,
     "table": "${projectKey}_ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS_AND_EBX",
     "tableCreationMode": "auto",
     "writeInsertBatchSize": 10000,
