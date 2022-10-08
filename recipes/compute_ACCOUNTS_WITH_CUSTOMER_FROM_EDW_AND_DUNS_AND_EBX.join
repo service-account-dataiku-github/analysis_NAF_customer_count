@@ -6,92 +6,131 @@
       "conditionsMode": "AND",
       "type": "LEFT",
       "outerJoinOnTheLeft": true,
-      "on": []
+      "on": [
+        {
+          "column1": {
+            "name": "CUSTOMER_ACCOUNT_ID",
+            "table": 0
+          },
+          "dateDiffUnit": "DAY",
+          "column2": {
+            "name": "CUSTOMER_ACCOUNT_ID",
+            "table": 1
+          },
+          "maxMatches": 1,
+          "caseInsensitive": false,
+          "maxDistance": 0,
+          "normalizeText": false,
+          "type": "EQ",
+          "strict": false
+        }
+      ]
     }
   ],
   "selectedColumns": [
     {
       "name": "CUSTOMER_ACCOUNT_ID",
+      "type": "bigint",
       "table": 0
     },
     {
       "name": "CUSTOMER_ACCOUNT_NAME",
+      "type": "string",
       "table": 0
     },
     {
       "name": "EDW_CUSTOMER_NAME",
+      "type": "string",
       "table": 0
     },
     {
       "name": "DUNS",
+      "type": "double",
       "table": 0
     },
     {
       "name": "IS_BUNDLER",
+      "type": "boolean",
       "table": 0
     },
     {
       "name": "DNB_GLOBAL_ULT_NUMBER",
+      "type": "double",
       "table": 0
     },
     {
       "name": "DNB_GLOBAL_ULT_NAME",
+      "type": "string",
       "table": 0
     },
     {
       "name": "DNB_DOMESTIC_ULT_NUMBER",
+      "type": "double",
       "table": 0
     },
     {
       "name": "DNB_DOMESTIC_ULTIMATE_NAME",
+      "type": "string",
       "table": 0
     },
     {
       "name": "DNB_HQ_NUMBER",
+      "type": "double",
       "table": 0
     },
     {
       "name": "DNB_HQ_NAME",
+      "type": "string",
       "table": 0
     },
     {
       "name": "DNB_DUNS_NUMBER",
+      "type": "double",
       "table": 0
     },
     {
       "name": "DNB_BUSINESS_NAME",
+      "type": "string",
       "table": 0
     },
     {
       "name": "DNB_LEVEL",
+      "type": "string",
       "table": 0
     },
     {
       "name": "DNB_CUSTOMER_NAME",
+      "type": "string",
       "table": 0
     },
     {
       "name": "EDW_STATE",
+      "type": "string",
       "table": 0
     },
     {
       "name": "CUSTOMER",
+      "type": "string",
       "table": 0
     },
     {
       "name": "CUST_CALC_SOURCE",
+      "type": "string",
       "table": 0
     },
     {
       "name": "PARTY_ID",
+      "type": "bigint",
       "table": 1
     },
     {
       "name": "PARTY_DEFAULT_NAME",
+      "type": "string",
       "table": 1
     },
     {
       "name": "PARTY_RPL_NAME",
+      "type": "string",
       "table": 1
     }
   ],
@@ -152,5 +191,115 @@
       "computedColumns": []
     }
   ],
+  "computedColumns": [],
+  "postFilter": {
+    "$status": {
+      "schema": {
+        "columns": [
+          {
+            "name": "CUSTOMER_ACCOUNT_ID",
+            "type": "bigint"
+          },
+          {
+            "name": "CUSTOMER_ACCOUNT_NAME",
+            "type": "string",
+            "maxLength": 4194304
+          },
+          {
+            "name": "EDW_CUSTOMER_NAME",
+            "type": "string",
+            "maxLength": 4194304
+          },
+          {
+            "name": "DUNS",
+            "type": "double"
+          },
+          {
+            "name": "IS_BUNDLER",
+            "type": "boolean"
+          },
+          {
+            "name": "DNB_GLOBAL_ULT_NUMBER",
+            "type": "double"
+          },
+          {
+            "name": "DNB_GLOBAL_ULT_NAME",
+            "type": "string",
+            "maxLength": 4194304
+          },
+          {
+            "name": "DNB_DOMESTIC_ULT_NUMBER",
+            "type": "double"
+          },
+          {
+            "name": "DNB_DOMESTIC_ULTIMATE_NAME",
+            "type": "string",
+            "maxLength": 4194304
+          },
+          {
+            "name": "DNB_HQ_NUMBER",
+            "type": "double"
+          },
+          {
+            "name": "DNB_HQ_NAME",
+            "type": "string",
+            "maxLength": 4194304
+          },
+          {
+            "name": "DNB_DUNS_NUMBER",
+            "type": "double"
+          },
+          {
+            "name": "DNB_BUSINESS_NAME",
+            "type": "string",
+            "maxLength": 4194304
+          },
+          {
+            "name": "DNB_LEVEL",
+            "type": "string",
+            "maxLength": 4194304
+          },
+          {
+            "name": "DNB_CUSTOMER_NAME",
+            "type": "string",
+            "maxLength": 4194304
+          },
+          {
+            "name": "EDW_STATE",
+            "type": "string",
+            "maxLength": 4194304
+          },
+          {
+            "name": "CUSTOMER",
+            "type": "string",
+            "maxLength": 4194304
+          },
+          {
+            "name": "CUST_CALC_SOURCE",
+            "type": "string",
+            "maxLength": 4194304
+          },
+          {
+            "originalType": "NUMBER",
+            "name": "PARTY_ID",
+            "type": "bigint"
+          },
+          {
+            "originalType": "VARCHAR",
+            "name": "PARTY_DEFAULT_NAME",
+            "type": "string",
+            "maxLength": 255
+          },
+          {
+            "originalType": "VARCHAR",
+            "name": "PARTY_RPL_NAME",
+            "type": "string",
+            "maxLength": 255
+          }
+        ],
+        "userModified": false
+      }
+    }
+  },
   "enableAutoCastInJoinConditions": false
 }
