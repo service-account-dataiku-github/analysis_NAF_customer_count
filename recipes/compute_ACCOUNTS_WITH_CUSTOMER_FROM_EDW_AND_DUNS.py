@@ -51,9 +51,9 @@ df['EDW_STATE'] = 'Unknown'
 df.loc[df["EDW_CUSTOMER_NAME"].isnull(),'EDW_STATE'] = "None"
 df.loc[~df["EDW_CUSTOMER_NAME"].isnull(),'EDW_STATE'] = "Set"
 
-df.['EDW_CUSTOMER_NAME_ORIGINAL'] = df.['EDW_CUSTOMER_NAME']
+df['EDW_CUSTOMER_NAME_ORIGINAL'] = df['EDW_CUSTOMER_NAME']
 
-df.['EDW_CUSTOMER_NAME'].str.strip()
+df['EDW_CUSTOMER_NAME'].str.strip()
 ending_tokens = [' 2', ' 3', ' 4', ' 5', ' 6', ' 7', ' 8', ' 9',' (2)', ' (3)',' (04)',' (4)', ' (5)', ' (6)', ' (7)', ' (8)', ' (9)']
 
 for s in ending_tokens:
