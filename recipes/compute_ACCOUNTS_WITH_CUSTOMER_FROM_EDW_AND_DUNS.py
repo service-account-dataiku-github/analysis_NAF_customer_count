@@ -162,6 +162,7 @@ df = apply_rule_starts_with(df, "RULE 068",'DNB_CUSTOMER_NAME',"STATE OF GEORGIA
 df = apply_rule_starts_with(df, "RULE 069",'DNB_CUSTOMER_NAME',"VERIZON COMMUNICATIONS INC" , "VERIZON SOURCING LLC")
 df = apply_rule_starts_with(df, "RULE 070",'DNB_CUSTOMER_NAME',"STATE OF NORTH CAROLINA" , "STATE OF NORTH CAROLINA")
 df = apply_rule_starts_with(df, "RULE 071",'CUSTOMER',"DYCOM INDUSTRIES" , "DYCOM INDUSTRIES")
+df = apply_rule_starts_with(df, "RULE 072",'CUSTOMER',"TERMINIX" , "TERMINIX CONSUMER SERVICES LLC")
 
 def apply_rule_contains(df, rule_name, compares_to, contains_string,final_name):
 
@@ -171,14 +172,14 @@ def apply_rule_contains(df, rule_name, compares_to, contains_string,final_name):
 
     return(df)
 
-df = apply_rule_starts_with(df, "RULE 072",'CUSTOMER',"BIMBO" , "BIMBO BAKERIES USA INC")
+df = apply_rule_starts_with(df, "RULE 073",'CUSTOMER',"BIMBO" , "BIMBO BAKERIES USA INC")
 
 
-print(len(df))
-df.CUST_CALC_SOURCE.value_counts()
+#print(len(df))
+#df.CUST_CALC_SOURCE.value_counts()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-df[df.DNB_CUSTOMER_NAME=='STATE OF NEW YORK'].head()
+#df[df.DNB_CUSTOMER_NAME=='STATE OF NEW YORK'].head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS_df = df
