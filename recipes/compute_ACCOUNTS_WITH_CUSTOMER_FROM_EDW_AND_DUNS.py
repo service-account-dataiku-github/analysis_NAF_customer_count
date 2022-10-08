@@ -51,7 +51,10 @@ df['EDW_STATE'] = 'Unknown'
 df.loc[df["EDW_CUSTOMER_NAME"].isnull(),'EDW_STATE'] = "None"
 df.loc[~df["EDW_CUSTOMER_NAME"].isnull(),'EDW_STATE'] = "Set"
 
-ending_tokens = [' 2', ' 3', ' 4', ' 5', ' 6', ' 7', ' 8', ' 9',' (2)', ' (3)', ' (4)', ' (5)', ' (6)', ' (7)', ' (8)', ' (9)']
+df.['EDW_CUSTOMER_NAME_ORIGINAL'] = df.['EDW_CUSTOMER_NAME']
+
+df.['EDW_CUSTOMER_NAME'].str.strip()
+ending_tokens = [' 2', ' 3', ' 4', ' 5', ' 6', ' 7', ' 8', ' 9',' (2)', ' (3)',' (04)',' (4)', ' (5)', ' (6)', ' (7)', ' (8)', ' (9)']
 
 for s in ending_tokens:
     index_offset = -1*(len(s))
@@ -183,6 +186,7 @@ def apply_rule_contains(df, rule_name, compares_to, contains_string,final_name):
     return(df)
 
 df = apply_rule_starts_with(df, "RULE 073",'CUSTOMER',"BIMBO" , "BIMBO BAKERIES USA INC")
+df = apply_rule_starts_with(df, "RULE 074",'CUSTOMER',"AT  T" , "AT&T")
 
 # stupid Tableau can't deal with the addition of a column
 # need to figure out how to add this back in
