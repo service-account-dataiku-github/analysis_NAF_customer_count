@@ -53,6 +53,7 @@ df.loc[~df["EDW_CUSTOMER_NAME"].isnull(),'EDW_STATE'] = "Set"
 
 df['CUSTOMER'] = np.nan
 df['CUST_CALC_SOURCE'] = 'Unknown'
+df['CUST_CALC_RULE'] = 'None'
 df.loc[~df["EDW_CUSTOMER_NAME"].isnull(),'CUSTOMER'] = df["EDW_CUSTOMER_NAME"]
 df.loc[~df["EDW_CUSTOMER_NAME"].isnull(),'CUST_CALC_SOURCE'] = "EDW"
 
@@ -65,7 +66,8 @@ df.loc[df["CUSTOMER"].isnull(),'CUSTOMER'] = df["CUSTOMER_ACCOUNT_NAME"]
 # RULE SETs
 def apply_rule(df, rule_name,filter_name_list,final_name):
 
-    df.loc[df['CUSTOMER'].isin(filter_name_list),"CUST_CALC_SOURCE"] = rule_name
+    df.loc[df['CUSTOMER'].isin(filter_name_list),"CUST_CALC_SOURCE"] = "Rule (IsIn)"
+    df.loc[df['CUSTOMER'].isin(filter_name_list),"CUST_CALC_RULE"] = rule_name
     df.loc[df['CUSTOMER'].isin(filter_name_list),"CUSTOMER"] = final_name
 
     return(df)
@@ -142,11 +144,31 @@ df = apply_rule(df, "RULE 059", ['VEOLIA WATER LOGISTICS (2R63)','VEOLIA LOGISTI
 df = apply_rule(df, "RULE 060", ['WILLIAMS STRATEGIC (0AX6)','WILLIAMS STRATEGIC (0AX6)(2)','WILLIAMS STRATEGIC 5DB0'], 'WILLIAMS STRATEGIC')
 df = apply_rule(df, "RULE 061", ['XTO ENERGY (2M33)','XTO ENERGY (2M33)(1)','XTO ENERGY (2M33)','XTO ENERGY CANADA','XTO ENERGY INC 2M33'], 'XTO ENERGY INC')
 
-df.loc[df['CUSTOMER'].str.startswith("MANSFIELD OIL", na=False),"CUST_CALC_SOURCE"] = "RULE 062"
-df.loc[df['CUSTOMER'].str.startswith("MANSFIELD OIL", na=False),"CUSTOMER"] = "MANSFIELD OIL"
+def apply_rule_starts_with(df, rule_name, compares_to, starts_with_string,final_name):
 
-#print(len(df))
-#df.CUST_CALC_SOURCE.value_counts()
+    df.loc[df[compares_to].str.startswith(starts_with_string, na=False),"CUST_CALC_SOURCE"] = "RULE (Startswith)"
+    df.loc[df[compares_to].str.startswith(starts_with_string, na=False),"CUST_CALC_RULE"] = rule_name
+    df.loc[df[compares_to].str.startswith(starts_with_string, na=False),"CUSTOMER"] = final_name
+
+    return(df)
+
+df = apply_rule_starts_with(df, "RULE 062",'CUSTOMER',"MANSFIELD OIL" , "MANSFIELD OIL")
+df = apply_rule_starts_with(df, "RULE 063",'CUSTOMER',"ASPLUNDH" , "ASPLUNDH")
+df = apply_rule_starts_with(df, "RULE 064",'CUSTOMER',"CINTAS CORPORATION" , "CINTAS CORPORATION")
+df = apply_rule_starts_with(df, "RULE 065",'CUSTOMER',"ENTERPRISE RAC" , "ENTERPRISE RAC")
+df = apply_rule_starts_with(df, "RULE 066",'CUSTOMER',"THE CRAWFORD GROUP INC" , "THE CRAWFORD GROUP INC")
+df = apply_rule_starts_with(df, "RULE 067",'DNB_CUSTOMER_NAME',"STATE OF NEW YORK" , "STATE OF NEW YORK")
+df = apply_rule_starts_with(df, "RULE 068",'DNB_CUSTOMER_NAME',"STATE OF GEORGIA" , "STATE OF GEORGIA")
+df = apply_rule_starts_with(df, "RULE 069",'DNB_CUSTOMER_NAME',"VERIZON COMMUNICATIONS INC" , "VERIZON SOURCING LLC")
+df = apply_rule_starts_with(df, "RULE 070",'DNB_CUSTOMER_NAME',"STATE OF NORTH CAROLINA" , "STATE OF NORTH CAROLINA")
+df = apply_rule_starts_with(df, "RULE 071",'CUSTOMER',"DYCOM INDUSTRIES" , "DYCOM INDUSTRIES")
+
+
+print(len(df))
+df.CUST_CALC_SOURCE.value_counts()
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+df[df.DNB_CUSTOMER_NAME=='STATE OF NEW YORK'].head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS_df = df
