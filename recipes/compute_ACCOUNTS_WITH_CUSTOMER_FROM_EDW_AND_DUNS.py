@@ -163,6 +163,16 @@ df = apply_rule_starts_with(df, "RULE 069",'DNB_CUSTOMER_NAME',"VERIZON COMMUNIC
 df = apply_rule_starts_with(df, "RULE 070",'DNB_CUSTOMER_NAME',"STATE OF NORTH CAROLINA" , "STATE OF NORTH CAROLINA")
 df = apply_rule_starts_with(df, "RULE 071",'CUSTOMER',"DYCOM INDUSTRIES" , "DYCOM INDUSTRIES")
 
+def apply_rule_contains(df, rule_name, compares_to, contains_string,final_name):
+
+    df.loc[df[compares_to].str.startswith(contains_string, na=False),"CUST_CALC_SOURCE"] = "RULE (Contains)"
+    df.loc[df[compares_to].str.startswith(contains_string, na=False),"CUST_CALC_RULE"] = rule_name
+    df.loc[df[compares_to].str.startswith(contains_string, na=False),"CUSTOMER"] = final_name
+
+    return(df)
+
+df = apply_rule_starts_with(df, "RULE 072",'CUSTOMER',"BIMBO" , "BIMBO BAKERIES USA INC")
+
 
 print(len(df))
 df.CUST_CALC_SOURCE.value_counts()
