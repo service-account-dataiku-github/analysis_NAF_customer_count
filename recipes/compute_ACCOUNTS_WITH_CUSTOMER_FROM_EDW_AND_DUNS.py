@@ -56,6 +56,10 @@ ending_tokens = [' 2', ' 3', ' 4', ' 5', ' 6', ' 7', ' 8', ' 9',' (2)', ' (3)', 
 for s in ending_tokens:
     index_offset = -1*(len(s))
     df.loc[df['EDW_CUSTOMER_NAME'].str.endswith(s, na=False),"EDW_CUSTOMER_NAME"] = df['EDW_CUSTOMER_NAME'].str[:index_offset]
+    
+for s in ending_tokens:
+    index_offset = -1*(len(s))
+    df.loc[df['CUSTOMER_ACCOUNT_NAME'].str.endswith(s, na=False),"CUSTOMER_ACCOUNT_NAME"] = df['CUSTOMER_ACCOUNT_NAME'].str[:index_offset]
 
 df['CUSTOMER'] = np.nan
 df['CUST_CALC_SOURCE'] = 'Unknown'
