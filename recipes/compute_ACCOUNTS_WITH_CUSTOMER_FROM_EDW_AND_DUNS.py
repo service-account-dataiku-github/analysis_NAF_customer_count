@@ -52,14 +52,18 @@ df.loc[df["EDW_CUSTOMER_NAME"].isnull(),'EDW_STATE'] = "None"
 df.loc[~df["EDW_CUSTOMER_NAME"].isnull(),'EDW_STATE'] = "Set"
 
 df['EDW_CUSTOMER_NAME_ORIGINAL'] = df['EDW_CUSTOMER_NAME']
+df['CUSTOMER_ACCOUNT_NAME_ORIGINAL'] = df['CUSTOMER_ACCOUNT_NAME']
 
 df['EDW_CUSTOMER_NAME'].str.strip()
-ending_tokens = [' 2', ' 3', ' 4', ' 5', ' 6', ' 7', ' 8', ' 9',' (2)', ' (3)',' (04)',' (4)', ' (5)', ' (6)', ' (7)', ' (8)', ' (9)']
+ending_tokens = [' 2', ' 3', ' 4', ' 04', ' 5', ' 6', ' 7', ' 8', ' 9',' (2)', 
+                 ' (3)',' (04)',' (4)', ' (5)', ' (6)', ' (7)', ' (8)', 
+                 ' (9)',' (25)','  (32)', ' AD', ' LD']
 
 for s in ending_tokens:
     index_offset = -1*(len(s))
     df.loc[df['EDW_CUSTOMER_NAME'].str.endswith(s, na=False),"EDW_CUSTOMER_NAME"] = df['EDW_CUSTOMER_NAME'].str[:index_offset]
-    
+
+df['CUSTOMER_ACCOUNT_NAME'].str.strip()
 for s in ending_tokens:
     index_offset = -1*(len(s))
     df.loc[df['CUSTOMER_ACCOUNT_NAME'].str.endswith(s, na=False),"CUSTOMER_ACCOUNT_NAME"] = df['CUSTOMER_ACCOUNT_NAME'].str[:index_offset]
@@ -85,78 +89,6 @@ def apply_rule(df, rule_name,filter_name_list,final_name):
 
     return(df)
 
-# this set of rules represents high card count mappings
-# these rules have been manually verified
-# as they impact large numbers of cards (and in turn gallons, spend and revenue)
-df = apply_rule(df, "RULE 001", ['QUANTA SERVICES INC','QUANTA SERVICES'], 'QUANTA SERVICES INC')
-df = apply_rule(df, "RULE 002", ['0113 WINDSTREAM COMM','0113 WINDSTREAM COMM (2)'], '0113 WINDSTREAM COMM')
-df = apply_rule(df, "RULE 003", ['1033 MONSANTO COMPANY (25)','1033 MONSANTO COMPANY (32)'], '1033 MONSANTO COMPANY')
-df = apply_rule(df, "RULE 004", ['2536 HOME DEPOT','2536 HOME DEPOT 5'], '2536 HOME DEPOT')
-df = apply_rule(df, "RULE 005", ['3274 MEDTRONIC 2','3274 MEDTRONIC','3274 MEDTRONIC AD'], '3274 MEDTRONIC')
-df = apply_rule(df, "RULE 006", ['3373 BASF','3373 BASF AD'], '3373 BASF')
-df = apply_rule(df, "RULE 007", ['5929-TESLA (2)','5929-TESLA','5929-TESLA (3)'], '5929-TESLA')
-
-df = apply_rule(df, "RULE 008", ['6220-KONE INC','6220-KONE INC','6220-KONE INC (3)'], '6220-KONE INC')
-df = apply_rule(df, "RULE 009", ['7325 ADVANCE STORES COMPANY 4','7325 ADVANCE AUTO','7325 ADVANCE STORES COMP','7325 ADVANCE STORES COMP 2'], 'ADVANCE AUTO')
-df = apply_rule(df, "RULE 010", ['17435-GE HEALTHCARE (3)','17435 GE HEALTHCARE','17435-GE HEALTHCARE','17435-GE HEALTHCARE (2)'], '17435-GE HEALTHCARE')
-df = apply_rule(df, "RULE 011", ['17595-SCHLUMBERGER','17595-SCHLUMBERGER','17595-SCHLUMBERGER (2)','17595 SCHLUMBERGER AD'], '17595 SCHLUMBERGER')
-df = apply_rule(df, "RULE 012", ['ADAPTHEALTH CORP','ADAPTHEALTH LLC'], 'ADAPTHEALTH')
-df = apply_rule(df, "RULE 013", ['AGILENT TECHNOLOGIES LP','AGILENT TECHNOLOGIES LP 2'], 'AGILENT TECHNOLOGIES LP')
-df = apply_rule(df, "RULE 014", ['AGL RESOURCES 5CU6','AGL RESOURCES ARI'], 'AGL RESOURCES')
-df = apply_rule(df, "RULE 015", ['APTIVE ENVIRONMENTAL LLC','ADAPTIVE ENVIRONMENTAL CONSULTING INC','APTIVE ENVIRONMENTAL LLC','APTIVE ENVIRONMENTAL 0CV7'], 'APTIVE ENVIRONMENTAL')
-df = apply_rule(df, "RULE 016", ['ARAMARK (RPT PARENT)','ARAMARK RPT PARENT','ARAMARK FOOD & FACILITY HYBRID','ARAMARK','ARAMARK 2G93'], 'ARAMARK')
-df = apply_rule(df, "RULE 017", ['CABLE ONE (5R09)','CABLE ONE INC 5R09','CABLE ONE INC'], 'CABLE ONE INC')
-df = apply_rule(df, "RULE 018", ['CBRE 3','CBRE','CBRE 2','CBRE GROUP INC'], 'CBRE GROUP INC')
-df = apply_rule(df, "RULE 019", ['COMCAST CABLE','COMCAST CABLE HQ 5BA6','COMCAST CABLE WEST 5BA6','COMCAST CABLE NE 5BA6','COMCAST CABLE CE 5BA6','COMCAST CABLE COMMUN 5FH6'], 'COMCAST CABLE')
-df = apply_rule(df, "RULE 020", ['COMPASS GROUP','COMPASS GROUP PLC','COMPASS GROUP 5968'], 'COMPASS GROUP')
-df = apply_rule(df, "RULE 021", ['CONOCOPHILLIPS','CONOCOPHILLIPS COMPANY','CONOCOPHILLIPS CO'], 'CONOCOPHILLIPS')
-df = apply_rule(df, "RULE 022", [' MMCCARTHY TIRE','MCCARTHY TIRE'], 'MCCARTHY TIRE')
-
-df = apply_rule(df, "RULE 023", ['',''], '')
-df = apply_rule(df, "RULE 024", ['CSC SERVICEWORKS','CSC SERVICEWORKS 0R53'], 'CSC SERVICEWORKS')
-df = apply_rule(df, "RULE 025", ['CROWN CASTLE USA (0AK7)','CROWN CASTLE USA INC 0AK7'], 'CROWN CASTLE USA INC')
-df = apply_rule(df, "RULE 026", ['E JOHNSON CONTROLS SECURITY','E JOHNSON CONTROLS FIRE & SEC'], 'E JOHNSON CONTROLS FIRE & SEC')
-df = apply_rule(df, "RULE 027", ['FASTENAL (0469)(3)','FASTENAL (0469)(4)','FASTENAL (0469)','FASTENAL (0469)(2)','FASTENAL COMPANY'], 'FASTENAL COMPANY')
-df = apply_rule(df, "RULE 028", ['FOSS NATIONAL/CORP-RATEFOSS NATIONAL LEASING (2)','FOSS NATIONAL LEASING (2)'], 'FOSS NATIONAL LEASING')
-df = apply_rule(df, "RULE 029", ['GENERAL MILLS','GENERAL MILLS (3GM0)','GENERAL MILLS SALES','GENERAL MILLS OPERATIONS  3GMO'], 'GENERAL MILLS')
-df = apply_rule(df, "RULE 030", ['HELMERICH AND PAYNE INC PARENT','HELMERICH  PAYNE ID 5FM8'], 'HELMERICH AND PAYNE INC')
-df = apply_rule(df, "RULE 031", ['HUSSMANN CORPORATION','HUSSMAN CORPORATION'],'HUSSMAN CORPORATION')
-df = apply_rule(df, "RULE 032", ['IGT GLOBAL SOLUTIONS CORP','IGT GLOBAL SOLUTIONS 0DK1'], '')
-df = apply_rule(df, "RULE 033", ['J R SIMPLOT -S40','J R SIMPLOT -S40 (2)','J R SIMPLOT CO'], 'J R SIMPLOT CO')
-df = apply_rule(df, "RULE 034", ['JC EHRLICH (4)','JC EHRLICH (5)','JC EHRLICH (2)'], 'JC EHRLICH')
-df = apply_rule(df, "RULE 035", ['JOHNSONJOHNSON','JOHNSON JOHNSON CITRUS'], 'JOHNSON JOHNSON')
-df = apply_rule(df, "RULE 036", ['KINDER MORGAN (0469)(3)','KINDER MORGAN INC','KINDER MORGAN 5GU5','KINDER MORGAN INC'], 'KINDER MORGAN INC')
-
-df = apply_rule(df, "RULE 037", ["L'OREAL USA 3","L'OREAL USA","L'OREAL USA 2","L'OREAL CANADA INC."], "L'OREAL USA")
-df = apply_rule(df, "RULE 038", ['LABCORP','LABCORP (3LAB)','LABCORP (3LAB)(2)','LABORATORY CORPORATION OF AMERICA'], 'LABORATORY CORPORATION OF AMERICA')
-df = apply_rule(df, "RULE 039", ['LEHIGH HANSON (3LHN)','LEHIGH HANSON (3LHN)(2)','3995 LEHIGH HANSON INC','116710-LEHIGH HANSON, INC (2)',
-                                 '116710-LEHIGH HANSON, INC (3)','116710-LEHIGH HANSON, INC (4)','116710-LEHIGH HANSON, INC (6)',
-                                 "E450 LEHIGH HANSON MATERIALS L",'LEHIGH HANSON INC3LHC'], 'LEHIGH HANSON INC')
-df = apply_rule(df, "RULE 040", ['LIBERTY MUTUAL 2D93','LIBERTY MUTUAL GROUP'], 'LIBERTY MUTUAL GROUP')
-df = apply_rule(df, "RULE 041", ['MARATHON PETROLEUM CORPORATION','MARATHON PETROLEUM COMPANY LP','MARATHON PETROLEUMEQUIP'], 'MARATHON PETROLEUM')
-df = apply_rule(df, "RULE 042", ['MONDELEZ GLOBAL LLC','MONDELEZ GLOBAL LLC 2'], 'MONDELEZ GLOBAL LLC')
-df = apply_rule(df, "RULE 043", ['NATIONAL FUEL (2G35)','NATIONAL FUEL GAS 5AP6'], 'NATIONAL FUEL')
-
-df = apply_rule(df, "RULE 044", ['NATIONAL FUEL GAS 5AP6','NATIONAL FUEL AND LUBRICANT IN','NATIONAL FUEL (2G35)','NATIONAL FUEL'], 'NATIONAL FUEL')
-df = apply_rule(df, "RULE 045", ['NEXSTAR BROADCASTING (5R10)','NEXSTAR BROADCASTING 5R10'], 'NEXSTAR BROADCASTING')
-
-df = apply_rule(df, "RULE 046", ['NORFOLK SOUTHERN RAILWAY CO (3','NORFOLK SOUTHERN 5K16','NORFOLK SOUTHERN 5K162'], 'NORFOLK SOUTHERN')
-df = apply_rule(df, "RULE 047", ['NORTHERN CLEARING INC 3','NORTHERN CLEARING INC 4'], 'NORTHERN CLEARING INC')
-df = apply_rule(df, "RULE 048", ['NOVONORDISK','NOVO NORDISK','NOVO NORDISK INC','NOVO NORDISK FONDEN'], 'NOVO NORDISK INC')
-df = apply_rule(df, "RULE 049", ['PHILLIPS 66 COMPANY (2J56)','PHILLIPS 66 COMPANY 2J56'], 'PHILLIPS 66 COMPANY')
-df = apply_rule(df, "RULE 050", ['SCHINDLER ELEVATOR (69)','SCHINDLER ELEVATOR 5G70'], 'SCHINDLER ELEVATOR')
-df = apply_rule(df, "RULE 051", ['SCI MANAGEMENT','SCI MANAGEMENT (2)'], 'SCI MANAGEMENT')
-df = apply_rule(df, "RULE 052", ['SERVICE EXPERTS','SERVICE EXPERTS LD'], 'SERVICE EXPERTS')
-df = apply_rule(df, "RULE 053", ['STONEMOR INC 0DS4','STONEMOR PARTNERS'], 'STONEMOR Inc')
-df = apply_rule(df, "RULE 054", ['SYNGENTA (WHEELS)(2)','SYNGENTA (WHEELS)','SYNGENTA US HOLDING INC'], 'SYNGENTA')
-df = apply_rule(df, "RULE 055", ['TRANSDEV (0R64)','TRANSDEV NORTH AMERI 0R64'], 'TRANSDEV')
-df = apply_rule(df, "RULE 056", ['UNITED RENTALS (ARI)','UNITED RENTALS 5T55','UNITED RENTALS INC'], 'UNITED RENTALS INC')
-df = apply_rule(df, "RULE 057", ['US LBM (5EE8)','US LBM (5EE8)(2)','US LBM HOLDINGS, LLC (5EE8)','LAMPERT YARDS US LBM LLC','US LBM HOLDINGS LLC 5EE8'], 'US LBM HOLDINGS LLC')
-df = apply_rule(df, "RULE 058", ['VAN POOL TRANSPORTATION LLC','VAN POOL TRANSPORTATION LLC 3','VAN POOL TRANSPORTATION LLC 4','VAN POOL TRANSPORTATION'], 'VAN POOL TRANSPORTATION')
-df = apply_rule(df, "RULE 059", ['VEOLIA WATER LOGISTICS (2R63)','VEOLIA LOGISTICS 2R63'], 'VEOLIA LOGISTICS')
-df = apply_rule(df, "RULE 060", ['WILLIAMS STRATEGIC (0AX6)','WILLIAMS STRATEGIC (0AX6)(2)','WILLIAMS STRATEGIC 5DB0'], 'WILLIAMS STRATEGIC')
-df = apply_rule(df, "RULE 061", ['XTO ENERGY (2M33)','XTO ENERGY (2M33)(1)','XTO ENERGY (2M33)','XTO ENERGY CANADA','XTO ENERGY INC 2M33'], 'XTO ENERGY INC')
-
 def apply_rule_starts_with(df, rule_name, compares_to, starts_with_string,final_name):
 
     df.loc[df[compares_to].str.startswith(starts_with_string, na=False),"CUST_CALC_SOURCE"] = "RULE (Startswith)"
@@ -165,39 +97,147 @@ def apply_rule_starts_with(df, rule_name, compares_to, starts_with_string,final_
 
     return(df)
 
-df = apply_rule_starts_with(df, "RULE 062",'CUSTOMER',"MANSFIELD OIL" , "MANSFIELD OIL")
-df = apply_rule_starts_with(df, "RULE 063",'CUSTOMER',"ASPLUNDH" , "ASPLUNDH")
-df = apply_rule_starts_with(df, "RULE 064",'CUSTOMER',"CINTAS CORPORATION" , "CINTAS CORPORATION")
-df = apply_rule_starts_with(df, "RULE 065",'CUSTOMER',"ENTERPRISE RAC" , "ENTERPRISE RAC")
-df = apply_rule_starts_with(df, "RULE 066",'CUSTOMER',"THE CRAWFORD GROUP INC" , "ENTERPRISE RAC")
-df = apply_rule_starts_with(df, "RULE 067",'DNB_CUSTOMER_NAME',"STATE OF NEW YORK" , "STATE OF NEW YORK")
-df = apply_rule_starts_with(df, "RULE 068",'DNB_CUSTOMER_NAME',"STATE OF GEORGIA" , "STATE OF GEORGIA")
-df = apply_rule_starts_with(df, "RULE 069",'DNB_CUSTOMER_NAME',"VERIZON COMMUNICATIONS INC" , "VERIZON SOURCING LLC")
-df = apply_rule_starts_with(df, "RULE 070",'DNB_CUSTOMER_NAME',"STATE OF NORTH CAROLINA" , "STATE OF NORTH CAROLINA")
-df = apply_rule_starts_with(df, "RULE 071",'CUSTOMER',"DYCOM INDUSTRIES" , "DYCOM INDUSTRIES")
-df = apply_rule_starts_with(df, "RULE 072",'CUSTOMER',"TERMINIX" , "TERMINIX CONSUMER SERVICES LLC")
-
 def apply_rule_contains(df, rule_name, compares_to, contains_string,final_name):
 
-    df.loc[df[compares_to].str.startswith(contains_string, na=False),"CUST_CALC_SOURCE"] = "RULE (Contains)"
-    df.loc[df[compares_to].str.startswith(contains_string, na=False),"CUST_CALC_RULE"] = rule_name
-    df.loc[df[compares_to].str.startswith(contains_string, na=False),"CUSTOMER"] = final_name
+    df.loc[df[compares_to].str.contains(contains_string, na=False),"CUST_CALC_SOURCE"] = "RULE (Contains)"
+    df.loc[df[compares_to].str.contains(contains_string, na=False),"CUST_CALC_RULE"] = rule_name
+    df.loc[df[compares_to].str.contains(contains_string, na=False),"CUSTOMER"] = final_name
 
     return(df)
 
-df = apply_rule_starts_with(df, "RULE 073",'CUSTOMER',"BIMBO" , "BIMBO BAKERIES USA INC")
-df = apply_rule_starts_with(df, "RULE 074",'CUSTOMER',"AT  T" , "AT&T")
-df = apply_rule_starts_with(df, "RULE 075",'CUSTOMER',"FEDEX" , "FEDEX")
+# this set of rules represents high card count mappings
+# these rules have been manually verified
+# as they impact large numbers of cards (and in turn gallons, spend and revenue)
+df = apply_rule(df, "RULE 001", ['QUANTA SERVICES INC','QUANTA SERVICES'], 'QUANTA SERVICES INC')
+df = apply_rule(df, "RULE 002", ['7325 ADVANCE STORES COMPANY 4','7325 ADVANCE AUTO','7325 ADVANCE STORES COMP','7325 ADVANCE STORES COMP 2'], 'ADVANCE AUTO')
+df = apply_rule(df, "RULE 003", ['17435-GE HEALTHCARE (3)','17435 GE HEALTHCARE','17435-GE HEALTHCARE','17435-GE HEALTHCARE (2)'], '17435-GE HEALTHCARE')
+df = apply_rule(df, "RULE 004", ['ADAPTHEALTH CORP','ADAPTHEALTH LLC'], 'ADAPTHEALTH')
+df = apply_rule(df, "RULE 005", ['AGL RESOURCES 5CU6','AGL RESOURCES ARI'], 'AGL RESOURCES')
+df = apply_rule(df, "RULE 006", ['APTIVE ENVIRONMENTAL LLC','ADAPTIVE ENVIRONMENTAL CONSULTING INC','APTIVE ENVIRONMENTAL LLC','APTIVE ENVIRONMENTAL 0CV7'], 'APTIVE ENVIRONMENTAL')
+df = apply_rule(df, "RULE 007", [' MMCCARTHY TIRE','MCCARTHY TIRE'], 'MCCARTHY TIRE')
+df = apply_rule(df, "RULE 008", ['FOSS NATIONAL/CORP-RATEFOSS NATIONAL LEASING (2)','FOSS NATIONAL LEASING (2)'], 'FOSS NATIONAL LEASING')
+df = apply_rule(df, "RULE 009", ['JOHNSONJOHNSON','JOHNSON JOHNSON CITRUS'], 'JOHNSON JOHNSON')
+df = apply_rule(df, "RULE 010", ['HELMERICH AND PAYNE INC PARENT','HELMERICH  PAYNE ID 5FM8'], 'HELMERICH AND PAYNE INC')
+df = apply_rule(df, "RULE 011", ['LABCORP','LABCORP (3LAB)','LABCORP (3LAB)(2)','LABORATORY CORPORATION OF AMERICA'], 'LABORATORY CORPORATION OF AMERICA')
+df = apply_rule(df, "RULE 012", ['LEHIGH HANSON (3LHN)','LEHIGH HANSON (3LHN)(2)','3995 LEHIGH HANSON INC','116710-LEHIGH HANSON, INC (2)',
+                                 '116710-LEHIGH HANSON, INC (3)','116710-LEHIGH HANSON, INC (4)','116710-LEHIGH HANSON, INC (6)',
+                                 "E450 LEHIGH HANSON MATERIALS L",'LEHIGH HANSON INC3LHC'], 'LEHIGH HANSON INC')
+df = apply_rule(df, "RULE 013", ['NOVONORDISK','NOVO NORDISK','NOVO NORDISK INC','NOVO NORDISK FONDEN'], 'NOVO NORDISK INC')
+df = apply_rule(df, "RULE 014", ['US LBM (5EE8)','US LBM (5EE8)(2)','US LBM HOLDINGS, LLC (5EE8)','LAMPERT YARDS US LBM LLC','US LBM HOLDINGS LLC 5EE8'], 'US LBM HOLDINGS LLC')
+df = apply_rule(df, "RULE 015", ['VEOLIA WATER LOGISTICS (2R63)','VEOLIA LOGISTICS 2R63'], 'VEOLIA LOGISTICS')
+
+df = apply_rule_starts_with(df, "RULE 016",'CUSTOMER',"AT  T" , "AT&T")
+df = apply_rule_starts_with(df, "RULE 017",'CUSTOMER',"FEDEX" , "FEDEX")
+df = apply_rule_starts_with(df, "RULE 018",'CUSTOMER','ARAMARK', 'ARAMARK')
+df = apply_rule_starts_with(df, "RULE 019",'CUSTOMER','CABLE ONE', 'CABLE ONE INC')
+df = apply_rule_starts_with(df, "RULE 020",'CUSTOMER','CBRE', 'CBRE GROUP INC')
+df = apply_rule_starts_with(df, "RULE 021",'CUSTOMER','COMCAST CABLE', 'COMCAST CABLE')
+df = apply_rule_starts_with(df, "RULE 022",'CUSTOMER','COMPASS GROUP', 'COMPASS GROUP')
+df = apply_rule_starts_with(df, "RULE 023",'CUSTOMER','CONOCOPHILLIPS', 'CONOCOPHILLIPS')
+df = apply_rule_starts_with(df, "RULE 024",'CUSTOMER','CSC SERVICEWORKS', 'CSC SERVICEWORKS')
+df = apply_rule_starts_with(df, "RULE 025",'CUSTOMER','CROWN CASTLE USA', 'CROWN CASTLE USA')
+df = apply_rule_starts_with(df, "RULE 026",'CUSTOMER','E JOHNSON CONTROLS', 'E JOHNSON CONTROLS FIRE & SEC')
+df = apply_rule_starts_with(df, "RULE 027",'CUSTOMER','FASTENAL', 'FASTENAL COMPANY')
+df = apply_rule_starts_with(df, "RULE 028",'CUSTOMER','GENERAL MILLS', 'GENERAL MILLS')
+df = apply_rule_starts_with(df, "RULE 029",'CUSTOMER','J R SIMPLOT', 'J R SIMPLOT')
+df = apply_rule_starts_with(df, "RULE 030",'CUSTOMER','JC EHRLICH', 'JC EHRLICH')
+df = apply_rule_starts_with(df, "RULE 031",'CUSTOMER','KINDER MORGAN', 'KINDER MORGAN')
+df = apply_rule_starts_with(df, "RULE 032",'CUSTOMER','LIBERTY MUTUAL', 'LIBERTY MUTUAL')
+df = apply_rule_starts_with(df, "RULE 033",'CUSTOMER','IGT GLOBAL', 'IGT GLOBAL')
+df = apply_rule_starts_with(df, "RULE 034",'CUSTOMER','MARATHON PETROLEUM', 'MARATHON PETROLEUM')
+df = apply_rule_starts_with(df, "RULE 035",'CUSTOMER','MONDELEZ GLOBAL', 'MONDELEZ GLOBAL')
+df = apply_rule_starts_with(df, "RULE 036",'CUSTOMER','NATIONAL FUEL', 'NATIONAL FUEL')
+df = apply_rule_starts_with(df, "RULE 037",'CUSTOMER','NEXSTAR BROADCASTING', 'NEXSTAR BROADCASTING')
+df = apply_rule_starts_with(df, "RULE 038",'CUSTOMER','NORFOLK SOUTHERN', 'NORFOLK SOUTHERN')
+df = apply_rule_starts_with(df, "RULE 039",'CUSTOMER','NORTHERN CLEARING', 'NORTHERN CLEARING')
+df = apply_rule_starts_with(df, "RULE 040",'CUSTOMER','PHILLIPS 66 COMPANY', 'PHILLIPS 66 COMPANY')
+df = apply_rule_starts_with(df, "RULE 041",'CUSTOMER','SCHINDLER ELEVATOR', 'SCHINDLER ELEVATOR')
+df = apply_rule_starts_with(df, "RULE 042",'CUSTOMER','STONEMOR', 'STONEMOR')
+df = apply_rule_starts_with(df, "RULE 043",'CUSTOMER','SYNGENTA', 'SYNGENTA')
+df = apply_rule_starts_with(df, "RULE 044",'CUSTOMER','TRANSDEV', 'TRANSDEV')
+df = apply_rule_starts_with(df, "RULE 045",'CUSTOMER','UNITED RENTALS', 'UNITED RENTALS INC')
+df = apply_rule_starts_with(df, "RULE 046",'CUSTOMER','VAN POOL TRANSPORTATION', 'VAN POOL TRANSPORTATION')
+df = apply_rule_starts_with(df, "RULE 047",'CUSTOMER','WILLIAMS STRATEGIC', 'WILLIAMS STRATEGIC')
+df = apply_rule_starts_with(df, "RULE 048",'CUSTOMER','XTO ENERGY', 'XTO ENERGY')
+df = apply_rule_starts_with(df, "RULE 049",'CUSTOMER',"BIMBO" , "BIMBO BAKERIES USA INC")
+
+df = apply_rule_starts_with(df, "RULE 050",'CUSTOMER',"MANSFIELD OIL" , "MANSFIELD OIL")
+df = apply_rule_starts_with(df, "RULE 051",'CUSTOMER',"ASPLUNDH" , "ASPLUNDH")
+df = apply_rule_starts_with(df, "RULE 052",'CUSTOMER',"CINTAS CORPORATION" , "CINTAS CORPORATION")
+df = apply_rule_starts_with(df, "RULE 053",'CUSTOMER',"ENTERPRISE RAC" , "ENTERPRISE RAC")
+df = apply_rule_starts_with(df, "RULE 054",'CUSTOMER',"THE CRAWFORD GROUP INC" , "ENTERPRISE RAC")
+df = apply_rule_starts_with(df, "RULE 055",'DNB_CUSTOMER_NAME',"STATE OF NEW YORK" , "STATE OF NEW YORK")
+df = apply_rule_starts_with(df, "RULE 056",'DNB_CUSTOMER_NAME',"STATE OF GEORGIA" , "STATE OF GEORGIA")
+df = apply_rule_starts_with(df, "RULE 057",'DNB_CUSTOMER_NAME',"VERIZON COMMUNICATIONS INC" , "VERIZON SOURCING LLC")
+df = apply_rule_starts_with(df, "RULE 058",'DNB_CUSTOMER_NAME',"STATE OF NORTH CAROLINA" , "STATE OF NORTH CAROLINA")
+df = apply_rule_starts_with(df, "RULE 059",'CUSTOMER',"DYCOM INDUSTRIES" , "DYCOM INDUSTRIES")
+df = apply_rule_starts_with(df, "RULE 060",'CUSTOMER',"TERMINIX" , "TERMINIX CONSUMER SERVICES LLC")
+df = apply_rule_starts_with(df, "RULE 061",'CUSTOMER',"WAYNE MUTUAL INSURANCE CO" , "WAYNE MUTUAL INSURANCE CO")
+
+df = apply_rule_starts_with(df, "RULE 062",'CUSTOMER',"ART WATT PAINTING" , "ART WATT PAINTING")
+df = apply_rule_starts_with(df, "RULE 063",'CUSTOMER',"BUENA VISTA SECURITY AND PROTE" , "BUENA VISTA SECURITY AND PROTE")
+df = apply_rule_starts_with(df, "RULE 064",'CUSTOMER',"GREAT STONE GRANITE" , "GREAT STONE GRANITE")
+df = apply_rule_starts_with(df, "RULE 065",'CUSTOMER',"SCHULTHEIS BROS CO" , "SCHULTHEIS BROS CO")
+df = apply_rule_starts_with(df, "RULE 066",'CUSTOMER',"PIECE OF GREEN" , "PIECE OF GREEN LANDSCAPING")
+df = apply_rule_starts_with(df, "RULE 067",'CUSTOMER',"CLEARPOINT CONSULTING ENGINEER" , "CLEARPOINT CONSULTING ENGINEER")
+df = apply_rule_starts_with(df, "RULE 068",'CUSTOMER',"GRADY CRAWFORD CONSTRUCTION CO" , "GRADY CRAWFORD CONSTRUCTION CO")
+df = apply_rule_starts_with(df, "RULE 069",'CUSTOMER',"ALLSOUTH APPLIANCE GROUP" , "ALLSOUTH APPLIANCE GROUP")
+df = apply_rule_starts_with(df, "RULE 070",'CUSTOMER',"DAC ENTERPRISES" , "DAC ENTERPRISES")
+df = apply_rule_starts_with(df, "RULE 071",'CUSTOMER',"HIGHLAND COMMUNITY COLLEGE" , "HIGHLAND COMMUNITY COLLEGE")
+df = apply_rule_starts_with(df, "RULE 072",'CUSTOMER',"MATRIX SERVICE COMPANY" , "MATRIX SERVICE COMPANY")
+df = apply_rule_starts_with(df, "RULE 073",'CUSTOMER',"TWIN CITY LIMOUSINES" , "TWIN CITY LIMOUSINES")
+df = apply_rule_starts_with(df, "RULE 074",'CUSTOMER',"RMI SERVICES CORPORATION" , "RMI SERVICES CORPORATION")
+df = apply_rule_starts_with(df, "RULE 075",'CUSTOMER',"GREAT LAKES HOME HEALTH S" , "GREAT LAKES HOME HEALTH S")
+df = apply_rule_starts_with(df, "RULE 076",'CUSTOMER',"TOTAL DEPTH" , "TOTAL DEPTH")
+df = apply_rule_starts_with(df, "RULE 077",'CUSTOMER',"CAPE BUILDING SYSTEMS" , "CAPE BUILDING SYSTEMS")
+df = apply_rule_starts_with(df, "RULE 078",'CUSTOMER',"STATE OF TEXAS" , "STATE OF TEXAS")
+df = apply_rule_starts_with(df, "RULE 079",'CUSTOMER',"RICS ELECTRIC" , "RICS ELECTRIC")
+df = apply_rule_starts_with(df, "RULE 080",'CUSTOMER',"GILS CARPETS" , "GILS CARPETS")
+df = apply_rule_starts_with(df, "RULE 081",'CUSTOMER',"PREMIER THERAPY" , "PREMIER THERAPY")
+df = apply_rule_starts_with(df, "RULE 082",'CUSTOMER',"STE GENEVIEVE COUNTY MEMORIAL" , "STE GENEVIEVE COUNTY MEMORIAL")
+df = apply_rule_starts_with(df, "RULE 083",'CUSTOMER',"STILSING ELECTRIC INC" , "STILSING ELECTRIC INC")
+df = apply_rule_starts_with(df, "RULE 084",'CUSTOMER',"ROBINSON AUTO SALES" , "ROBINSON AUTO SALES")
+df = apply_rule_starts_with(df, "RULE 085",'CUSTOMER',"FLORIDA FIRST CALL REMOVAL SER" , "FLORIDA FIRST CALL REMOVAL SER")
+df = apply_rule_starts_with(df, "RULE 086",'CUSTOMER',"LANDMARK CONSTRUCTION SOLUTIO" , "LANDMARK CONSTRUCTION SOLUTIO")
+df = apply_rule_starts_with(df, "RULE 087",'CUSTOMER',"IMPORT MOTORS OF OLD SAYBROOK" , "IMPORT MOTORS OF OLD SAYBROOK")
+df = apply_rule_starts_with(df, "RULE 088",'CUSTOMER',"RALEIGH EAST CONCRETE CONSTRUC" , "RALEIGH EAST CONCRETE CONSTRUC")
+df = apply_rule_starts_with(df, "RULE 089",'CUSTOMER',"AMES PLUMBING SERVIC" , "AMES PLUMBING SERVIC")
+df = apply_rule_starts_with(df, "RULE 090",'CUSTOMER',"FENIGOR GROUP LLC" , "FENIGOR GROUP LLC")
+df = apply_rule_starts_with(df, "RULE 091",'CUSTOMER',"MONTCALM COUNTY ROAD COMMISSIO" , "MONTCALM COUNTY ROAD COMMISSIO")
+df = apply_rule_starts_with(df, "RULE 092",'CUSTOMER',"WESTERN INDUSTRIAL CONTRACTORS" , "WESTERN INDUSTRIAL CONTRACTORS")
+df = apply_rule_starts_with(df, "RULE 093",'CUSTOMER',"TIRE CORRAL OF AMERICA" , "TIRE CORRAL OF AMERICA")
 
 df['EDW_CUSTOMER_NAME'] = df['EDW_CUSTOMER_NAME_ORIGINAL']
+df['CUSTOMER_ACCOUNT_NAME'] = df['CUSTOMER_ACCOUNT_NAME_ORIGINAL']
 
 # stupid Tableau can't deal with the addition of a column
 # need to figure out how to add this back in
 del(df['CUST_CALC_RULE'])
 del(df['EDW_CUSTOMER_NAME_ORIGINAL'])
+del(df['CUSTOMER_ACCOUNT_NAME_ORIGINAL'])
 
 #print(len(df))
+#print(len(df.CUSTOMER.unique()))
 #df.CUST_CALC_SOURCE.value_counts()
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+# find all customer_names that have other customer names that start with this customer name
+
+#idx_match = 0
+#idx = 0
+#unique_customer_names = df['CUSTOMER'].unique()
+
+#for n in unique_customer_names:
+    
+#    df_f = df[(df['CUSTOMER'].str.startswith(n, na=False))&(df['CUSTOMER']!=n)]
+#    match_list = df_f['CUSTOMER'].unique()
+#    if len(match_list)>0:
+#        print(n, match_list)
+#        print(idx, idx_match)
+#        print()
+#        idx_match+=1
+#    else:
+#        idx+=1
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 #df[df.DNB_CUSTOMER_NAME=='STATE OF NEW YORK'].head()
