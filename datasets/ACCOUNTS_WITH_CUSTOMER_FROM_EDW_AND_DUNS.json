@@ -28,11 +28,11 @@
     "dimensions": []
   },
   "versionTag": {
-    "versionNumber": 12,
+    "versionNumber": 13,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1665268690356
+    "lastModifiedOn": 1665340068870
   },
   "creationTag": {
     "versionNumber": 0,
@@ -76,7 +76,7 @@
       {"name":"CUSTOMER","type":"string","maxLength":4194304},
       {"name":"CUST_CALC_SOURCE","type":"string","maxLength":4194304}
     ],
-    "userModified": true
+    "userModified": false
   },
   "dkuProperties": [],
   "metrics": {
