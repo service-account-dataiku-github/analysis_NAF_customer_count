@@ -28,11 +28,11 @@
     "dimensions": []
   },
   "versionTag": {
-    "versionNumber": 1,
+    "versionNumber": 2,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1665349123318
+    "lastModifiedOn": 1665349890757
   },
   "creationTag": {
     "versionNumber": 0,
@@ -58,7 +58,7 @@
   "schema": {
     "columns": [
       {"name":"CUSTOMER","type":"string","maxLength":4194304},
-      {"name":"potential_matches","type":"string","maxLength":4194304}
+      {"name":"POTENTIAL_MATCHES","type":"string","maxLength":4194304}
     ],
     "userModified": false
   },
