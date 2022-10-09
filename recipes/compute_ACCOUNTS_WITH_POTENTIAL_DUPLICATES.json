@@ -24,6 +24,10 @@
         {
           "ref": "ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS",
           "deps": []
+        },
+        {
+          "ref": "NAFCUSTOMER_CUSTOMERS_WITH_MORE_THAN_X_REVENUE",
+          "deps": []
         }
       ]
     }
@@ -40,11 +44,11 @@
   },
   "labels": [],
   "versionTag": {
-    "versionNumber": 2,
+    "versionNumber": 3,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1665356064560
+    "lastModifiedOn": 1665356157402
   },
   "creationTag": {
     "versionNumber": 0,
