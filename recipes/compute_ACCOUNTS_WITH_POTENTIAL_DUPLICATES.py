@@ -8,12 +8,15 @@ from dataiku import pandasutils as pdu
 ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS = dataiku.Dataset("ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS")
 ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS_df = ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS.get_dataframe()
 
+NAFCUSTOMER_CUSTOMERS_WITH_MORE_THAN_X_REVENUE = dataiku.Dataset("NAFCUSTOMER_CUSTOMERS_WITH_MORE_THAN_X_REVENUE")
+NAFCUSTOMER_CUSTOMERS_WITH_MORE_THAN_X_REVENUE_df = NAFCUSTOMER_CUSTOMERS_WITH_MORE_THAN_X_REVENUE.get_dataframe()
+
 # Compute recipe outputs from inputs
 # TODO: Replace this part by your actual code that computes the output, as a Pandas dataframe
 # NB: DSS also supports other kinds of APIs for reading and writing data. Please see doc.
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-df = ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS_df
+df = NAFCUSTOMER_CUSTOMERS_WITH_MORE_THAN_X_REVENUE_df
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 # find all customer_names that have other customer names that start with this customer name
