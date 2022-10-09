@@ -17,6 +17,7 @@ NAFCUSTOMER_CUSTOMERS_WITH_MORE_THAN_X_REVENUE_df = NAFCUSTOMER_CUSTOMERS_WITH_M
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 df = NAFCUSTOMER_CUSTOMERS_WITH_MORE_THAN_X_REVENUE_df
+print(len(df))
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 # find all customer_names that have other customer names that start with this customer name
@@ -40,10 +41,10 @@ for n in unique_customer_names:
         list_potential_matches_.append(match_list)
 
     if (idx % report_every_n == 0):
-        print(idx, "iterations", len(list_customers_), "with potential matches", full_set_n-idx, "remaining", round(idx/full_set_n,2), "% complete")
-        
+        print(idx, "iterations", len(list_customers_), "with potential matches", full_set_n-idx, "remaining", round((idx/full_set_n)*100,2), "% complete")
+
     if (idx % save_every_n == 0):
-        print('SAVING DATAFRAME')        
+        print('SAVING DATAFRAME')
         df_candidates = pd.DataFrame(list_customers_)
         df_candidates.columns = ['CUSTOMER']
         df_candidates['POTENTIAL_MATCHES'] = list_potential_matches_
@@ -55,5 +56,5 @@ for n in unique_customer_names:
         ACCOUNTS_WITH_POTENTIAL_DUPLICATES.write_with_schema(ACCOUNTS_WITH_POTENTIAL_DUPLICATES_df)
         print(len(ACCOUNTS_WITH_POTENTIAL_DUPLICATES_df), "written")
         print("continuing on with checks....")
-        
+
 print(len(list_customers_))
