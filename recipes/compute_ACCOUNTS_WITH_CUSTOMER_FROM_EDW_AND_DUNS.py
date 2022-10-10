@@ -9,7 +9,7 @@ import string
 ACCOUNTS_WITH_BUNDLER_AND_DUNS = dataiku.Dataset("ACCOUNTS_WITH_BUNDLER_AND_DUNS")
 ACCOUNTS_WITH_BUNDLER_AND_DUNS_df = ACCOUNTS_WITH_BUNDLER_AND_DUNS.get_dataframe()
 
-ACCOUNTS_WITH_EBX_PARTY = dataiku.Dataset("ACCOUNTS_WITH_EBX_PARTYS")
+ACCOUNTS_WITH_EBX_PARTY = dataiku.Dataset("ACCOUNTS_WITH_EBX_PARTY")
 ACCOUNTS_WITH_EBX_PARTY_df = ACCOUNTS_WITH_EBX_PARTY.get_dataframe()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
@@ -58,8 +58,8 @@ df['EDW_CUSTOMER_NAME_ORIGINAL'] = df['EDW_CUSTOMER_NAME']
 df['CUSTOMER_ACCOUNT_NAME_ORIGINAL'] = df['CUSTOMER_ACCOUNT_NAME']
 
 df['EDW_CUSTOMER_NAME'].str.strip()
-ending_tokens = [' 2', ' 3', ' 4', ' 04', ' 5', ' 6', ' 7', ' 8', ' 9',' (2)', 
-                 ' (3)',' (04)',' (4)', ' (5)', ' (6)', ' (7)', ' (8)', 
+ending_tokens = [' 2', ' 3', ' 4', ' 04', ' 5', ' 6', ' 7', ' 8', ' 9',' (2)',
+                 ' (3)',' (04)',' (4)', ' (5)', ' (6)', ' (7)', ' (8)',
                  ' (9)',' (25)','  (32)', ' AD', ' LD']
 
 for s in ending_tokens:
@@ -224,29 +224,16 @@ del(df['CUSTOMER_ACCOUNT_NAME_ORIGINAL'])
 #df.CUST_CALC_SOURCE.value_counts()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-# find all customer_names that have other customer names that start with this customer name
+df_j = pd.merge(df, ACCOUNTS_WITH_EBX_PARTY_df, on='CUSTOMER_ACCOUNT_ID', how='left')
+df_j.loc[~df_j["PARTY_DEFAULT_NAME"].isnull(),'CUSTOMER'] = df_j.PARTY_DEFAULT_NAME
+df_j.loc[~df_j["PARTY_DEFAULT_NAME"].isnull(),'CUST_CALC_SOURCE'] = 'EBX'
+df_j.CUST_CALC_SOURCE.value_counts()
 
-#idx_match = 0
-#idx = 0
-#unique_customer_names = df['CUSTOMER'].unique()
-
-#for n in unique_customer_names:
-    
-#    df_f = df[(df['CUSTOMER'].str.startswith(n, na=False))&(df['CUSTOMER']!=n)]
-#    match_list = df_f['CUSTOMER'].unique()
-#    if len(match_list)>0:
-#        print(n, match_list)
-#        print(idx, idx_match)
-#        print()
-#        idx_match+=1
-#    else:
-#        idx+=1
+del(df_j['PARTY_ID'])
+del(df_j['PARTY_DEFAULT_NAME'])
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-#df[df.DNB_CUSTOMER_NAME=='STATE OF NEW YORK'].head()
-
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS_df = df
+ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS_df = df_j
 
 # Write recipe outputs
 ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS = dataiku.Dataset("ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS")
