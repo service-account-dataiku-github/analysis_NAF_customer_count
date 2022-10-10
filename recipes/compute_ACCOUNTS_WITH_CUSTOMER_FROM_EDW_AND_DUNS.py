@@ -9,6 +9,9 @@ import string
 ACCOUNTS_WITH_BUNDLER_AND_DUNS = dataiku.Dataset("ACCOUNTS_WITH_BUNDLER_AND_DUNS")
 ACCOUNTS_WITH_BUNDLER_AND_DUNS_df = ACCOUNTS_WITH_BUNDLER_AND_DUNS.get_dataframe()
 
+ACCOUNTS_WITH_EBX_PARTY = dataiku.Dataset("ACCOUNTS_WITH_EBX_PARTYS")
+ACCOUNTS_WITH_EBX_PARTY_df = ACCOUNTS_WITH_EBX_PARTY.get_dataframe()
+
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 df = ACCOUNTS_WITH_BUNDLER_AND_DUNS_df
 
