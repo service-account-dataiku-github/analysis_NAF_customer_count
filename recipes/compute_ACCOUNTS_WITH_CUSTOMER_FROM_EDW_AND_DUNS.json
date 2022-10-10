@@ -24,6 +24,10 @@
         {
           "ref": "ACCOUNTS_WITH_BUNDLER_AND_DUNS",
           "deps": []
+        },
+        {
+          "ref": "ACCOUNTS_WITH_EBX_PARTY",
+          "deps": []
         }
       ]
     }
@@ -40,11 +44,11 @@
   },
   "labels": [],
   "versionTag": {
-    "versionNumber": 55,
+    "versionNumber": 56,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1665339952067
+    "lastModifiedOn": 1665412302660
   },
   "creationTag": {
     "versionNumber": 0,
