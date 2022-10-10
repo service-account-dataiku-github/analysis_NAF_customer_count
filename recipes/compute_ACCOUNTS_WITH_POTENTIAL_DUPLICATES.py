@@ -22,6 +22,8 @@ print(len(df))
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 # find all customer_names that have other customer names that start with this customer name
 
+import time
+
 idx = 0
 unique_customer_names = df['CUSTOMER'].unique()
 full_set_n = len(unique_customer_names)
@@ -29,8 +31,10 @@ full_set_n = len(unique_customer_names)
 list_customers_ = []
 list_potential_matches_ = []
 
-report_every_n = 1000
-save_every_n = 10000
+report_every_n = 100
+save_every_n = 1000
+
+start = time.time()
 
 for n in unique_customer_names:
     idx+=1
@@ -55,6 +59,8 @@ for n in unique_customer_names:
         ACCOUNTS_WITH_POTENTIAL_DUPLICATES = dataiku.Dataset("ACCOUNTS_WITH_POTENTIAL_DUPLICATES")
         ACCOUNTS_WITH_POTENTIAL_DUPLICATES.write_with_schema(ACCOUNTS_WITH_POTENTIAL_DUPLICATES_df)
         print(len(ACCOUNTS_WITH_POTENTIAL_DUPLICATES_df), "written")
-        print("continuing on with checks....")
+        
+        end = time.time()
+        print(round((end - start)/60,2), "minutes elapsed.")
 
 print(len(list_customers_))
