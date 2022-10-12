@@ -46,14 +46,14 @@ def find_consistent_customers(df, consecutive=3):
     
     ## Needs only these columns ['customer_account_name', 'revenue_month', 'purchase_gallons_qty']
     
-    df = df[['customer_account_id', 'revenue_date', 'purchase_gallons_qty']].copy()
-    df.sort_values(by=['customer_account_id', 'revenue_date'], inplace=True)
+    df = df[['CUSTOMER_ACCOUNT_ID', 'REVENUE_DATE', 'PURCHASE_GALLONS_QTY']].copy()
+    df.sort_values(by=['CUSTOMER_ACCOUNT_ID', 'REVENUE_DATE'], inplace=True)
     
-    z = (df.groupby(['customer_account_id'])['revenue_date'].diff(1)/np.timedelta64(1, 'M'))
+    z = (df.groupby(['CUSTOMER_ACCOUNT_ID'])['REVENUE_DATE'].diff(1)/np.timedelta64(1, 'M'))
     z = z.round(0)
     z = (z == 1).astype('int')
-    df['cust_cons'] = (z * (z.groupby((z != z.shift()).cumsum()).cumcount() + 2))
-    cust_cons = df.groupby('customer_account_id')['cust_cons'].max()
+    df['CUST_CONS'] = (z * (z.groupby((z != z.shift()).cumsum()).cumcount() + 2))
+    cust_cons = df.groupby('CUSTOMER_ACCOUNT_ID')['CUST_CONS'].max()
     
     return list(cust_cons[cust_cons>=consecutive].index)
 
