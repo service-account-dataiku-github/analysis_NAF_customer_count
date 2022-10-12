@@ -156,20 +156,20 @@ for sublist in tqdm(all_account_ids_n):
     ## Add padding, find the n months average and compute drawdown indicator based on the rules
     dd_find = add_padding(dd_find, padding=statistics_period, last_date=period_end_date)
     dd_find = find_average(dd_find, n=statistics_period)
-    
+
     dd_find['DD_INDICATOR'] = np.where(((drawdown*(dd_find['LAST_N_MONTHS_AVG'].round(3)) >
                                          dd_find['PURCHASE_GALLONS_QTY'].round(3)) &
                                         (dd_find['NEXT_N_MONTHS_AVG'].round(3) <
                                          drawdown_fwd_check*dd_find['LAST_N_MONTHS_AVG'].round(3))),
                                        True, False)
-    
+
     ## Find the first drawdown and also the list of customers
     pflip_dd = dd_find[dd_find['DD_INDICATOR'] == True].copy()
     pflip_dd.drop_duplicates('CUSTOMER_ACCOUNT_ID', inplace=True)
     first_drop_idx = pflip_dd.index
     pflip_dd_customers = list(dd_find['CUSTOMER_ACCOUNT_ID'].unique())
     first_drop = dd_find.iloc[first_drop_idx]
-    
+
     ## Identify the lookback period
     first_drop = first_drop[['CUSTOMER_ACCOUNT_ID', 'REVENUE_DATE']].copy()
     first_drop = first_drop[first_drop['REVENUE_DATE'] <= inactive_date_start].copy()
@@ -178,27 +178,27 @@ for sublist in tqdm(all_account_ids_n):
     dd_find_df = dd_find[dd_find['CUSTOMER_ACCOUNT_ID'].isin(pflip_dd_customers)]
     dd_find_df = dd_find_df.merge(first_drop, on=['CUSTOMER_ACCOUNT_ID'])
     dd_find_df = dd_find_df[dd_find_df['REVENUE_DATE'].between(dd_find_df['START_DATE'],dd_find_df['DD_DATE'])].copy()
-    
+
     ## Compute the sharpest fall from the lookback period
     dd_find_df.sort_values(['CUSTOMER_ACCOUNT_ID', 'REVENUE_DATE'], inplace=True)
     dd_find_df['DROP'] = dd_find_df.groupby(['CUSTOMER_ACCOUNT_ID'])['PURCHASE_GALLONS_QTY'].diff(-1)
-    
+
     ## Find the corresponding period and remove duplicates in case of a similar values
     drop_idx = dd_find_df.groupby(['CUSTOMER_ACCOUNT_ID'])['DROP'].transform(max) == dd_find_df['DROP']
     drop_month_df = dd_find_df[drop_idx].copy()
     drop_month_df.drop_duplicates(['CUSTOMER_ACCOUNT_ID'], inplace=True)
-    
+
     ## remove the first record
     dd_find = dd_find.groupby('CUSTOMER_ACCOUNT_ID').apply(lambda group: group.iloc[1:, 1:]).reset_index()
     dd_find.drop('level_1', axis=1, inplace=True)
-    
+
     ## Find the time periods for calculating statistics (mean and standard deviation)
     drop_month_df.rename(columns = {'REVENUE_DATE':'DROP_DATE'}, inplace=True)
     dd_find = dd_find.merge(drop_month_df[['CUSTOMER_ACCOUNT_ID', 'DROP_DATE']], on='CUSTOMER_ACCOUNT_ID')
     dd_find['END_DATE'] = dd_find['DROP_DATE'] - pd.DateOffset(months=3)
     dd_find['START_DATE'] = dd_find['END_DATE'] - pd.DateOffset(months=statistics_period-1)
     pflip_12_data = dd_find[dd_find['REVENUE_DATE'].between(dd_find['START_DATE'], dd_find['END_DATE'])].copy()
-    
+
     ## Calculate Mean and Standard Deviation
     dd_stat = pflip_12_data.groupby(['CUSTOMER_ACCOUNT_ID'], as_index=False).agg({'PURCHASE_GALLONS_QTY':['mean','std']})
     dd_stat.columns = ['CUSTOMER_ACCOUNT_ID_DD', 'MEAN_DD','STD_DD']
@@ -206,9 +206,9 @@ for sublist in tqdm(all_account_ids_n):
                                         left_on='CUSTOMER_ACCOUNT_ID',
                                         right_on='CUSTOMER_ACCOUNT_ID_DD',
                                         how='left')
-    
+
     drop_df = pd.concat([drop_df, drop_month_df], ignore_index=True)
-    
+
 drop_df.drop(['CUSTOMER_ACCOUNT_ID_DD'], axis=1, inplace=True)
 drop_df.rename(columns={'CUSTOMER_ACCOUNT_ID':'CUSTOMER_ACCOUNT_ID_DD',
                         'CUSTOMER_ACCOUNT_NAME': 'CUSTOMER_ACCOUNT_NAME_DD',
@@ -216,6 +216,9 @@ drop_df.rename(columns={'CUSTOMER_ACCOUNT_ID':'CUSTOMER_ACCOUNT_ID_DD',
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 len(drop_df.CUSTOMER_ACCOUNT_ID_DD.unique())
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+drop_df.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 # Compute recipe outputs from inputs
