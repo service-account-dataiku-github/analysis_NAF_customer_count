@@ -70,6 +70,13 @@ print(len(df_v))
 df_v.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+print(len(df_v))
+df_v = df_v[df_v['REVENUE_DATE'].between(pd.to_datetime(start_date), pd.to_datetime(end_date))].copy()
+df_v = df_v.dropna(subset=['CUSTOMER_ACCOUNT_ID'])
+df_v = df_v[df_v['CUSTOMER_SOURCE_SYSTEM_CODE'].isin(['TANDEM', 'SIEBEL'])]
+print(len(df_v))
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 df_v.columns.tolist()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
