@@ -76,9 +76,14 @@ def add_padding(df, padding=12, last_date=None):
     Fills all the zeros in between for intermittent data and also fills the trailing data with 
     12 zeros or till the last date whichever is earlier
     '''
-    cols = ['customer_account_id', 'customer_account_name', 'customer_name',
-                           'account_since_date', 'customer_business_program_name', 'account_city',
-                           'account_state_prov_code', 'customer_source_system_code', 'revenue_date']
+    
+    cols = ['CUSTOMER_ACCOUNT_ID', 'CUSTOMER_ACCOUNT_NAME', 'CUSTOMER_NAME',
+                           'ACCOUNT_SINCE_DATE', 'CUSTOMER_BUSINESS_PROGRAM_NAME', 'ACCOUNT_CITY',
+                           'ACCOUNT_STATE', 'CUSTOMER_SOURCE_SYSTEM_CODE', 'REVENUE_DATE']
+    
+    #cols = ['customer_account_id', 'customer_account_name', 'customer_name',
+    #                       'account_since_date', 'customer_business_program_name', 'account_city',
+    #                       'account_state_prov_code', 'customer_source_system_code', 'revenue_date']
     
     common_cols = set(df.columns).intersection(set(cols))
     
