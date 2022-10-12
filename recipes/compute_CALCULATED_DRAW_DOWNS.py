@@ -77,7 +77,18 @@ df_v = df_v[df_v['CUSTOMER_SOURCE_SYSTEM_CODE'].isin(['TANDEM', 'SIEBEL'])]
 print(len(df_v))
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-df_v.columns.tolist()
+df_v['CUSTOMER_ACCOUNT_ID'] = df_v['CUSTOMER_ACCOUNT_ID'].astype('int64')
+df_v['REVENUE_DATE'] = pd.to_datetime(df_v['REVENUE_DATE'])
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+states = list(df_v['ACCOUNT_STATE'].unique())
+states_dict = {s:s.upper() for s in states}
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+states_dict
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+df_v.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 # Compute recipe outputs from inputs
