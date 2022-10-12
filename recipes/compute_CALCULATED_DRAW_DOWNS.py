@@ -85,7 +85,12 @@ states = list(df_v['ACCOUNT_STATE'].unique())
 states_dict = {s:s.upper() for s in states}
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-states_dict
+df_v['ACCOUNT_STATE'] = df_v['ACCOUNT_STATE'].map(states_dict)
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+## remove the unneccesary columns
+remove_cols=['REVENUE_MONTH','REVENUE_YEAR', 'REVENUE_QUARTER']
+df_v = df_v.drop([x for x in remove_cols if x in df_v.columns], axis=1)
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 df_v.head()
