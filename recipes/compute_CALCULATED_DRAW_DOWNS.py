@@ -93,7 +93,63 @@ remove_cols=['REVENUE_MONTH','REVENUE_YEAR', 'REVENUE_QUARTER']
 df_v = df_v.drop([x for x in remove_cols if x in df_v.columns], axis=1)
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-df_v.head()
+df_v.sort_values(['REVENUE_DATE'], inplace=True)
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+seen_accounts = df_v[df_v['PURCHASE_GALLONS_QTY'] > 0].groupby(['CUSTOMER_ACCOUNT_ID'], as_index=False)[['REVENUE_DATE']].first()
+seen_accounts['FIRST_DATE'] = seen_accounts['REVENUE_DATE'] - pd.DateOffset(months=1)
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+df_v.REVENUE_DATE.value_counts(dropna=False)
+print(len(df_v))
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+import pandas as pd
+import numpy as np
+from tqdm import tqdm
+from dateutil.relativedelta import relativedelta
+from helper import *
+
+#---------------------
+# input vars
+df = df_v
+period_end_date = end_date
+match_type = 'program_flip'
+period_start_date=None
+split=None
+#------------------------
+
+drawdown = (100 - drawdown)/100
+drawdown_fwd_check /= 100
+
+inactive_date_start = pd.to_datetime(period_end_date) + relativedelta(months=-inactive_period)
+
+if match_type == 'conversion':
+    df = df[df['CUSTOMER_SOURCE_SYSTEM_CODE'] == 'TANDEM'].copy()
+
+df = df[df['REVENUE_DATE'] <= period_end_date].copy()
+
+if period_start_date:
+    period_start_date = pd.to_datetime(period_start_date)
+    df = df[df['REVENUE_DATE'] >= period_start_date].copy()
+    
+all_account_ids = list(df['CUSTOMER_ACCOUNT_ID'].unique())
+
+if not split:
+    split=1
+    
+all_account_ids_n = list(split_list(all_account_ids, split))
+
+drop_df = pd.DataFrame()
+
+for sublist in tqdm(all_account_ids_n):
+    
+    dd_find = df[df['CUSTOMER_ACCOUNT_ID'].isin(sublist)].copy()
+
+    ## Find consistent customers
+    consistent_customers_dd = find_consistent_customers(dd_find, consecutive=consistency)
+    if len(consistent_customers_dd) == 0:
+        continue
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 # Compute recipe outputs from inputs
@@ -102,9 +158,9 @@ df_v.head()
 
 
 
-CALCULATED_DRAW_DOWNS_df = NAFCUSTOMER_C360_ACCOUNTS_df # For this sample code, simply copy input to output
+#CALCULATED_DRAW_DOWNS_df = NAFCUSTOMER_C360_ACCOUNTS_df # For this sample code, simply copy input to output
 
 
 # Write recipe outputs
-CALCULATED_DRAW_DOWNS = dataiku.Dataset("CALCULATED_DRAW_DOWNS")
-CALCULATED_DRAW_DOWNS.write_with_schema(CALCULATED_DRAW_DOWNS_df)
+#CALCULATED_DRAW_DOWNS = dataiku.Dataset("CALCULATED_DRAW_DOWNS")
+#CALCULATED_DRAW_DOWNS.write_with_schema(CALCULATED_DRAW_DOWNS_df)
