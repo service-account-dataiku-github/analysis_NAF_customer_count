@@ -84,26 +84,26 @@ def add_padding(df, padding=12, last_date=None):
     
     profile = df[common_cols].drop_duplicates()
 
-    vol = df[['customer_account_id', 'revenue_date', 'purchase_gallons_qty']].copy()
-    vol = vol.groupby(['customer_account_id', 'revenue_date'])[['purchase_gallons_qty']].sum().reset_index()
+    vol = df[['CUSTOMER_ACCOUNT_ID', 'REVENUE_DATE', 'PURCHASE_GALLONS_QTY']].copy()
+    vol = vol.groupby(['CUSTOMER_ACCOUNT_ID', 'REVENUE_DATE'])[['PURCHASE_GALLONS_QTY']].sum().reset_index()
     vol.reset_index(drop=True, inplace=True)
 
-    vol.sort_values(['customer_account_id', 'revenue_date'], inplace=True)
+    vol.sort_values(['CUSTOMER_ACCOUNT_ID', 'REVENUE_DATE'], inplace=True)
     vol.reset_index(drop=True, inplace=True)
 
-    last_rev_date = vol.groupby(['customer_account_id'])[['revenue_date']].last()
-    last_rev_date = last_rev_date[last_rev_date['revenue_date'] < pd.to_datetime(last_date)]
-    last_rev_date['revenue_date'] = last_rev_date['revenue_date'] + pd.DateOffset(months=padding)
-    last_rev_date['last_date'] = pd.to_datetime(last_date)
-    last_rev_date['revenue_date'] = last_rev_date[['revenue_date','last_date']].min(axis=1)
-    last_rev_date.drop(['last_date'], axis=1, inplace=True)
+    last_rev_date = vol.groupby(['CUSTOMER_ACCOUNT_ID'])[['REVENUE_DATE']].last()
+    last_rev_date = last_rev_date[last_rev_date['REVENUE_DATE'] < pd.to_datetime(last_date)]
+    last_rev_date['REVENUE_DATE'] = last_rev_date['REVENUE_DATE'] + pd.DateOffset(months=padding)
+    last_rev_date['LAST_DATE'] = pd.to_datetime(last_date)
+    last_rev_date['REVENUE_DATE'] = last_rev_date[['REVENUE_DATE','LAST_DATE']].min(axis=1)
+    last_rev_date.drop(['LAST_DATE'], axis=1, inplace=True)
     last_rev_date.reset_index(inplace=True)
     vol = pd.concat([vol, last_rev_date], ignore_index=True)
     vol.fillna(0, inplace=True)
-    vol = (vol.set_index('revenue_date').groupby('customer_account_id').resample('MS').asfreq()
-                  .drop(['customer_account_id'], 1).reset_index())
+    vol = (vol.set_index('REVENUE_DATE').groupby('CUSTOMER_ACCOUNT_ID').resample('MS').asfreq()
+                  .drop(['CUSTOMER_ACCOUNT_ID'], 1).reset_index())
     vol.fillna(0, inplace=True)
-    df = vol.merge(profile, how='left', on = ['customer_account_id', 'revenue_date'])
+    df = vol.merge(profile, how='left', on = ['CUSTOMER_ACCOUNT_ID', 'REVENUE_DATE'])
     df.fillna(method='ffill', inplace=True)
 
     return df
