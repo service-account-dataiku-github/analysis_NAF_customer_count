@@ -28,11 +28,11 @@
     "dimensions": []
   },
   "versionTag": {
-    "versionNumber": 1,
+    "versionNumber": 2,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1665597716298
+    "lastModifiedOn": 1665599277747
   },
   "creationTag": {
     "versionNumber": 0,
@@ -75,7 +75,8 @@
       {"name":"BI_MRU","type":"string","originalType":"VARCHAR","maxLength":10},
       {"name":"REVENUE_AMOUNT_USD","type":"double","originalType":"NUMBER"},
       {"name":"GROSS_SPEND_AMOUNT","type":"double","originalType":"NUMBER"},
-      {"name":"PURCHASE_GALLONS_QTY","type":"double","originalType":"NUMBER"}
+      {"name":"PURCHASE_GALLONS_QTY","type":"double","originalType":"NUMBER"},
+      {"name":"ACTIVE_CARD_COUNT","type":"bigint","originalType":"NUMBER"}
     ],
     "userModified": true
   },
