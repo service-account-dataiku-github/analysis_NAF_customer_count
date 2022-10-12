@@ -127,20 +127,20 @@ def find_average(dd_find, n=12):
 
     ## New Method
 
-    dd_find.sort_values(['customer_account_id', 'revenue_date'], inplace=True)
-    dd_find2 = dd_find.sort_values(['customer_account_id', 'revenue_date'], ascending=[True, False]).reset_index(drop=True)
+    dd_find.sort_values(['CUSTOMER_ACCOUNT_ID', 'REVENUE_DATE'], inplace=True)
+    dd_find2 = dd_find.sort_values(['CUSTOMER_ACCOUNT_ID', 'REVENUE_DATE'], ascending=[True, False]).reset_index(drop=True)
 
     dd_find.reset_index(drop=True, inplace=True)
-    dd_find['last_n_months_avg'] = dd_find.groupby(['customer_account_id'])['purchase_gallons_qty']\
+    dd_find['LAST_N_MONTHS_AVG'] = dd_find.groupby(['CUSTOMER_ACCOUNT_ID'])['PURCHASE_GALLONS_QTY']\
                                         .rolling(n, min_periods=1).mean().reset_index(drop=True)
-    dd_find2['next_n_months_avg'] = dd_find2.groupby(['customer_account_id'])['purchase_gallons_qty']\
+    dd_find2['NEXT_N_MONTHS_AVG'] = dd_find2.groupby(['CUSTOMER_ACCOUNT_ID'])['PURCHASE_GALLONS_QTY']\
                                         .rolling(n, min_periods=1).mean().reset_index(drop=True)
 
-    dd_find['last_n_months_avg'] = dd_find.groupby('customer_account_id')['last_n_months_avg'].shift(1)
-    dd_find2['next_n_months_avg'] = dd_find2.groupby('customer_account_id')['next_n_months_avg'].shift(1)
+    dd_find['LAST_N_MONTHS_AVG'] = dd_find.groupby('CUSTOMER_ACCOUNT_ID')['LAST_N_MONTHS_AVG'].shift(1)
+    dd_find2['NEXT_N_MONTHS_AVG'] = dd_find2.groupby('CUSTOMER_ACCOUNT_ID')['NEXT_N_MONTHS_AVG'].shift(1)
 
-    dd_find = dd_find.merge(dd_find2[['customer_account_id', 'revenue_date', 'next_n_months_avg']], 
-                on=['customer_account_id', 'revenue_date'])
+    dd_find = dd_find.merge(dd_find2[['CUSTOMER_ACCOUNT_ID', 'REVENUE_DATE', 'NEXT_N_MONTHS_AVG']], 
+                on=['CUSTOMER_ACCOUNT_ID', 'REVENUE_DATE'])
 
     return dd_find
 
