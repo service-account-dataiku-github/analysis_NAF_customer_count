@@ -1,0 +1,21 @@
+{
+  "start_date": "2010-01-01",
+  "end_date": "2022-03-01",
+  "run_type": "base_run",
+  "consistency": 4,
+  "drawdown_period_average": 12,
+  "drawdown": 90,
+  "drawdown_fwd_check": 5,
+  "drawdown_lookback_period": 6,
+  "drawup_lookfwd_period": 3,
+  "statistics_period": 12,
+  "inactive_period": 4,
+  "month_diff_h": 6,
+  "month_diff_l": 0,
+  "sd_mul": 2,
+  "max_city_distance": 3,
+  "threshold_score_step1": 50,
+  "threshold_score_step2": 50,
+  "threshold_score": 50,
+  "sd_multiplier": 2
+}
