@@ -132,24 +132,30 @@ df = df[df['REVENUE_DATE'] <= period_end_date].copy()
 if period_start_date:
     period_start_date = pd.to_datetime(period_start_date)
     df = df[df['REVENUE_DATE'] >= period_start_date].copy()
-    
+
 all_account_ids = list(df['CUSTOMER_ACCOUNT_ID'].unique())
 
 if not split:
     split=1
-    
+
 all_account_ids_n = list(split_list(all_account_ids, split))
 
 drop_df = pd.DataFrame()
 
 for sublist in tqdm(all_account_ids_n):
-    
+
     dd_find = df[df['CUSTOMER_ACCOUNT_ID'].isin(sublist)].copy()
 
     ## Find consistent customers
     consistent_customers_dd = find_consistent_customers(dd_find, consecutive=consistency)
     if len(consistent_customers_dd) == 0:
         continue
+        
+    dd_find = dd_find[dd_find['CUSTOMER_ACCOUNT_ID'].isin(consistent_customers_dd)].copy()
+    
+    ## Add padding, find the n months average and compute drawdown indicator based on the rules
+    dd_find = add_padding(dd_find, padding=statistics_period, last_date=period_end_date)
+    dd_find = find_average(dd_find, n=statistics_period)
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 # Compute recipe outputs from inputs
