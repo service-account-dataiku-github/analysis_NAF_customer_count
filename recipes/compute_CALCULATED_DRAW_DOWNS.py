@@ -14,10 +14,9 @@ NAFCUSTOMER_REVENUE_BY_CUSTOMER_LIMITED_df = NAFCUSTOMER_REVENUE_BY_CUSTOMER_LIM
 print(len(NAFCUSTOMER_REVENUE_BY_CUSTOMER_LIMITED_df))
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-NAFCUSTOMER_C360_ACCOUNTS_df.head()
+NAFCUSTOMER_REVENUE_BY_CUSTOMER_LIMITED_df.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-
 # Compute recipe outputs from inputs
 # TODO: Replace this part by your actual code that computes the output, as a Pandas dataframe
 # NB: DSS also supports other kinds of APIs for reading and writing data. Please see doc.
