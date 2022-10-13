@@ -23,18 +23,43 @@ print(len(df_a), "total accounts")
 
 print()
 
-print(len(CALCULATED_DRAW_UPS_df), "with draw ups")
-df_down = pd.merge(df_a, CALCULATED_DRAW_UPS_df, on='CUSTOMER_ACCOUNT_ID', how='inner')
-print(len(df_down), "accounts joined with draw ups")
+print(len(CALCULATED_DRAW_DOWNS_df), "with draw downs")
+df_down = pd.merge(df_a, CALCULATED_DRAW_DOWNS_df, on='CUSTOMER_ACCOUNT_ID', how='inner')
+print(len(df_down), "accounts joined with draw downs")
 
 print()
 
-print(len(CALCULATED_DRAW_DOWNS_df), "with draw downs")
-df_up = pd.merge(df_a, CALCULATED_DRAW_DOWNS_df, on='CUSTOMER_ACCOUNT_ID', how='inner')
-print(len(df_up), "accounts joined with draw downs")
+print(len(CALCULATED_DRAW_UPS_df), "with draw ups")
+df_up = pd.merge(df_a, CALCULATED_DRAW_UPS_df, on='CUSTOMER_ACCOUNT_ID', how='inner')
+print(len(df_up), "accounts joined with draw ups")
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-df_down.head()
+df_down['DRAW_DOWN_DATE'] = pd.to_datetime(df_down['DRAW_DOWN_DATE']).dt.date
+
+df_down_customer_account_count =  df_down.groupby(by=["CUSTOMER"])['CUSTOMER_ACCOUNT_ID'].count().reset_index()
+df_down_customer_min_date =  df_down.groupby(by=["CUSTOMER"])['DRAW_DOWN_DATE'].min().reset_index()
+df_down_customer_min_date.columns = ['CUSTOMER','DRAW_DOWN_DATE_MIN']
+
+df_down_customer_max_date =  df_down.groupby(by=["CUSTOMER"])['DRAW_DOWN_DATE'].max().reset_index()
+df_down_customer_max_date.columns = ['CUSTOMER','DRAW_DOWN_DATE_MAX']
+
+df_customer_down = pd.merge(df_down_customer_account_count, df_down_customer_min_date, on='CUSTOMER', how='left') 
+df_customer_down = pd.merge(df_customer_down, df_down_customer_max_date, on='CUSTOMER', how='left') 
+df_customer_down.head()
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+df_up['DRAW_UP_DATE'] = pd.to_datetime(df_up['DRAW_UP_DATE']).dt.date
+
+df_up_customer_account_count =  df_up.groupby(by=["CUSTOMER"])['CUSTOMER_ACCOUNT_ID'].count().reset_index()
+df_up_customer_min_date =  df_up.groupby(by=["CUSTOMER"])['DRAW_UP_DATE'].min().reset_index()
+df_up_customer_min_date.columns = ['CUSTOMER','DRAW_UP_DATE_MIN']
+
+df_up_customer_max_date =  df_up.groupby(by=["CUSTOMER"])['DRAW_UP_DATE'].max().reset_index()
+df_up_customer_max_date.columns = ['CUSTOMER','DRAW_UP_DATE_MAX']
+
+df_customer_up = pd.merge(df_up_customer_account_count, df_up_customer_min_date, on='CUSTOMER', how='left') 
+df_customer_up = pd.merge(df_customer_up, df_up_customer_max_date, on='CUSTOMER', how='left') 
+df_customer_up.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 # Compute recipe outputs
