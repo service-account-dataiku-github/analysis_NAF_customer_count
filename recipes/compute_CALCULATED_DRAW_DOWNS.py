@@ -217,7 +217,7 @@ drop_df.rename(columns={'DROP_DATE':'DRAW_DOWN_DATE',
 len(drop_df.CUSTOMER_ACCOUNT_ID.unique())
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-drop_df = drop_df[['CUSTOMER_ACCOUNT_ID','DROP_DATE','DROP_QTY','MEAN_DD','STD_DD']]
+drop_df = drop_df[['CUSTOMER_ACCOUNT_ID','DRAW_DROP_DATE','DROP_QTY','MEAN_DD','STD_DD']]
 drop_df.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
