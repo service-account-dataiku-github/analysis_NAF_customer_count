@@ -226,10 +226,9 @@ drop_df.head()
 # NB: DSS also supports other kinds of APIs for reading and writing data. Please see doc.
 
 
-
-#CALCULATED_DRAW_DOWNS_df = NAFCUSTOMER_C360_ACCOUNTS_df # For this sample code, simply copy input to output
+CALCULATED_DRAW_DOWNS_df = drop_df
 
 
 # Write recipe outputs
-#CALCULATED_DRAW_DOWNS = dataiku.Dataset("CALCULATED_DRAW_DOWNS")
-#CALCULATED_DRAW_DOWNS.write_with_schema(CALCULATED_DRAW_DOWNS_df)
+CALCULATED_DRAW_DOWNS = dataiku.Dataset("CALCULATED_DRAW_DOWNS")
+CALCULATED_DRAW_DOWNS.write_with_schema(CALCULATED_DRAW_DOWNS_df)
