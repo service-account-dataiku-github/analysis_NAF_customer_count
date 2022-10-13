@@ -98,7 +98,7 @@ def split_list(lst, n):
     return [lst[i*k+min(i, m):(i+1)*k+min(i+1, m)] for i in range(n)]
 
 match_type = "program_flip"
-period_start_date = start_date 
+period_start_date = start_date
 period_end_date = None
 drawup_window = drawup_lookfwd_period
 statistics_period = statistics_period
@@ -106,32 +106,32 @@ split = None
 
 if match_type == 'conversion':
     df_v = df_v[df_v['CUSTOMER_SOURCE_SYSTEM_CODE'] == 'SIEBEL'].copy()
-    
+
 period_start_date = pd.to_datetime(period_start_date)
 df_v = df_v[df_v['REVENUE_DATE'] >= period_start_date].copy()
 
 if period_end_date:
     period_end_date = pd.to_datetime(period_end_date)
     df_v = df_v[df_v['revenue_date'] <= period_end_date].copy()
-    
+
 all_account_ids = list(df_v['CUSTOMER_ACCOUNT_ID'].unique())
 
 if not split:
     split=1
-    
+
 all_account_ids_n = list(split_list(all_account_ids, split))
 
 rise_df = pd.DataFrame()
 
 for sublist in tqdm(all_account_ids_n):
-    
+
     du_find = df_v[df_v['CUSTOMER_ACCOUNT_ID'].isin(sublist)].copy()
-    
+
     ## Filter Non-Zero Records and find the first non zero transaction date
     du_find = du_find[du_find['PURCHASE_GALLONS_QTY'] > 0]
-    
+
     du_find.sort_values(['REVENUE_DATE'], inplace=True)
-    
+
     du_agg = du_find.groupby(['CUSTOMER_ACCOUNT_ID',
                       'CUSTOMER_ACCOUNT_NAME',
                       'CUSTOMER',
@@ -139,66 +139,56 @@ for sublist in tqdm(all_account_ids_n):
                       'ACCOUNT_CITY',
                       'ACCOUNT_STATE',
                       'CUSTOMER_BUSINESS_PROGRAM_NAME'], as_index=False)[['REVENUE_DATE']].min()
-    
+
     du_agg['DU_INDICATOR'] = np.where((du_agg['REVENUE_DATE'] > period_start_date), True, False)
     du_agg.rename(columns={'REVENUE_DATE':'DU_DATE'}, inplace=True)
     du_agg['DU_DATE'] -= pd.DateOffset(months=1)
     du_agg = du_agg[du_agg['DU_INDICATOR'] == True].drop_duplicates(['CUSTOMER_ACCOUNT_ID'])
-    
+
     ## list of customers who are drawing up
     du_customers = list(du_agg['CUSTOMER_ACCOUNT_ID'])
-    
+
     if len(du_customers) == 0:
         continue
-        
+
     du_find = du_find[du_find['CUSTOMER_ACCOUNT_ID'].isin(du_customers)].copy()
-    
+
     du_find = du_find.groupby('CUSTOMER_ACCOUNT_ID').apply(lambda group: group.iloc[:-1, 1:]).reset_index()
     du_find.drop('level_1', axis=1, inplace=True)
-    
+
     du_find = du_find.merge(du_agg, left_on=['CUSTOMER_ACCOUNT_ID'], right_on=['CUSTOMER_ACCOUNT_ID'])
-    
+
     du_find['DU_AVG_START'] = du_find['DU_DATE']  + pd.DateOffset(months=drawup_window)
     du_find['DU_AVG_END'] = du_find['DU_DATE']  + pd.DateOffset(months=drawup_window+statistics_period-1)
-    
+
     du_find_12 = du_find[du_find['REVENUE_DATE'].between(du_find['DU_AVG_START'], du_find['DU_AVG_END'])].copy()
-    
+
     du_stat = du_find_12.groupby(['CUSTOMER_ACCOUNT_ID'], as_index=False).agg({'PURCHASE_GALLONS_QTY':['mean','std']})
-    
+
     du_stat.columns = ['CUSTOMER_ACCOUNT_ID', 'mean_du','std_du']
-    
+
     rise_df_ = du_agg.merge(du_stat, left_on='CUSTOMER_ACCOUNT_ID', right_on='CUSTOMER_ACCOUNT_ID', how='left')
-    
+
     rise_df = pd.concat([rise_df, rise_df_], ignore_index=True)
-    
+
 rise_df.head()
 
 rise_df.rename(columns={'customer_account_id':'customer_account_id_du',
                     'customer_account_name': 'customer_account_name_du',
                     'customer_name': 'customer_name_du'}, inplace=True)
 
-rise_df.rename(columns={'CUSTOMER_ACCOUNT_ID':'CUSTOMER_ACCOUNT_ID_DU',
-                       'CUSTOMER_ACCOUNT_NAME':'CUSTOMER_ACCOUNT_NAME_DU',
-                       'CUSTOMER':'CUSTOMER_DU'}, inplace=True)
+rise_df.rename(columns={'mean_du':'DU_MEAN',
+                       'std_du':'DU_STD'}, inplace=True)
 
 print(len(rise_df))
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-rise_df.CUSTOMER_ACCOUNT_ID_DU.value_counts()
+rise_df = rise_df[['CUSTOMER_ACCOUNT_ID','DU_DATE']]
+rise_df.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-rise_df[['CUSTOMER_ACCOUNT_ID','DU_DATE']]
-
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-df_v.head()
-
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-# Compute recipe outputs from inputs
-# TODO: Replace this part by your actual code that computes the output, as a Pandas dataframe
-# NB: DSS also supports other kinds of APIs for reading and writing data. Please see doc.
-
-#CALCULATED_DRAW_UPS_df = NAFCUSTOMER_REVENUE_BY_CUSTOMER_LIMITED_df # For this sample code, simply copy input to output
+CALCULATED_DRAW_UPS_df = rise_df
 
 # Write recipe outputs
-#CALCULATED_DRAW_UPS = dataiku.Dataset("CALCULATED_DRAW_UPS")
-#CALCULATED_DRAW_UPS.write_with_schema(CALCULATED_DRAW_UPS_df)
+CALCULATED_DRAW_UPS = dataiku.Dataset("CALCULATED_DRAW_UPS")
+CALCULATED_DRAW_UPS.write_with_schema(CALCULATED_DRAW_UPS_df)
