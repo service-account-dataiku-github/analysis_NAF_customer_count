@@ -210,7 +210,8 @@ for sublist in tqdm(all_account_ids_n):
     drop_df = pd.concat([drop_df, drop_month_df], ignore_index=True)
 
 drop_df.drop(['CUSTOMER_ACCOUNT_ID_DD'], axis=1, inplace=True)
-drop_df.rename(columns={'DROP':'DROP_QTY'}, inplace=True)
+drop_df.rename(columns={'DROP_DATE':'DRAW_DOWN_DATE',
+                        'DROP':'DROP_QTY'}, inplace=True)
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 len(drop_df.CUSTOMER_ACCOUNT_ID.unique())
