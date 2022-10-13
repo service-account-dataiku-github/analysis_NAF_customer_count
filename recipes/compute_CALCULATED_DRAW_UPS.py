@@ -57,9 +57,7 @@ print(len(NAFCUSTOMER_REVENUE_BY_CUSTOMER_LIMITED_df.CUSTOMER_ACCOUNT_ID.unique(
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 df_v = NAFCUSTOMER_REVENUE_BY_CUSTOMER_LIMITED_df
-
 print(len(df_v))
-df_v.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 def date_tz_naive(pd_s):
@@ -70,7 +68,6 @@ print(len(df_v))
 df_v['REVENUE_DATE'] = df_v.REVENUE_MONTH.astype(str) + "/01/" + df_v.REVENUE_YEAR.astype(str)
 df_v['REVENUE_DATE'] = date_tz_naive(df_v['REVENUE_DATE'])
 print(len(df_v))
-df_v.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 print(len(df_v))
@@ -160,7 +157,7 @@ for sublist in tqdm(all_account_ids_n):
 
     du_find['DU_AVG_START'] = du_find['DU_DATE']  + pd.DateOffset(months=drawup_window)
     du_find['DU_AVG_END'] = du_find['DU_DATE']  + pd.DateOffset(months=drawup_window+statistics_period-1)
-
+    
     du_find_12 = du_find[du_find['REVENUE_DATE'].between(du_find['DU_AVG_START'], du_find['DU_AVG_END'])].copy()
 
     du_stat = du_find_12.groupby(['CUSTOMER_ACCOUNT_ID'], as_index=False).agg({'PURCHASE_GALLONS_QTY':['mean','std']})
@@ -177,13 +174,14 @@ rise_df.rename(columns={'customer_account_id':'customer_account_id_du',
                     'customer_account_name': 'customer_account_name_du',
                     'customer_name': 'customer_name_du'}, inplace=True)
 
-rise_df.rename(columns={'mean_du':'DU_MEAN',
-                       'std_du':'DU_STD'}, inplace=True)
+rise_df.rename(columns={'DU_DATE':'DRAW_UP_DATE',
+                        'mean_du':'MEAN_DU',
+                       'std_du':'STD_DU'}, inplace=True)
 
 print(len(rise_df))
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-rise_df = rise_df[['CUSTOMER_ACCOUNT_ID','DU_DATE']]
+rise_df = rise_df[['CUSTOMER_ACCOUNT_ID','DRAW_UP_DATE','MEAN_DU','STD_DU']]
 rise_df.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
