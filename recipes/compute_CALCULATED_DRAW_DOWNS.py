@@ -210,14 +210,13 @@ for sublist in tqdm(all_account_ids_n):
     drop_df = pd.concat([drop_df, drop_month_df], ignore_index=True)
 
 drop_df.drop(['CUSTOMER_ACCOUNT_ID_DD'], axis=1, inplace=True)
-drop_df.rename(columns={'CUSTOMER_ACCOUNT_ID':'CUSTOMER_ACCOUNT_ID_DD',
-                        'CUSTOMER_ACCOUNT_NAME': 'CUSTOMER_ACCOUNT_NAME_DD',
-                        'CUSTOMER_NAME': 'CUSTOMER_NAME_DD'}, inplace=True)
+drop_df.rename(columns={'DROP':'DROP_QTY'}, inplace=True)
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-len(drop_df.CUSTOMER_ACCOUNT_ID_DD.unique())
+len(drop_df.CUSTOMER_ACCOUNT_ID.unique())
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+drop_df = drop_df[['CUSTOMER_ACCOUNT_ID','DROP_DATE','DROP_QTY','MEAN_DD','STD_DD']]
 drop_df.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
@@ -225,9 +224,7 @@ drop_df.head()
 # TODO: Replace this part by your actual code that computes the output, as a Pandas dataframe
 # NB: DSS also supports other kinds of APIs for reading and writing data. Please see doc.
 
-
 CALCULATED_DRAW_DOWNS_df = drop_df
-
 
 # Write recipe outputs
 CALCULATED_DRAW_DOWNS = dataiku.Dataset("CALCULATED_DRAW_DOWNS")
