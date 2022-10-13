@@ -28,11 +28,11 @@
     "dimensions": []
   },
   "versionTag": {
-    "versionNumber": 2,
+    "versionNumber": 3,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1665599277747
+    "lastModifiedOn": 1665691204056
   },
   "creationTag": {
     "versionNumber": 0,
@@ -76,7 +76,8 @@
       {"name":"REVENUE_AMOUNT_USD","type":"double","originalType":"NUMBER"},
       {"name":"GROSS_SPEND_AMOUNT","type":"double","originalType":"NUMBER"},
       {"name":"PURCHASE_GALLONS_QTY","type":"double","originalType":"NUMBER"},
-      {"name":"ACTIVE_CARD_COUNT","type":"bigint","originalType":"NUMBER"}
+      {"name":"ACTIVE_CARD_COUNT","type":"bigint","originalType":"NUMBER"},
+      {"name":"OUTSTANDING_CARD_COUNT","type":"bigint","originalType":"NUMBER"}
     ],
     "userModified": true
   },
