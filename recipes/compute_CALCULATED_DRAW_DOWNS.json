@@ -23,10 +23,6 @@
     "main": {
       "items": [
         {
-          "ref": "NAFCUSTOMER_C360_ACCOUNTS",
-          "deps": []
-        },
-        {
           "ref": "NAFCUSTOMER_REVENUE_BY_CUSTOMER_LIMITED",
           "deps": []
         }
@@ -45,11 +41,11 @@
   },
   "labels": [],
   "versionTag": {
-    "versionNumber": 45,
+    "versionNumber": 46,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1665662285615
+    "lastModifiedOn": 1665662897323
   },
   "creationTag": {
     "versionNumber": 0,
