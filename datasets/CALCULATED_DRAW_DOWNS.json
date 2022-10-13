@@ -28,11 +28,11 @@
     "dimensions": []
   },
   "versionTag": {
-    "versionNumber": 2,
+    "versionNumber": 3,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1665654244523
+    "lastModifiedOn": 1665661571290
   },
   "creationTag": {
     "versionNumber": 0,
@@ -57,20 +57,9 @@
   },
   "schema": {
     "columns": [
-      {"name":"CUSTOMER_ACCOUNT_ID_DD","type":"bigint"},
+      {"name":"CUSTOMER_ACCOUNT_ID","type":"bigint"},
       {"name":"DROP_DATE","type":"date"},
-      {"name":"PURCHASE_GALLONS_QTY","type":"double"},
-      {"name":"CUSTOMER_SOURCE_SYSTEM_CODE","type":"string","maxLength":4194304},
-      {"name":"CUSTOMER_BUSINESS_PROGRAM_NAME","type":"string","maxLength":4194304},
-      {"name":"ACCOUNT_STATE","type":"string","maxLength":4194304},
-      {"name":"ACCOUNT_CITY","type":"string","maxLength":4194304},
-      {"name":"CUSTOMER_ACCOUNT_NAME_DD","type":"string","maxLength":4194304},
-      {"name":"LAST_N_MONTHS_AVG","type":"double"},
-      {"name":"NEXT_N_MONTHS_AVG","type":"double"},
-      {"name":"DD_INDICATOR","type":"boolean"},
-      {"name":"DD_DATE","type":"date"},
-      {"name":"START_DATE","type":"date"},
-      {"name":"DROP","type":"double"},
+      {"name":"DROP_QTY","type":"double"},
       {"name":"MEAN_DD","type":"double"},
       {"name":"STD_DD","type":"double"}
     ],
