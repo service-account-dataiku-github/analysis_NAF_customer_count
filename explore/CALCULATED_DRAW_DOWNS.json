@@ -78,7 +78,12 @@
       "individualColumns": [],
       "valueColoringMode": "HASH"
     },
-    "sorting": [],
+    "sorting": [
+      {
+        "column": "DROP",
+        "ascending": false
+      }
+    ],
     "analysisColumnData": {},
     "explorationSampling": {
       "selection": {
