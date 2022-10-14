@@ -65,8 +65,10 @@ print(len(df_v))
 
 df_v = df_v[['CUSTOMER','REVENUE_DATE', 'ACTIVE_CARD_COUNT']]
 
-df_cust =  df_v.groupby(by=["CUSTOMER","REVENUE_DATE"]).sum().reset_index()
-df_cust.head()
+df_v_max = df_v[['CUSTOMER','ACTIVE_CARD_COUNT']]
+df_max = df_v_max.groupby(by=["CUSTOMER"]).max().reset_index()
+df_max.columns = ['CUSTOMER', 'ACTIVE_CARD_MAX']
+df_max
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 print(len(df_v))
@@ -272,8 +274,14 @@ len(drop_df.CUSTOMER.unique())
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 drop_df
-drop_df = drop_df[['CUSTOMER','DRAW_DOWN_DATE','DROP_QTY','MEAN_DD','STD_DD']]
+drop_df = drop_df[['CUSTOMER','DRAW_DOWN_DATE','MEAN_DD','STD_DD']]
 drop_df.head()
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+print(len(drop_df))
+drop_df = pd.merge(drop_df, df_max, how='left', on='CUSTOMER')
+print(len(drop_df))
+drop_df
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 # Compute recipe outputs from inputs
