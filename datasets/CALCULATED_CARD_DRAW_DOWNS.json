@@ -28,11 +28,11 @@
     "dimensions": []
   },
   "versionTag": {
-    "versionNumber": 1,
+    "versionNumber": 2,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1665746822937
+    "lastModifiedOn": 1665751076792
   },
   "creationTag": {
     "versionNumber": 0,
@@ -59,7 +59,6 @@
     "columns": [
       {"name":"CUSTOMER","type":"string","maxLength":4194304},
       {"name":"DRAW_DOWN_DATE","type":"date"},
-      {"name":"DROP_QTY","type":"double"},
       {"name":"MEAN_DD","type":"double"},
       {"name":"STD_DD","type":"double"}
     ],
