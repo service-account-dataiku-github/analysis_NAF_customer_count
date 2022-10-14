@@ -80,8 +80,9 @@ df_v['REVENUE_DATE'] = pd.to_datetime(df_v['REVENUE_DATE'])
 
 df_v = df_v[['CUSTOMER','REVENUE_DATE', 'ACTIVE_CARD_COUNT']]
 
-df_cust =  df_v.groupby(by=["CUSTOMER","REVENUE_DATE"]).sum().reset_index()
-df_cust.head()
+df_v_max = df_v[['CUSTOMER','ACTIVE_CARD_COUNT']]
+df_max = df_v_max.groupby(by=["CUSTOMER"]).max().reset_index()
+df_max.columns = ['CUSTOMER', 'ACTIVE_CARD_MAX']
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 import pandas as pd
@@ -170,6 +171,12 @@ rise_df.rename(columns={'DU_DATE':'DRAW_UP_DATE',
 
 rise_df = rise_df[['CUSTOMER','DRAW_UP_DATE','MEAN_DU','STD_DU']]
 rise_df.head()
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+print(len(rise_df))
+rise_df = pd.merge(rise_df, df_max, how='left', on='CUSTOMER')
+print(len(rise_df))
+rise_df
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 CALCULATED_CARD_DRAW_UPS_df = rise_df
