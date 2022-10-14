@@ -68,7 +68,6 @@ df_v = df_v[['CUSTOMER','REVENUE_DATE', 'ACTIVE_CARD_COUNT']]
 df_v_max = df_v[['CUSTOMER','ACTIVE_CARD_COUNT']]
 df_max = df_v_max.groupby(by=["CUSTOMER"]).max().reset_index()
 df_max.columns = ['CUSTOMER', 'ACTIVE_CARD_MAX']
-df_max
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 print(len(df_v))
