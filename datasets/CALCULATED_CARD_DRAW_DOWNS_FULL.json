@@ -28,11 +28,11 @@
     "dimensions": []
   },
   "versionTag": {
-    "versionNumber": 0,
+    "versionNumber": 1,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1665863240943
+    "lastModifiedOn": 1665867648374
   },
   "creationTag": {
     "versionNumber": 0,
@@ -56,8 +56,14 @@
     "readSQLDateColsAsDSSDates": true
   },
   "schema": {
-    "columns": [],
-    "userModified": true
+    "columns": [
+      {"name":"CUSTOMER","type":"string","maxLength":4194304},
+      {"name":"DRAW_DOWN_DATE","type":"date"},
+      {"name":"MEAN_DD","type":"double"},
+      {"name":"STD_DD","type":"double"},
+      {"name":"ACTIVE_CARD_MAX","type":"double"}
+    ],
+    "userModified": false
   },
   "dkuProperties": [],
   "metrics": {
