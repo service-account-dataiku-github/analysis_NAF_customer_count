@@ -86,7 +86,7 @@ df_words.sort_values(by='counts', ascending=False, inplace=True)
 # TODO: Replace this part by your actual code that computes the output, as a Pandas dataframe
 # NB: DSS also supports other kinds of APIs for reading and writing data. Please see doc.
 
-COMMON_WORDS_IN_NAMES = df_words
+COMMON_WORDS_IN_NAMES_df = df_words
 
 # Write recipe outputs
 COMMON_WORDS_IN_NAMES = dataiku.Dataset("COMMON_WORDS_IN_NAMES")
