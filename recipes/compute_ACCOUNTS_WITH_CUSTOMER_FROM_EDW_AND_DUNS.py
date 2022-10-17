@@ -233,11 +233,32 @@ del(df_j['PARTY_ID'])
 del(df_j['PARTY_DEFAULT_NAME'])
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS_df = df_j
+unique_customer_list = df_j.CUSTOMER.unique()
+df_customer_ids = pd.DataFrame(unique_customer_list)
+df_customer_ids.columns = ["CUSTOMER"]
+df_customer_ids = df_customer_ids.sort_values(['CUSTOMER']).reset_index(drop=True)
+df_customer_ids = df_customer_ids.reset_index(drop=False)
+df_customer_ids['CUSTOMER_ID'] = df_customer_ids.index + 77000000
+del(df_customer_ids['index'])
+df_customer_ids.tail()
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+print(len(df_j))
+df_jj = pd.merge(df_j, df_customer_ids, on='CUSTOMER')
+df_jj.dropna(subset=['CUSTOMER'], inplace=True)
+print(len(df_jj))
+df_jj.head()
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+df_by_account = df_jj[['CUSTOMER_ACCOUNT_ID','CUSTOMER_ID', 'CUSTOMER']]
+df_by_account.head()
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS_df = df_jj
 
 # Write recipe outputs
 ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS = dataiku.Dataset("ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS")
 ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS.write_with_schema(ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS_df)
 
-#BY_ACCOUNT = dataiku.Dataset("BY_ACCOUNT")
-#BY_ACCOUNT.write_with_schema(BY_ACCOUNT_df)
+BY_ACCOUNT = dataiku.Dataset("BY_ACCOUNT")
+BY_ACCOUNT.write_with_schema(df_by_account)
