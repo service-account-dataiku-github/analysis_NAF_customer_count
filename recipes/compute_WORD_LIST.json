@@ -32,7 +32,7 @@
     "main": {
       "items": [
         {
-          "ref": "WORD_LIST",
+          "ref": "COMMON_WORDS_IN_NAMES",
           "appendMode": false
         }
       ]
@@ -40,11 +40,11 @@
   },
   "labels": [],
   "versionTag": {
-    "versionNumber": 2,
+    "versionNumber": 3,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1666044559760
+    "lastModifiedOn": 1666044598697
   },
   "creationTag": {
     "versionNumber": 0,
