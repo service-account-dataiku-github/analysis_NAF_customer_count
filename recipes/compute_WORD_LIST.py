@@ -67,6 +67,9 @@ for c in customers:
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 _words = []
 _counts = []
+
+_keep_threshold = 100
+
 for w in list_.values:
     if w.count>50:
         _words.append(w.word)
