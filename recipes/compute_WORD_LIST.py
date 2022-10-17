@@ -61,7 +61,7 @@ for c in customers:
     if (idx % 10000 == 0):
         print(idx, len(list_.values))
 
-    if idx>50000:
+    if idx>5000:
         break;
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
