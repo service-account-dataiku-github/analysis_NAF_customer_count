@@ -90,6 +90,7 @@ class Draw_Down_Customer:
                         self.MATCHING_CUSTOMERS.append(name)
                         self.PERCENT_DIFFERENCE.append(percent_diff)
                         self.DAYS_DIFFERENCE.append(delta_between_drop_and_rise)
+                        self.DROP_DATE.append(draw_up_date)
                         break;
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
