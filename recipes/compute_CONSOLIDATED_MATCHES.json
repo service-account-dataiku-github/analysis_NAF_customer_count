@@ -36,7 +36,11 @@
     "main": {
       "items": [
         {
-          "ref": "CONSOLIDATED_MATCHES",
+          "ref": "MATCHES_1_TO_N_FOR_MANUAL_REVIEW",
+          "appendMode": false
+        },
+        {
+          "ref": "MATCHES_1_TO_1",
           "appendMode": false
         }
       ]
@@ -44,11 +48,11 @@
   },
   "labels": [],
   "versionTag": {
-    "versionNumber": 4,
+    "versionNumber": 5,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1666023468956
+    "lastModifiedOn": 1666023715172
   },
   "creationTag": {
     "versionNumber": 0,
