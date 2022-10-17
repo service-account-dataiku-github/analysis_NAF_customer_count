@@ -28,11 +28,11 @@
     "dimensions": []
   },
   "versionTag": {
-    "versionNumber": 1,
+    "versionNumber": 2,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1666045542870
+    "lastModifiedOn": 1666046021947
   },
   "creationTag": {
     "versionNumber": 0,
@@ -57,8 +57,8 @@
   },
   "schema": {
     "columns": [
-      {"name":"word","type":"string","maxLength":4194304},
-      {"name":"counts","type":"bigint"}
+      {"name":"WORD","type":"string","maxLength":4194304},
+      {"name":"COUNTS","type":"bigint"}
     ],
     "userModified": false
   },
