@@ -48,6 +48,7 @@ class Draw_Down_Customer:
         self.MATCHING_CUSTOMERS = []
         self.PERCENT_DIFFERENCE = []
         self.DAYS_DIFFERENCE = []
+        self.DROP_DATE = []
         
         # remove punctuation
         c_str = name.translate(str.maketrans('', '', string.punctuation))
@@ -140,9 +141,9 @@ for c in _customers:
     
     if len(c.MATCHING_CUSTOMERS)==1:
         
-        _direct_matches.append([c.CUSTOMER, c.WORD_LIST])
         _direct_customer.append(c.CUSTOMER)
         _direct_match.append(c.c.MATCHING_CUSTOMERS[0])
+        _direct_draw_up_date
         
         print(c.CUSTOMER, c.MATCHING_CUSTOMERS)
         
