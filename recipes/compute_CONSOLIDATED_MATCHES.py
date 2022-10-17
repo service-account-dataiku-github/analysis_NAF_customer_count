@@ -144,7 +144,7 @@ for c in _customers:
         
         _direct_customer.append(c.CUSTOMER)
         _direct_match.append(c.c.MATCHING_CUSTOMERS[0])
-        _direct_draw_up_date(c.c.DRAW_UP_DATE)
+        _direct_draw_up_date(c.c.DRAW_UP_DATE[0])
         
         print(c.CUSTOMER, c.MATCHING_CUSTOMERS)
         
