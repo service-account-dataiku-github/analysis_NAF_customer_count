@@ -71,14 +71,14 @@ _counts = []
 _keep_threshold = 100
 
 for w in list_.values:
-    if w.count>50:
+    if w.count>_keep_threshold:
         _words.append(w.word)
         _counts.append(w.count)
 
 df_words = pd.DataFrame(_words, columns=['WORD'])
 df_words['COUNTS'] = _counts
 
-df_words.sort_values(by='counts', ascending=False, inplace=True)
+df_words.sort_values(by='COUNTS', ascending=False, inplace=True)
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 # Compute recipe outputs from inputs
