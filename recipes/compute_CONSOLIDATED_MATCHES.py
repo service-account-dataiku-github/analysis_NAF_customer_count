@@ -28,52 +28,52 @@ df_down.head()
 import string
 
 class Draw_Down_Customer:
-    
+
     def __init__(self, name, draw_down_date, mean_dd, std_dd, active_card_max):
 
         self._common_words = ['PIZZA', 'MANAGEMENT', 'THERAPEUTICS', 'USA', 'INC', 'US', 'EQUIPMENT', 'MEDICAL', 'SYSTEMS',
-                             'ANIMAL', 'HEALTH', 'LLC', 'CORPORATION', 'BRANDS', 'TIRE', 'RUBBER', 'COUNTRY', 'CORP', 
-                              'PHARMACY','INC', 'RESTAURANTS', 'CONTAINER', 'AMERICA', 'APPLICATIONS', 'TECHNOLOGY', 
-                              'INSURANCE', 'FARM','CREDIT', 'SERVICES', 'SERVICE', 'ACCOUNT', 'GENERAL', 'PARTS', 
+                             'ANIMAL', 'HEALTH', 'LLC', 'CORPORATION', 'BRANDS', 'TIRE', 'RUBBER', 'COUNTRY', 'CORP',
+                              'PHARMACY','INC', 'RESTAURANTS', 'CONTAINER', 'AMERICA', 'APPLICATIONS', 'TECHNOLOGY',
+                              'INSURANCE', 'FARM','CREDIT', 'SERVICES', 'SERVICE', 'ACCOUNT', 'GENERAL', 'PARTS',
                               'INTL', 'FLAVORS', 'HOLDINGS', 'FOOD','INDUSTRIES', 'LP', 'FLEET', 'MEDICAL', 'PHARMA',
-                             'GLOBAL', 'PIPELINE', 'WHEELS', 'BIOSCIENCES', 'SSI', 'SPRINGS', 'NORTH', 'MARINE', 'HOLDING', 
-                              'TECHNOLOGIES','GROUP', 'PHARMACEUTICAL', 'NA', 'USA', 'COMPANY', 'RAIL', 'PARTNERS', 'BROS', 
-                              'CO', 'PHARMACEUTICALS', 'ENERGY', 'DISTRIBUTION', 'DENTAL', 'SPECIALTIES', 'OPERATIONS', 
+                             'GLOBAL', 'PIPELINE', 'WHEELS', 'BIOSCIENCES', 'SSI', 'SPRINGS', 'NORTH', 'MARINE', 'HOLDING',
+                              'TECHNOLOGIES','GROUP', 'PHARMACEUTICAL', 'NA', 'USA', 'COMPANY', 'RAIL', 'PARTNERS', 'BROS',
+                              'CO', 'PHARMACEUTICALS', 'ENERGY', 'DISTRIBUTION', 'DENTAL', 'SPECIALTIES', 'OPERATIONS',
                               'COMPANY', 'THE', 'MOUNTAIN', 'TRANS', 'FUEL', 'AMERICAN', 'HOMES', 'GAS']
-        
+
         self.CUSTOMER = name
         self.DRAW_DOWN_DATE = draw_down_date
         self.ACTIVE_CARD_MAX = active_card_max
-        
+
         self.MATCHING_CUSTOMERS = []
         self.PERCENT_DIFFERENCE = []
         self.DAYS_DIFFERENCE = []
         self.DRAW_UP_DATE = []
-        
+
         # remove punctuation
         c_str = name.translate(str.maketrans('', '', string.punctuation))
-    
+
         f = c_str.split()
         self.WORD_LIST = []
         for w in f:
             if w not in self._common_words:
                 self.WORD_LIST.append(w)
-                
+
     def Match_Draw_Up_Customer(self, name, draw_up_date, mean_du, std_du, active_card_max):
-        
+
         if (self.CUSTOMER == name):
             # exact match, already captured
             return
-        
+
         c_str = name.translate(str.maketrans('', '', string.punctuation))
-        
+
         f = c_str.split()
-        
+
         check_list = []
         for w in f:
             if w not in self._common_words:
                 check_list.append(w)
-                
+
         percent_diff = round((abs(self.ACTIVE_CARD_MAX - active_card_max) / ((self.ACTIVE_CARD_MAX+active_card_max)/2)),2)
 
         #date_format = "%Y-%m-%d"
@@ -81,11 +81,11 @@ class Draw_Down_Customer:
         #d2_date = datetime.strptime(self.DRAW_DOWN_DATE.astype(str), date_format)
 
         delta_between_drop_and_rise = round(abs((draw_up_date-self.DRAW_DOWN_DATE).days)/30.,0)
-            
+
         for w_to_check in check_list:
             for w in self.WORD_LIST:
                 if w_to_check==w:
-                    
+
                     if not name in(self.MATCHING_CUSTOMERS) and(delta_between_drop_and_rise<=4)and(percent_diff<=0.5) :
                         self.MATCHING_CUSTOMERS.append(name)
                         self.PERCENT_DIFFERENCE.append(percent_diff)
@@ -95,26 +95,25 @@ class Draw_Down_Customer:
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 idx = 0
-
 _customers = []
 
 for index, row in df_down.iterrows():
-    
-    idx+=1 
-    
+
+    idx+=1
+
     customer = row['CUSTOMER']
     draw_down_date = row['DRAW_DOWN_DATE']
     mean_dd = row['MEAN_DD']
     std_dd = row['STD_DD']
     active_card_max = row['ACTIVE_CARD_MAX']
-    
+
     c = Draw_Down_Customer(customer, draw_down_date, mean_dd, std_dd, active_card_max)
-    
+
     _customers.append(c)
-    
+
     #if idx>10:
     #    break;
-    
+
 idx = 0
 verbose = False
 
@@ -123,33 +122,32 @@ _direct_match = []
 _direct_draw_up_date = []
 
 
-_direct_matches = []
 _multiple_matches = []
 
 for c in _customers:
-        
+
     for index_up, row_up in df_up.iterrows():
-        
+
         idx+=1
-        
+
         customer = row_up['CUSTOMER']
         draw_up_date = row_up['DRAW_UP_DATE']
         mean_du = row_up['MEAN_DU']
         std_du = row_up['STD_DU']
         active_card_max = row_up['ACTIVE_CARD_MAX']
-        
+
         c.Match_Draw_Up_Customer(customer, draw_up_date, mean_du, std_du, active_card_max)
-    
+
     if len(c.MATCHING_CUSTOMERS)==1:
-        
+
         _direct_customer.append(c.CUSTOMER)
-        _direct_match.append(c.c.MATCHING_CUSTOMERS[0])
-        _direct_draw_up_date(c.c.DRAW_UP_DATE[0])
-        
+        _direct_match.append(c.MATCHING_CUSTOMERS[0])
+        _direct_draw_up_date.append(c.DRAW_UP_DATE[0])
+
         print(c.CUSTOMER, c.MATCHING_CUSTOMERS)
-        
+
         if verbose:
-            
+
             print(c.CUSTOMER, c.WORD_LIST)
             print("Draw Up Date:", c.DRAW_DOWN_DATE)
             print("Cards", c.ACTIVE_CARD_MAX)
@@ -160,27 +158,34 @@ for c in _customers:
             print()
             print("=====")
             print()
-        
+
     elif len(c.MATCHING_CUSTOMERS)>1:
-        
+
         _multiple_matches.append([c.CUSTOMER, c.WORD_LIST])
-        
+
         if verbose:
             print()
             print("deal with multiple matches")
             print()
-        
+
 print(idx)
 print()
 
-print(len(_direct_matches), "direct matches")
+print(len(_direct_customer), "direct matches")
 print(len(_multiple_matches), "multiple matches")
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+df_matches = pd.DataFrame(_direct_customer)
+df_matches.columns = ['CUSTOMER']
+df_matches["MATCH_CUSTOMER"] = _direct_match
+df_matches["DRAW_UP_DATE"] = _direct_draw_up_date
+
+df_matches.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 len(df_up)
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-
 # Compute recipe outputs
 # TODO: Write here your actual code that computes the outputs
 # NB: DSS supports several kinds of APIs for reading and writing data. Please see doc.
