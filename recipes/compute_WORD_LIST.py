@@ -16,11 +16,7 @@ len(customers)
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 import string
-import nltk
-from nltk.tag import pos_tag
 
-df_dict = pd.DataFrame(nltk.corpus.words.words(), columns=['word'])
-df_dict['word'] = df_dict['word'].str.upper()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 class Common_Word:
