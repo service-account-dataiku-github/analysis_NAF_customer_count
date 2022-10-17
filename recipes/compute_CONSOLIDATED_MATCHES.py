@@ -116,6 +116,10 @@ for index, row in df_down.iterrows():
 idx = 0
 verbose = False
 
+_direct_customer = []
+_direct_match = []
+_direct_draw_up_date = []
+
 
 _direct_matches = []
 _multiple_matches = []
@@ -137,6 +141,9 @@ for c in _customers:
     if len(c.MATCHING_CUSTOMERS)==1:
         
         _direct_matches.append([c.CUSTOMER, c.WORD_LIST])
+        _direct_customer.append(c.CUSTOMER)
+        _direct_match.append(c.c.MATCHING_CUSTOMERS[0])
+        
         print(c.CUSTOMER, c.MATCHING_CUSTOMERS)
         
         if verbose:
