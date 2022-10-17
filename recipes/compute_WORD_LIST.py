@@ -24,19 +24,19 @@ df_dict['word'] = df_dict['word'].str.upper()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 class Common_Word:
-    
+
     def __init__(self, word):
-        
+
         self.word = word
         self.count = 1
-        
+
 
 class Common_Word_List:
-        
+
     def __init__(self):
-        
+
         self.values = []
-        
+
 
     def add_word(self, word):
 
@@ -48,58 +48,48 @@ class Common_Word_List:
 
         if not found:
             self.values.append(Common_Word(word))
-        
-
-words = ['APPLE', 'PEAR', 'APPLE', 'ORANGE', 'PEAR']
-        
-
-
-for w in words:
-    
-    
-    
-for w in list_.values:
-    print(w.word, w.count)
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 list_ = Common_Word_List()
 idx = 0
 
 for c in customers:
-    
+
     c_str = c.translate(str.maketrans('', '', string.punctuation))
     f = c_str.split()
-    
+
     for w in f:
         if (len(w)>1) and (not w.isnumeric()):
             list_.add_word(w)
     idx+=1
-    
-    if (idx % 1000 == 0):
-        print(idx, len(list_.values))
 
-    if idx>100000:
+    if (idx % 10000 == 0):
+        print(idx, len(list_.values))
+        
+    if idx>50000:
         break;
-        
-        
+
 print()
-        
-for w in list_.values:
-    if w.count>20:
-        print(w.word, w.count)
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+_words = []
+_counts = []
 for w in list_.values:
-    if w.count>20:
-        print(w.word, w.count)
+    if w.count>50:
+        _words.append(w.word)
+        _counts.append(w.count)
+        
+df_words = pd.DataFrame(_words, columns=['word'])
+df_words['counts'] = _counts
+
+df_words.sort_values(by='counts', ascending=False, inplace=True)
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 # Compute recipe outputs from inputs
 # TODO: Replace this part by your actual code that computes the output, as a Pandas dataframe
 # NB: DSS also supports other kinds of APIs for reading and writing data. Please see doc.
 
-WORD_LIST_df = BY_ACCOUNT_df # For this sample code, simply copy input to output
-
+WORD_LIST_df = df_words
 
 # Write recipe outputs
 WORD_LIST = dataiku.Dataset("WORD_LIST")
