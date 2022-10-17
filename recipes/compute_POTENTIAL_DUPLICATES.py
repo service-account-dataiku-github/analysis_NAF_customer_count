@@ -25,6 +25,7 @@ df_up.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 from datetime import datetime
+import nltk
 
 # ===============================================
 class Draw_Down_Customer:
@@ -80,9 +81,6 @@ class Draw_Down_Customer:
         #d2_date = datetime.strptime(self.DRAW_DOWN_DATE.astype(str), date_format)
 
         #delta = d2_date-d1_date
-        
-        if 
-        
             
         for w_to_check in check_list:
             for w in self.WORD_LIST:
@@ -93,7 +91,8 @@ class Draw_Down_Customer:
                         self.DAYS_DIFFERENCE.append(draw_up_date)
                         break;
        
-
+    
+    
 idx = 0
 
 _draw_down_customers = []
@@ -110,33 +109,36 @@ for index, row in df_down.iterrows():
     c = Draw_Down_Customer(customer, draw_down_date, mean_dd, std_dd, active_card_max)
     _draw_down_customers.append(c)
     
-    #if idx>5:
-    #    break;
+    if idx>5:
+        break;
         
 for c in _draw_down_customers:
     
-    for index_up, row_up in df_up.iterrows():
+    print(c.CUSTOMER)
+    
+    #for index_up, row_up in df_up.iterrows():
         
-        customer = row_up['CUSTOMER']
-        draw_up_date = row_up['DRAW_UP_DATE']
-        mean_du = row_up['MEAN_DU']
-        std_du = row_up['STD_DU']
-        active_card_max = row_up['ACTIVE_CARD_MAX']
+    #    customer = row_up['CUSTOMER']
+    #    draw_up_date = row_up['DRAW_UP_DATE']
+    #    mean_du = row_up['MEAN_DU']
+    #    std_du = row_up['STD_DU']
+    #    active_card_max = row_up['ACTIVE_CARD_MAX']
         
-        c.Match_Draw_Up_Customer(customer, draw_up_date, mean_du, std_du, active_card_max)
+        #c.Match_Draw_Up_Customer(customer, draw_up_date, mean_du, std_du, active_card_max)
+        
 
-match_count = 0
-for c in _draw_down_customers:
+#match_count = 0
+#for c in _draw_down_customers:
     
-    if len(c.MATCHING_CUSTOMERS)>0:
-        match_count+=1
-        print(c.CUSTOMER)
-        print(c.MATCHING_CUSTOMERS)
-        print(c.PERCENT_DIFFERENCE)
-        print(c.DAYS_DIFFERENCE)
-        print()
+#    if len(c.MATCHING_CUSTOMERS)>0:
+#        match_count+=1
+#        print(c.CUSTOMER)
+#        print(c.MATCHING_CUSTOMERS)
+#        print(c.PERCENT_DIFFERENCE)
+#        print(c.DAYS_DIFFERENCE)
+#        print()
         
-print(match_count)
+#print(match_count)
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 df_up.head()
