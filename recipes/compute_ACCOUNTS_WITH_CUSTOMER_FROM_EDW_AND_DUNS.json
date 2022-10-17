@@ -38,17 +38,21 @@
         {
           "ref": "ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS",
           "appendMode": false
+        },
+        {
+          "ref": "BY_ACCOUNT",
+          "appendMode": false
         }
       ]
     }
   },
   "labels": [],
   "versionTag": {
-    "versionNumber": 60,
+    "versionNumber": 61,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1665413186271
+    "lastModifiedOn": 1666004860149
   },
   "creationTag": {
     "versionNumber": 0,
