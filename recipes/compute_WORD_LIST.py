@@ -30,7 +30,6 @@ class Common_Word:
         self.word = word
         self.count = 1
 
-
 class Common_Word_List:
 
     def __init__(self):
@@ -65,11 +64,9 @@ for c in customers:
 
     if (idx % 10000 == 0):
         print(idx, len(list_.values))
-        
+
     if idx>50000:
         break;
-
-print()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 _words = []
@@ -78,7 +75,7 @@ for w in list_.values:
     if w.count>50:
         _words.append(w.word)
         _counts.append(w.count)
-        
+
 df_words = pd.DataFrame(_words, columns=['word'])
 df_words['counts'] = _counts
 
