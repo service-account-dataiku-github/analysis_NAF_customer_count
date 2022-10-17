@@ -14,14 +14,15 @@ CALCULATED_CARD_DRAW_UPS_df = CALCULATED_CARD_DRAW_UPS.get_dataframe()
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 df_up = CALCULATED_CARD_DRAW_UPS_df
 print(len(df_up))
-df_up.DRAW_UP_DATE = pd.to_datetime(df_down.DRAW_DOWN_DATE).dt.date
 df_up.sort_values(['CUSTOMER'], inplace=True)
 
 df_down = CALCULATED_CARD_DRAW_DOWNS_df
 print(len(df_down))
-df_down.DRAW_DOWN_DATE = pd.to_datetime(df_down.DRAW_DOWN_DATE).dt.date
 df_down.sort_values(['CUSTOMER'], inplace=True)
 df_up.head()
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+df_up.DRAW_UP_DATE.value_counts(dropna=False)
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 from datetime import datetime
