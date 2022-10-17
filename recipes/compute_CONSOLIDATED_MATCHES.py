@@ -121,8 +121,9 @@ _direct_customer = []
 _direct_match = []
 _direct_draw_up_date = []
 
-
+_multiple_customer = []
 _multiple_matches = []
+_multiple_drop_dates = []
 
 for c in _customers:
 
@@ -161,7 +162,9 @@ for c in _customers:
 
     elif len(c.MATCHING_CUSTOMERS)>1:
 
-        _multiple_matches.append([c.CUSTOMER, c.WORD_LIST])
+        _multiple_customer.append(c.CUSTOMER)
+        _multiple_matches.append(c.MATCHING_CUSTOMERS)
+        _multiple_drop_dates.append(c.DRAW_UP_DATE)
 
         if verbose:
             print()
@@ -179,24 +182,20 @@ df_matches = pd.DataFrame(_direct_customer)
 df_matches.columns = ['CUSTOMER']
 df_matches["MATCH_CUSTOMER"] = _direct_match
 df_matches["DRAW_UP_DATE"] = _direct_draw_up_date
-
 df_matches.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-len(df_up)
+df_multiple_matches = pd.DataFrame(_multiple_customer)
+df_multiple_matches.columns = ['CUSTOMER']
+df_multiple_matches["MATCH_CUSTOMER"] = _multiple_matches
+df_multiple_matches["DRAW_UP_DATE"] = _multiple_drop_dates
+df_multiple_matches.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+MATCHES_1_TO_N_FOR_MANUAL_REVIEW_df = df_multiple_matches
+MACTHES_1_TO_N_FOR_MANUAL_REVIEW = dataiku.Dataset("MATCHES_1_TO_N_FOR_MANUAL_REVIEW")
+MACTHES_1_TO_N_FOR_MANUAL_REVIEW.write_with_schema(MATCHES_1_TO_N_FOR_MANUAL_REVIEW_df)
 
-"MATCHES_1_TO_N_FOR_MANUAL_REVIEW"
-"MATCHES_1_TO_1"
-
-# Compute recipe outputs
-# TODO: Write here your actual code that computes the outputs
-# NB: DSS supports several kinds of APIs for reading and writing data. Please see doc.
-
-#CONSOLIDATED_MATCHES_df = ... # Compute a Pandas dataframe to write into CONSOLIDATED_MATCHES
-
-
-# Write recipe outputs
-#CONSOLIDATED_MATCHES = dataiku.Dataset("CONSOLIDATED_MATCHES")
-#CONSOLIDATED_MATCHES.write_with_schema(CONSOLIDATED_MATCHES_df)
+MATCHES_1_TO_1_df = df_matches
+MATCHES_1_TO_1 = dataiku.Dataset("MATCHES_1_TO_1")
+MATCHES_1_TO_1.write_with_schema(MATCHES_1_TO_1_df)
