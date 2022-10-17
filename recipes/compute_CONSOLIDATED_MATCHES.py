@@ -22,6 +22,7 @@ print(len(df_down), "draw downs")
 print(len(df_up), "draw ups")
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+df_down = df_down.sample(frac=1).reset_index(drop=True)
 df_down.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
@@ -39,7 +40,57 @@ class Draw_Down_Customer:
                              'GLOBAL', 'PIPELINE', 'WHEELS', 'BIOSCIENCES', 'SSI', 'SPRINGS', 'NORTH', 'MARINE', 'HOLDING',
                               'TECHNOLOGIES','GROUP', 'PHARMACEUTICAL', 'NA', 'USA', 'COMPANY', 'RAIL', 'PARTNERS', 'BROS',
                               'CO', 'PHARMACEUTICALS', 'ENERGY', 'DISTRIBUTION', 'DENTAL', 'SPECIALTIES', 'OPERATIONS',
-                              'COMPANY', 'THE', 'MOUNTAIN', 'TRANS', 'FUEL', 'AMERICAN', 'HOMES', 'GAS']
+                              'COMPANY', 'THE', 'MOUNTAIN', 'TRANS', 'FUEL', 'AMERICAN', 'HOMES', 'GAS',
+                             'AFFORDABLE', 'LAWN', 'MAINTENANCE','LOGISTICS','INC','LLC','CO','CORP','LTD','LIMITED',
+                              'IN','COMPANY','COMPANIES','VENTURES','TECHNOLOGIES','WORKS','AND','THE','OF','COMPANY',
+                              'SYSTEMS','PROPERTY','EXPRESS','SONS','BROTHERS','BUILDING','SERVIC','SERVICE','SERVICES',
+                              'CONSTRUCTION','CONSTRUCTIONS','ELECTRIC','ELECTIC','ELECTRICAL','ELECTRONICS','GROUPE',
+                              'GROUP','SOLUTIONS','PLUMBING','ENTERPRISES','TRANSPORT','TRANSPORTATION','SYSTEMS',
+                              'MANAGEMENT','CONTRACTING','ASSOCIATES','CONSULTING','CONTRAC','CONTRACTORS','CONSTRUCTORS',
+                              'SECURITY','INDUSTRIES','EXPRESS','SONS','PROPERTIES','INVESTMENTS','INVESTMENT',
+                              'CORPORATION','BUILDERS','ENTERPRISE','STORE','INDUSTRIAL','AUTOMOTIVE','ENGINEERING',
+                              'INTERNATIONAL','MEDICAL','MOTORS','STATE','COMMUNICATIONS','COMMUNICATION','DELIVERY',
+                              'COMMERCIAL','REFRIGERATION','BUSINESS','HOUSING','DEPARTMENT','TECHNOLOGY','FOODS',
+                              'PRODUCTIONS','MANUFACTURING','CONTRACTOR','DISTRIBUTORS','SYSTEM','ENTERTAINMENT',
+                              'HOSPITAL','OPERATIONS','EXTERIORS','ASSOCIATED','FOUNDATIONS','LABORATORIES','BLACK',
+                              'DECK','ENERGY','BUS','CONCRETE','CONTROL','CONTROLS','FIRE','WHEELS','TEST','KM','WINDOW',
+                              'CLEANING','STEEMER','DEZURE','WHEELS','TEST','EQUIPMENT','COURIER','SANITARY',
+                              'PAINT','PARTS','ELECTRICA','PRIORITY', 'ENVIRONMENTAL','WAY', 'AUTO', 'FREIGHT',
+                              'WITH', 'NATURE',  'AMBULANCE', 'FINANCIAL', 'SALES', 'HOUR', 'CENTERS','MEMORY', 'LANE', 
+                              'CENTRAL','STREET', 'SUPPLY', 'CENTER', 'TRANSPORTING', 'JUNK', '1ST', 'ACTION', 'HEATING', 
+                              'AIR','ADVANCED', 'ALARM', 'INFUSION',  'BAPTIST', 'CHURCH', 'CALL', 'TOW', 'RECOVERY', 
+                              'CHOICE', 'COLLATERAL', 'LANDSCAPE', 'CLASS','ALARM', 'CORPORATE', 'TULSA',
+                             'JUDICIAL', 'DISTRICT', 'ATTORNEY', 'RATE', 'TRUCKING', 'STOP',
+                            'CUSTOM', 'TRUCK', 'TRUCKS', 'VENDING', 'FAST', 'FARMS', 'INCORPORATED', 'ARIZONA', 'REAL', 'HOTEL', 'PROSECU', 'CENTURY', 'DATA', 'FLOORS',
+                            'POOL', 'PATIO', 'PROTECTION', 'AGENCY', 'TIMBER', 'CUTS', 'GREEN',
+                            'REGENCY', 'COURT', 'FIT', 'HEALTHY', 'WESTERN', 'OILFIELD', 'ATTIC',
+                            '2ND', 'TO', 'LOUNGE', 'LOCKSMITH', 'CLEAN', 'UP', 'WOMEN', 'MASONRY',
+                            'ORLANDO', 'CREATIONS', 'KINGS', 'LITTLE', 'VALLEY', 'MEDIA','WEST',
+                            'AGRICULTURAL', 'BLUE', 'WASTE', 'OUTLET', '3D',  'GREEN', 'SOLUTION',
+                            'LEASING', 'CARE', '3RD', 'ROCK', 'PEST', 'PROS', 'UNIQUE', 'HAIR', 
+                            'SPECIALTY', 'RENTALS', 'COMMERCE', 'EVERGREEN', 'GOD', 'RESTORATION', 
+                            'ROADSIDE', 'WHEEL', 'UNLIMITED', 'ACRES', 'BRAND', 'MOVERS', 'UNDERGROUND',
+                            'A', 'CATTLE', 'RANCH', 'RIVERS', 'STAR', 'CARPET', 'JOURNEY', 'PEST', 'CONTROL',
+                            'TERMITE', 'EMERGENCY', 'SVCS', 'STATES', 'EXCAVATING', 'MUSIC', 'MEDIA',
+                            'WATER', 'MOBILE', 'NOTARY', 'REGIMENT', 'TACTICAL', 'REPAIR', 'BROKERS',
+                            'LIABILITY', 'INCORPORATED', 'FOUNDATION', 'BODY', 'WELLNESS', 'CARRIERS',
+                            'MISSION', 'FOR', 'JESUS', 'RADIO', 'MILES', 'TINT', 'CARE', 'N', 'MORE',
+                            'RESTORATION', 'VOLUNTEER', 'DEPAR', 'HOME', 'SEWER', 'DRAIN', 'TOWING',
+                            'SVC', 'LLP', 'CUSTOM', 'CURBING', 'REAL', 'ESTATE', 'SITE', 'COOLING','SAFETY',
+                            'SON', 'GROVE', 'FAMOUS', 'FIXTURES', 'WELDING', 'WELL', 'DRILLING', 'WHOLESALE',
+                            'TECHNICAL', 'RESOURCES', 'CRANE', 'PROFESSIONAL', 'SE',  'RAILROAD', 'MATERIALS',
+                            'DOORS', 'HARDWARE', 'JANITORIAL', 'MECHANICAL', 'INSULATION', 'MOBILITY',
+                             'IRON', 'DESIGNS', 'POWER', 'TREE', 'WELDING', 'RENTALS', 'LEASING', 
+                            'CONDITIONING', 'COOLING', 'ALL','MOVERS', 'BONDING', 'MOTOR', 'FLOORING',
+                            'GLASS', 'MIRROR', 'GLASS', 'HANDYMAN', 'JANITORIAL', 'LOCKSMITH', 'POWDER', 'COAT', 'QUALITY', 'ROOFING', 'TOWING', 'RENTAL', 'SIGNS', 'INCORPORATED', 
+                            'TERMITE', 'TINT', 'ACCESSORIES', 'UTILITY', 'MECHANICAL', 'ABSOLUTE', 'AUTOMATION', 'ACE', 'UNDERWRITERS', 'COMPUTER', 'DESIGN', 'SAFETY', 'GLASS', 
+                            'MARBLE', 'GASES', 'PRESSURE', 'WASHING', 'SWEEP', 'SOUND', 'LOW', 'VOLT',
+                            'SPRINGFIELD', 'RESTORATION', 'PETROLEUM', 'TESTING', 'MOVING', 'DRYWALL',
+                            'ABILITY', 'ALERT', 'PRO', 'TOWER', 'TRANSIT', 'LINES', 'EXCAVATING', 'ADVENTURES','IMPROVEMENTS', 'WASTE', 'OFFICE', 'LIGHT', 'BEST', 
+                            'BETTER', 'VIEW', 'COUNTERTOPS', 'DESERT', 'DESIGN', 'PROFESSIONALS', 
+                            'DEVELOPMENT', 'DOCTOR', 'COMPLETE', 'RECYCLING', 'CONDITIONING',
+                            'RESOURCES', 'PAVEMENT', 'STRIPING', 'PIPE',  'PLUS', 'DRILLING',
+                            'QUALITY', 'NORTHERN', 'CARING', 'COMPANION', 'CHRISTIAN', 'CLEAN', 'ESSENTIALS', 'FASHIONS']
 
         self.CUSTOMER = name
         self.DRAW_DOWN_DATE = draw_down_date
@@ -71,7 +122,7 @@ class Draw_Down_Customer:
 
         check_list = []
         for w in f:
-            if w not in self._common_words:
+            if (w not in self._common_words) and (len(w)>1) and (not w.isnumeric()):
                 check_list.append(w)
 
         percent_diff = round((abs(self.ACTIVE_CARD_MAX - active_card_max) / ((self.ACTIVE_CARD_MAX+active_card_max)/2)),2)
@@ -96,6 +147,9 @@ class Draw_Down_Customer:
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 idx = 0
 _customers = []
+verbose = True
+
+max_idx = 1000
 
 for index, row in df_down.iterrows():
 
@@ -111,11 +165,11 @@ for index, row in df_down.iterrows():
 
     _customers.append(c)
 
-    #if idx>10:
-    #    break;
+    if max_idx>0:
+        if idx>max_idx:
+            break;
 
 idx = 0
-verbose = False
 
 _direct_customer = []
 _direct_match = []
@@ -124,6 +178,8 @@ _direct_draw_up_date = []
 _multiple_customer = []
 _multiple_matches = []
 _multiple_drop_dates = []
+
+_no_match_customer = []
 
 for c in _customers:
 
@@ -145,18 +201,13 @@ for c in _customers:
         _direct_match.append(c.MATCHING_CUSTOMERS[0])
         _direct_draw_up_date.append(c.DRAW_UP_DATE[0])
 
-        print(c.CUSTOMER, c.MATCHING_CUSTOMERS)
-
         if verbose:
-
-            print(c.CUSTOMER, c.WORD_LIST)
-            print("Draw Up Date:", c.DRAW_DOWN_DATE)
-            print("Cards", c.ACTIVE_CARD_MAX)
             print()
+            print("DIRECT")
+            print(c.CUSTOMER, c.WORD_LIST)
             print(c.MATCHING_CUSTOMERS)
             print(c.PERCENT_DIFFERENCE)
             print(c.DAYS_DIFFERENCE)
-            print()
             print("=====")
             print()
 
@@ -168,14 +219,22 @@ for c in _customers:
 
         if verbose:
             print()
-            print("deal with multiple matches")
+            print("MULTIPLE")
+            print(c.CUSTOMER, c.WORD_LIST)
+            print(c.MATCHING_CUSTOMERS)
+            print(c.PERCENT_DIFFERENCE)
+            print(c.DAYS_DIFFERENCE)
+            print("=====")
             print()
+    else:
+        _no_match_customer.append(c.CUSTOMER)
 
 print(idx)
 print()
 
 print(len(_direct_customer), "direct matches")
 print(len(_multiple_matches), "multiple matches")
+print(len(_no_match_customer), "no match customers")
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 df_matches = pd.DataFrame(_direct_customer)
