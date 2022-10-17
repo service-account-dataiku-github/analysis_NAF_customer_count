@@ -28,11 +28,11 @@
     "dimensions": []
   },
   "versionTag": {
-    "versionNumber": 4,
+    "versionNumber": 5,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1666041508535
+    "lastModifiedOn": 1666041865329
   },
   "creationTag": {
     "versionNumber": 0,
@@ -63,7 +63,7 @@
       {"name":"STD_DD","type":"double"},
       {"name":"ACTIVE_CARD_MAX","type":"double"}
     ],
-    "userModified": true
+    "userModified": false
   },
   "dkuProperties": [],
   "metrics": {
