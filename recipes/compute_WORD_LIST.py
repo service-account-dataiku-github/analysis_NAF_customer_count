@@ -76,8 +76,8 @@ for w in list_.values:
         _words.append(w.word)
         _counts.append(w.count)
 
-df_words = pd.DataFrame(_words, columns=['word'])
-df_words['counts'] = _counts
+df_words = pd.DataFrame(_words, columns=['WORD'])
+df_words['COUNTS'] = _counts
 
 df_words.sort_values(by='counts', ascending=False, inplace=True)
 
