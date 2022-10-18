@@ -107,11 +107,12 @@ class Draw_Down_Customer:
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 idx = 0
-_customers = []
+max_idx = 0
 _processed_customers = []
 verbose = True
 
-process_ranges = [[100000,1000],[1100,100],[120,50],[70,30],[40,20],[40,0]]
+#process_ranges = [[100000,1000],[1100,100],[120,50],[70,30],[40,20],[40,0]]
+process_ranges = [[70,30]]
 
 for r in process_ranges:
 
@@ -126,6 +127,7 @@ for r in process_ranges:
 
     max_idx = 1000
 
+    _customers = []
     # Prepare Customer Set
     for index, row in df_down.iterrows():
 
@@ -140,11 +142,12 @@ for r in process_ranges:
         c = Draw_Down_Customer(customer, draw_down_date, mean_dd, std_dd, active_card_max)
 
         _customers.append(c)
-
-        if max_idx>0:
-            if idx>max_idx:
-                break;
+        
+    print(idx)
+                
     ##
+    if verbose:
+        print(" processing range from " + str(r_max) + " to " + str(r_min) + " " + str(len(_customers)) + " Draw Down Customers")
     
     idx = 0
 
@@ -163,7 +166,6 @@ for r in process_ranges:
 
     _no_match_customer = []
     _no_match_draw_down_date = []
-
 
     for c in _customers:
 
@@ -250,7 +252,7 @@ for r in process_ranges:
         MATCHES_1_TO_N_FOR_MANUAL_REVIEW = dataiku.Dataset("MATCHES_1_TO_N_FOR_MANUAL_REVIEW")
         MATCHES_1_TO_N_FOR_MANUAL_REVIEW.write_with_schema(MATCHES_1_TO_N_FOR_MANUAL_REVIEW_df)
 
-    if len(df_matches)>0:        
+    if len(df_matches)>0:
         MATCHES_1_TO_1_df = df_matches
         MATCHES_1_TO_1 = dataiku.Dataset("MATCHES_1_TO_1")
         MATCHES_1_TO_1.write_with_schema(MATCHES_1_TO_1_df)
