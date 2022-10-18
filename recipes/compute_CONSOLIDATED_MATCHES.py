@@ -231,3 +231,7 @@ for r in process_ranges:
     MATCHES_1_TO_1_df = df_matches
     MATCHES_1_TO_1 = dataiku.Dataset("MATCHES_1_TO_1")
     MATCHES_1_TO_1.write_with_schema(MATCHES_1_TO_1_df)
+    
+    MATCHES_1_TO_NONE_df = df_no_matches
+    MATCHES_1_TO_NONE = dataiku.Dataset("MATCHES_1_TO_NONE")
+    MATCHES_1_TO_NONE.write_with_schema(MATCHES_1_TO_NONE_df)
