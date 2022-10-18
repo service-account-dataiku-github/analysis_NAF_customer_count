@@ -49,22 +49,22 @@
       "items": [
         {
           "ref": "MATCHES_1_TO_N_FOR_MANUAL_REVIEW",
-          "appendMode": false
+          "appendMode": true
         },
         {
           "ref": "MATCHES_1_TO_1",
-          "appendMode": false
+          "appendMode": true
         }
       ]
     }
   },
   "labels": [],
   "versionTag": {
-    "versionNumber": 37,
+    "versionNumber": 38,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1666095391254
+    "lastModifiedOn": 1666095476543
   },
   "creationTag": {
     "versionNumber": 0,
