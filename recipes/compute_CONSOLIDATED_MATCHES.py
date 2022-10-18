@@ -151,7 +151,7 @@ for r in process_ranges:
     _matching_process_log_time = []
     _matching_process_log_event = []
     _matching_process_log_time.append(str(pd.Timestamp.now()))
-    _matching_process_log_event.append(" processing range from " + str(r_max) + " to " + str(r_min), + " " + str(len(_customers)) + " Draw Down Customers")
+    _matching_process_log_event.append(" processing range from " + str(r_max) + " to " + str(r_min) + " " + str(len(_customers)) + " Draw Down Customers")
 
     _direct_customer = []
     _direct_match = []
