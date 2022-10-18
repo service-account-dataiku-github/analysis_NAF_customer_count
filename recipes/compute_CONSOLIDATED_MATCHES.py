@@ -11,6 +11,10 @@ CALCULATED_CARD_DRAW_UPS_df = CALCULATED_CARD_DRAW_UPS.get_dataframe()
 CALCULATED_CARD_DRAW_DOWNS = dataiku.Dataset("CALCULATED_CARD_DRAW_DOWNS")
 CALCULATED_CARD_DRAW_DOWNS_df = CALCULATED_CARD_DRAW_DOWNS.get_dataframe()
 
+COMMON_WORDS = dataiku.Dataset("NAFCUSTOMER_COMMON_WORDS_IN_NAMES")
+COMMON_WORDS_df = COMMON_WORDS.get_dataframe()
+
+
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 df_down = CALCULATED_CARD_DRAW_DOWNS_df
 df_up = CALCULATED_CARD_DRAW_UPS_df
