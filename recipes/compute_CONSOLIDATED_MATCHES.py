@@ -111,7 +111,7 @@ _customers = []
 _processed_customers = []
 verbose = True
 
-process_ranges = [[100000,1000],[1100,800],[1000,700],[900,600],[800,500],[700,400],[600,300]]
+process_ranges = [[100000,1000],[1100,500],[700,400],[600,300]]
 
 for r in process_ranges:
 
