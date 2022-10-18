@@ -58,17 +58,21 @@
         {
           "ref": "MATCHES_1_TO_NONE",
           "appendMode": true
+        },
+        {
+          "ref": "MATCHING_PROCESS_LOG",
+          "appendMode": true
         }
       ]
     }
   },
   "labels": [],
   "versionTag": {
-    "versionNumber": 45,
+    "versionNumber": 46,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1666096647927
+    "lastModifiedOn": 1666096711245
   },
   "creationTag": {
     "versionNumber": 0,
