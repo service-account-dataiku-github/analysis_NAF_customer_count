@@ -226,12 +226,12 @@ for r in process_ranges:
     _matching_process_log_event.append("writing datasets to snowflake")
 
     df_matches = pd.DataFrame(_direct_customer)
-    df_matches.columns = ['CUSTOMER']
-    df_matches["MATCH_CUSTOMER"] = _direct_match
-    df_matches["DRAW_UP_DATE"] = _direct_draw_up_date
+    if len(df_matches)>0:
+        df_matches.columns = ['CUSTOMER']
+        df_matches["MATCH_CUSTOMER"] = _direct_match
+        df_matches["DRAW_UP_DATE"] = _direct_draw_up_date
 
     df_multiple_matches = pd.DataFrame(_multiple_customer)
-    print(len(df_multiple_matches.head()))
     if len(df_multiple_matches)>0:
         df_multiple_matches.columns = ['CUSTOMER']
         df_multiple_matches["MATCH_CUSTOMER"] = _multiple_matches
