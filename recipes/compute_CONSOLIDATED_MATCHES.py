@@ -117,7 +117,6 @@ for r in process_ranges:
 
     r_max = r[0]
     r_min = r[1]
-    print("processing range from", r_max, "to", r_min)
 
     df_down = df_down_full[(df_down_full.ACTIVE_CARD_MAX<=r_max)&(df_down_full.ACTIVE_CARD_MAX>=r_min)]
     df_up = df_up_full[(df_up_full.ACTIVE_CARD_MAX<=r_max)&(df_up_full.ACTIVE_CARD_MAX>=r_min)]
@@ -145,8 +144,9 @@ for r in process_ranges:
         if max_idx>0:
             if idx>max_idx:
                 break;
-    # Prepare Customer Set
-
+    ##
+    print("processing range from", r_max, "to", r_min)
+    
     idx = 0
 
     _matching_process_log_time = []
