@@ -189,7 +189,6 @@ for r in process_ranges:
                 _processed_customers.append(c.MATCHING_CUSTOMERS[0])
                 _direct_draw_up_date.append(c.DRAW_UP_DATE[0])
 
-
                 if verbose:
                     print()
                     print("DIRECT")
