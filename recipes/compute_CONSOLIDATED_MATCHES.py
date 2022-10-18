@@ -182,19 +182,23 @@ for r in process_ranges:
 
         if len(c.MATCHING_CUSTOMERS)==1:
 
-            _direct_customer.append(c.CUSTOMER)
-            _direct_match.append(c.MATCHING_CUSTOMERS[0])
-            _direct_draw_up_date.append(c.DRAW_UP_DATE[0])
+            if not c.CUSTOMER is in (_processed_customers):
+                _direct_customer.append(c.CUSTOMER)
+                _processed_customers.append(C.CUSTOMER)
+                _direct_match.append(c.MATCHING_CUSTOMERS[0])
+                _processed_customers.append(c.MATCHING_CUSTOMERS[0])
+                _direct_draw_up_date.append(c.DRAW_UP_DATE[0])
 
-            if verbose:
-                print()
-                print("DIRECT")
-                print(c.CUSTOMER, c.WORD_LIST)
-                print(c.MATCHING_CUSTOMERS)
-                print(c.PERCENT_DIFFERENCE)
-                print(c.DAYS_DIFFERENCE)
-                print("=====")
-                print()
+
+                if verbose:
+                    print()
+                    print("DIRECT")
+                    print(c.CUSTOMER, c.WORD_LIST)
+                    print(c.MATCHING_CUSTOMERS)
+                    print(c.PERCENT_DIFFERENCE)
+                    print(c.DAYS_DIFFERENCE)
+                    print("=====")
+                    print()
 
         elif len(c.MATCHING_CUSTOMERS)>1:
 
