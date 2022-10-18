@@ -28,6 +28,10 @@
         {
           "ref": "CALCULATED_CARD_DRAW_DOWNS",
           "deps": []
+        },
+        {
+          "ref": "NAFCUSTOMER_COMMON_WORDS_IN_NAMES",
+          "deps": []
         }
       ]
     }
@@ -48,11 +52,11 @@
   },
   "labels": [],
   "versionTag": {
-    "versionNumber": 22,
+    "versionNumber": 23,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1666041691080
+    "lastModifiedOn": 1666091996552
   },
   "creationTag": {
     "versionNumber": 0,
