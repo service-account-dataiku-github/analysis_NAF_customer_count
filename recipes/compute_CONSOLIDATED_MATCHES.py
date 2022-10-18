@@ -214,16 +214,16 @@ for r in process_ranges:
     df_matches.columns = ['CUSTOMER']
     df_matches["MATCH_CUSTOMER"] = _direct_match
     df_matches["DRAW_UP_DATE"] = _direct_draw_up_date
-    
+
     df_multiple_matches = pd.DataFrame(_multiple_customer)
     df_multiple_matches.columns = ['CUSTOMER']
     df_multiple_matches["MATCH_CUSTOMER"] = _multiple_matches
     df_multiple_matches["DRAW_UP_DATE"] = _multiple_drop_dates
-    
+
     df_no_matches = pd.DataFrame(_no_match_customer)
     df_no_matches.columns = ['CUSTOMER']
     df_no_matches['DRAW_DOWN_DATE'] = _no_match_draw_down_date
-    
+
     MATCHES_1_TO_N_FOR_MANUAL_REVIEW_df = df_multiple_matches
     MACTHES_1_TO_N_FOR_MANUAL_REVIEW = dataiku.Dataset("MATCHES_1_TO_N_FOR_MANUAL_REVIEW")
     MACTHES_1_TO_N_FOR_MANUAL_REVIEW.write_with_schema(MATCHES_1_TO_N_FOR_MANUAL_REVIEW_df)
