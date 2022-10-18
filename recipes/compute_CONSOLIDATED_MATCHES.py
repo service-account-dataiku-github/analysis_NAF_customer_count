@@ -17,25 +17,29 @@ CALCULATED_CARD_DRAW_DOWNS_df = CALCULATED_CARD_DRAW_DOWNS.get_dataframe()
 CALCULATED_CARD_DRAW_DOWNS_FULL = dataiku.Dataset("CALCULATED_CARD_DRAW_DOWNS_FULL")
 CALCULATED_CARD_DRAW_DOWNS_FULL_df = CALCULATED_CARD_DRAW_DOWNS_FULL.get_dataframe()
 
-
 COMMON_WORDS = dataiku.Dataset("NAFCUSTOMER_COMMON_WORDS_IN_NAMES")
 COMMON_WORDS_df = COMMON_WORDS.get_dataframe()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 df_down = CALCULATED_CARD_DRAW_DOWNS_df
+df_down_full = CALCULATED_CARD_DRAW_DOWNS_FULL_df
 df_up = CALCULATED_CARD_DRAW_UPS_df
+df_up_full = CALCULATED_CARD_DRAW_UPS_FULL_df
 df_common = COMMON_WORDS_df
 
 df_down.sort_values(['CUSTOMER'], inplace=True)
+df_down_full.sort_values(['CUSTOMER'], inplace=True)
 df_up.sort_values(['CUSTOMER'], inplace=True)
+df_up_full.sort_values(['CUSTOMER'], inplace=True)
 df_common.sort_values(['WORD'], inplace=True)
 
 print(len(df_down), "draw downs")
+print(len(df_down_full), "draw downs full")
 print(len(df_up), "draw ups")
+print(len(df_up_full), "draw ups full")
 print(len(df_common), "common words")
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-df_down = df_down.sample(frac=1).reset_index(drop=True)
 df_down.head()
 df_common.head()
 
@@ -105,6 +109,12 @@ class Draw_Down_Customer:
 idx = 0
 _customers = []
 verbose = True
+
+df_down = df_down_full[df_down_full.ACTIVE_CARD_MAX>1000]
+df_up = df_up_full[df_up_full.ACTIVE_CARD_MAX>1000]
+
+print(len(df_down), "filtered down rows")
+print(len(df_up), "filtered up rows")
 
 max_idx = 1000
 
