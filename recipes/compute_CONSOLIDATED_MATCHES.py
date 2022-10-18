@@ -108,6 +108,7 @@ class Draw_Down_Customer:
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 idx = 0
 _customers = []
+_processed_customers = []
 verbose = True
 
 process_ranges = [[100000,1000],[1100,800],[1000,700]]
