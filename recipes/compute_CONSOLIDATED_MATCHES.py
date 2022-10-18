@@ -203,7 +203,7 @@ for r in process_ranges:
 
             if not c.CUSTOMER in (_processed_customers):
                 _multiple_customer.append(c.CUSTOMER)
-                _processed_customers.append(C.CUSTOMER)
+                _processed_customers.append(c.CUSTOMER)
                 _multiple_matches.append(c.MATCHING_CUSTOMERS)
                 _multiple_drop_dates.append(c.DRAW_UP_DATE)
 
