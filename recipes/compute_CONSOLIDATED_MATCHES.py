@@ -146,9 +146,9 @@ for r in process_ranges:
             if idx>max_idx:
                 break;
     # Prepare Customer Set
-                
+
     idx = 0
-    
+
     _matching_process_log_time = []
     _matching_process_log_event = []
     _matching_process_log_time.append(str(pd.Timestamp.now()))
@@ -164,7 +164,7 @@ for r in process_ranges:
 
     _no_match_customer = []
     _no_match_draw_down_date = []
-    
+
 
     for c in _customers:
 
@@ -182,9 +182,9 @@ for r in process_ranges:
 
         if len(c.MATCHING_CUSTOMERS)==1:
 
-            if not c.CUSTOMER is in (_processed_customers):
+            if not c.CUSTOMER in (_processed_customers):
                 _direct_customer.append(c.CUSTOMER)
-                _processed_customers.append(C.CUSTOMER)
+                _processed_customers.append(c.CUSTOMER)
                 _direct_match.append(c.MATCHING_CUSTOMERS[0])
                 _processed_customers.append(c.MATCHING_CUSTOMERS[0])
                 _direct_draw_up_date.append(c.DRAW_UP_DATE[0])
@@ -201,7 +201,7 @@ for r in process_ranges:
 
         elif len(c.MATCHING_CUSTOMERS)>1:
 
-            if not c.CUSTOMER is in (_processed_customers):
+            if not c.CUSTOMER in (_processed_customers):
                 _multiple_customer.append(c.CUSTOMER)
                 _processed_customers.append(C.CUSTOMER)
                 _multiple_matches.append(c.MATCHING_CUSTOMERS)
@@ -225,7 +225,7 @@ for r in process_ranges:
 
     _matching_process_log_time.append(str(pd.Timestamp.now()))
     _matching_process_log_event.append("writing datasets to snowflake")
-    
+
     df_matches = pd.DataFrame(_direct_customer)
     df_matches.columns = ['CUSTOMER']
     df_matches["MATCH_CUSTOMER"] = _direct_match
@@ -241,11 +241,11 @@ for r in process_ranges:
     df_no_matches = pd.DataFrame(_no_match_customer)
     df_no_matches.columns = ['CUSTOMER']
     df_no_matches['DRAW_DOWN_DATE'] = _no_match_draw_down_date
-    
+
     df_matching_log = pd.DataFrame(_matching_process_log_time)
     df_matching_log.columns = ['LOG_TIME']
     df_matching_log['LOG_EVENT'] = _matching_process_log_event
-    
+
     if len(df_multiple_matches)>0:
         MATCHES_1_TO_N_FOR_MANUAL_REVIEW_df = df_multiple_matches
         MATCHES_1_TO_N_FOR_MANUAL_REVIEW = dataiku.Dataset("MATCHES_1_TO_N_FOR_MANUAL_REVIEW")
@@ -258,7 +258,7 @@ for r in process_ranges:
     MATCHES_1_TO_NONE_df = df_no_matches
     MATCHES_1_TO_NONE = dataiku.Dataset("MATCHES_1_TO_NONE")
     MATCHES_1_TO_NONE.write_with_schema(MATCHES_1_TO_NONE_df)
-    
+
     MATCHING_PROCESS_LOG_df = df_matching_log
     MATCHING_PROCESS_LOG = dataiku.Dataset("MATCHING_PROCESS_LOG")
     MATCHING_PROCESS_LOG.write_with_schema(MATCHING_PROCESS_LOG_df)
