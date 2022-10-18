@@ -32,6 +32,14 @@
         {
           "ref": "NAFCUSTOMER_COMMON_WORDS_IN_NAMES",
           "deps": []
+        },
+        {
+          "ref": "CALCULATED_CARD_DRAW_DOWNS_FULL",
+          "deps": []
+        },
+        {
+          "ref": "CALCULATED_CARD_DRAW_UPS_FULL",
+          "deps": []
         }
       ]
     }
@@ -52,11 +60,11 @@
   },
   "labels": [],
   "versionTag": {
-    "versionNumber": 31,
+    "versionNumber": 32,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1666093727690
+    "lastModifiedOn": 1666093793941
   },
   "creationTag": {
     "versionNumber": 0,
