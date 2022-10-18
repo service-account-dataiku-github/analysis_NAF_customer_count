@@ -201,9 +201,11 @@ for r in process_ranges:
 
         elif len(c.MATCHING_CUSTOMERS)>1:
 
-            _multiple_customer.append(c.CUSTOMER)
-            _multiple_matches.append(c.MATCHING_CUSTOMERS)
-            _multiple_drop_dates.append(c.DRAW_UP_DATE)
+            if not c.CUSTOMER is in (_processed_customers):
+                _multiple_customer.append(c.CUSTOMER)
+                _processed_customers.append(C.CUSTOMER)
+                _multiple_matches.append(c.MATCHING_CUSTOMERS)
+                _multiple_drop_dates.append(c.DRAW_UP_DATE)
 
             if verbose:
                 print()
