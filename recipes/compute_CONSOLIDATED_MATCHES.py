@@ -110,8 +110,7 @@ idx = 0
 _customers = []
 verbose = True
 
-#process_ranges = [[100000,1000],[1100,800],[1000,700]]
-process_ranges = [[100000,1000]]
+process_ranges = [[100000,1000],[1100,800],[1000,700]]
 
 for r in process_ranges:
 
@@ -127,6 +126,7 @@ for r in process_ranges:
 
     max_idx = 1000
 
+    # Prepare Customer Set
     for index, row in df_down.iterrows():
 
         idx+=1
@@ -144,8 +144,14 @@ for r in process_ranges:
         if max_idx>0:
             if idx>max_idx:
                 break;
-
+    # Prepare Customer Set
+                
     idx = 0
+    
+    _matching_process_log_time = []
+    _matching_process_log_event = []
+    _matching_process_log_time.append(str(pd.Timestamp.now()))
+    _matching_process_log_event.append(" processing range from " + str(r_max) + " to " + str(r_min))
 
     _direct_customer = []
     _direct_match = []
@@ -157,6 +163,7 @@ for r in process_ranges:
 
     _no_match_customer = []
     _no_match_draw_down_date = []
+    
 
     for c in _customers:
 
@@ -210,28 +217,42 @@ for r in process_ranges:
     print(idx)
     print()
 
+    _matching_process_log_time.append(str(pd.Timestamp.now()))
+    _matching_process_log_event.append("writing datasets to snowflake")
+    
     df_matches = pd.DataFrame(_direct_customer)
     df_matches.columns = ['CUSTOMER']
     df_matches["MATCH_CUSTOMER"] = _direct_match
     df_matches["DRAW_UP_DATE"] = _direct_draw_up_date
 
     df_multiple_matches = pd.DataFrame(_multiple_customer)
-    df_multiple_matches.columns = ['CUSTOMER']
-    df_multiple_matches["MATCH_CUSTOMER"] = _multiple_matches
-    df_multiple_matches["DRAW_UP_DATE"] = _multiple_drop_dates
+    print(len(df_multiple_matches.head()))
+    if len(df_multiple_matches)>0:
+        df_multiple_matches.columns = ['CUSTOMER']
+        df_multiple_matches["MATCH_CUSTOMER"] = _multiple_matches
+        df_multiple_matches["DRAW_UP_DATE"] = _multiple_drop_dates
 
     df_no_matches = pd.DataFrame(_no_match_customer)
     df_no_matches.columns = ['CUSTOMER']
     df_no_matches['DRAW_DOWN_DATE'] = _no_match_draw_down_date
-
-    MATCHES_1_TO_N_FOR_MANUAL_REVIEW_df = df_multiple_matches
-    MACTHES_1_TO_N_FOR_MANUAL_REVIEW = dataiku.Dataset("MATCHES_1_TO_N_FOR_MANUAL_REVIEW")
-    MACTHES_1_TO_N_FOR_MANUAL_REVIEW.write_with_schema(MATCHES_1_TO_N_FOR_MANUAL_REVIEW_df)
+    
+    df_matching_log = pd.DataFrame(_matching_process_log_time)
+    df_matching_log.columns = ['LOG_TIME']
+    df_matching_log['LOG_EVENT'] = _matching_process_log_event
+    
+    if len(df_multiple_matches)>0:
+        MATCHES_1_TO_N_FOR_MANUAL_REVIEW_df = df_multiple_matches
+        MATCHES_1_TO_N_FOR_MANUAL_REVIEW = dataiku.Dataset("MATCHES_1_TO_N_FOR_MANUAL_REVIEW")
+        MATCHES_1_TO_N_FOR_MANUAL_REVIEW.write_with_schema(MATCHES_1_TO_N_FOR_MANUAL_REVIEW_df)
 
     MATCHES_1_TO_1_df = df_matches
     MATCHES_1_TO_1 = dataiku.Dataset("MATCHES_1_TO_1")
     MATCHES_1_TO_1.write_with_schema(MATCHES_1_TO_1_df)
-    
+
     MATCHES_1_TO_NONE_df = df_no_matches
     MATCHES_1_TO_NONE = dataiku.Dataset("MATCHES_1_TO_NONE")
     MATCHES_1_TO_NONE.write_with_schema(MATCHES_1_TO_NONE_df)
+    
+    MATCHING_PROCESS_LOG_df = df_matching_log
+    MATCHING_PROCESS_LOG = dataiku.Dataset("MATCHING_PROCESS_LOG")
+    MATCHING_PROCESS_LOG.write_with_schema(MATCHING_PROCESS_LOG_df)
