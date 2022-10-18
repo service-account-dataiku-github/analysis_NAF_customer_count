@@ -111,7 +111,8 @@ max_idx = 0
 _processed_customers = []
 verbose = True
 
-process_ranges = [[100000,1000],[1100,100],[120,50],[70,30],[40,20],[40,0]]
+process_ranges = [[100000,1000],[1100,900],[1000,600],[700,400],[500,200],[300,100],[200,70],
+                  [100,50],[70,40],[60,30],[40,20],[30,10],[30,0]]
 
 for r in process_ranges:
 
@@ -141,13 +142,13 @@ for r in process_ranges:
         c = Draw_Down_Customer(customer, draw_down_date, mean_dd, std_dd, active_card_max)
 
         _customers.append(c)
-        
+
     print(idx)
-                
+
     ##
     if verbose:
         print(" processing range from " + str(r_max) + " to " + str(r_min) + " " + str(len(_customers)) + " Draw Down Customers")
-    
+
     idx = 0
 
     _matching_process_log_time = []
