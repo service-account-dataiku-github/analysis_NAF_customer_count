@@ -111,8 +111,7 @@ max_idx = 0
 _processed_customers = []
 verbose = True
 
-#process_ranges = [[100000,1000],[1100,100],[120,50],[70,30],[40,20],[40,0]]
-process_ranges = [[70,30]]
+process_ranges = [[100000,1000],[1100,100],[120,50],[70,30],[40,20],[40,0]]
 
 for r in process_ranges:
 
