@@ -110,118 +110,124 @@ idx = 0
 _customers = []
 verbose = True
 
-df_down = df_down_full[df_down_full.ACTIVE_CARD_MAX>1000]
-df_up = df_up_full[df_up_full.ACTIVE_CARD_MAX>1000]
+#process_ranges = [[100000,1000],[1100,800],[1000,700]]
+process_ranges = [[100000,1000]]
 
-print(len(df_down), "filtered down rows")
-print(len(df_up), "filtered up rows")
+for r in process_ranges:
 
-max_idx = 1000
+    r_max = r[0]
+    r_min = r[1]
+    print("processing range from", r_max, "to", r_min)
 
-for index, row in df_down.iterrows():
+    df_down = df_down_full[(df_down_full.ACTIVE_CARD_MAX<=r_max)&(df_down_full.ACTIVE_CARD_MAX>=r_min)]
+    df_up = df_up_full[(df_up_full.ACTIVE_CARD_MAX<=r_max)&(df_up_full.ACTIVE_CARD_MAX>=r_min)]
 
-    idx+=1
+    print(len(df_down), "filtered down rows")
+    print(len(df_up), "filtered up rows")
 
-    customer = row['CUSTOMER']
-    draw_down_date = row['DRAW_DOWN_DATE']
-    mean_dd = row['MEAN_DD']
-    std_dd = row['STD_DD']
-    active_card_max = row['ACTIVE_CARD_MAX']
+    max_idx = 1000
 
-    c = Draw_Down_Customer(customer, draw_down_date, mean_dd, std_dd, active_card_max)
-
-    _customers.append(c)
-
-    if max_idx>0:
-        if idx>max_idx:
-            break;
-
-idx = 0
-
-_direct_customer = []
-_direct_match = []
-_direct_draw_up_date = []
-
-_multiple_customer = []
-_multiple_matches = []
-_multiple_drop_dates = []
-
-_no_match_customer = []
-
-for c in _customers:
-
-    for index_up, row_up in df_up.iterrows():
+    for index, row in df_down.iterrows():
 
         idx+=1
 
-        customer = row_up['CUSTOMER']
-        draw_up_date = row_up['DRAW_UP_DATE']
-        mean_du = row_up['MEAN_DU']
-        std_du = row_up['STD_DU']
-        active_card_max = row_up['ACTIVE_CARD_MAX']
+        customer = row['CUSTOMER']
+        draw_down_date = row['DRAW_DOWN_DATE']
+        mean_dd = row['MEAN_DD']
+        std_dd = row['STD_DD']
+        active_card_max = row['ACTIVE_CARD_MAX']
 
-        c.Match_Draw_Up_Customer(customer, draw_up_date, mean_du, std_du, active_card_max)
+        c = Draw_Down_Customer(customer, draw_down_date, mean_dd, std_dd, active_card_max)
 
-    if len(c.MATCHING_CUSTOMERS)==1:
+        _customers.append(c)
 
-        _direct_customer.append(c.CUSTOMER)
-        _direct_match.append(c.MATCHING_CUSTOMERS[0])
-        _direct_draw_up_date.append(c.DRAW_UP_DATE[0])
+        if max_idx>0:
+            if idx>max_idx:
+                break;
 
-        if verbose:
-            print()
-            print("DIRECT")
-            print(c.CUSTOMER, c.WORD_LIST)
-            print(c.MATCHING_CUSTOMERS)
-            print(c.PERCENT_DIFFERENCE)
-            print(c.DAYS_DIFFERENCE)
-            print("=====")
-            print()
+    idx = 0
 
-    elif len(c.MATCHING_CUSTOMERS)>1:
+    _direct_customer = []
+    _direct_match = []
+    _direct_draw_up_date = []
 
-        _multiple_customer.append(c.CUSTOMER)
-        _multiple_matches.append(c.MATCHING_CUSTOMERS)
-        _multiple_drop_dates.append(c.DRAW_UP_DATE)
+    _multiple_customer = []
+    _multiple_matches = []
+    _multiple_drop_dates = []
 
-        if verbose:
-            print()
-            print("MULTIPLE")
-            print(c.CUSTOMER, c.WORD_LIST)
-            print(c.MATCHING_CUSTOMERS)
-            print(c.PERCENT_DIFFERENCE)
-            print(c.DAYS_DIFFERENCE)
-            print("=====")
-            print()
-    else:
-        _no_match_customer.append(c.CUSTOMER)
+    _no_match_customer = []
+    _no_match_draw_down_date = []
 
-print(idx)
-print()
+    for c in _customers:
 
-print(len(_direct_customer), "direct matches")
-print(len(_multiple_matches), "multiple matches")
-print(len(_no_match_customer), "no match customers")
+        for index_up, row_up in df_up.iterrows():
 
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-df_matches = pd.DataFrame(_direct_customer)
-df_matches.columns = ['CUSTOMER']
-df_matches["MATCH_CUSTOMER"] = _direct_match
-df_matches["DRAW_UP_DATE"] = _direct_draw_up_date
-df_matches.head()
+            idx+=1
 
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-df_multiple_matches = pd.DataFrame(_multiple_customer)
-df_multiple_matches.columns = ['CUSTOMER']
-df_multiple_matches["MATCH_CUSTOMER"] = _multiple_matches
-df_multiple_matches["DRAW_UP_DATE"] = _multiple_drop_dates
-df_multiple_matches.head()
+            customer = row_up['CUSTOMER']
+            draw_up_date = row_up['DRAW_UP_DATE']
+            mean_du = row_up['MEAN_DU']
+            std_du = row_up['STD_DU']
+            active_card_max = row_up['ACTIVE_CARD_MAX']
 
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-MATCHES_1_TO_N_FOR_MANUAL_REVIEW_df = df_multiple_matches
-MACTHES_1_TO_N_FOR_MANUAL_REVIEW = dataiku.Dataset("MATCHES_1_TO_N_FOR_MANUAL_REVIEW")
-MACTHES_1_TO_N_FOR_MANUAL_REVIEW.write_with_schema(MATCHES_1_TO_N_FOR_MANUAL_REVIEW_df)
+            c.Match_Draw_Up_Customer(customer, draw_up_date, mean_du, std_du, active_card_max)
 
-MATCHES_1_TO_1_df = df_matches
-MATCHES_1_TO_1 = dataiku.Dataset("MATCHES_1_TO_1")
-MATCHES_1_TO_1.write_with_schema(MATCHES_1_TO_1_df)
+        if len(c.MATCHING_CUSTOMERS)==1:
+
+            _direct_customer.append(c.CUSTOMER)
+            _direct_match.append(c.MATCHING_CUSTOMERS[0])
+            _direct_draw_up_date.append(c.DRAW_UP_DATE[0])
+
+            if verbose:
+                print()
+                print("DIRECT")
+                print(c.CUSTOMER, c.WORD_LIST)
+                print(c.MATCHING_CUSTOMERS)
+                print(c.PERCENT_DIFFERENCE)
+                print(c.DAYS_DIFFERENCE)
+                print("=====")
+                print()
+
+        elif len(c.MATCHING_CUSTOMERS)>1:
+
+            _multiple_customer.append(c.CUSTOMER)
+            _multiple_matches.append(c.MATCHING_CUSTOMERS)
+            _multiple_drop_dates.append(c.DRAW_UP_DATE)
+
+            if verbose:
+                print()
+                print("MULTIPLE")
+                print(c.CUSTOMER, c.WORD_LIST)
+                print(c.MATCHING_CUSTOMERS)
+                print(c.PERCENT_DIFFERENCE)
+                print(c.DAYS_DIFFERENCE)
+                print("=====")
+                print()
+        else:
+            _no_match_customer.append(c.CUSTOMER)
+            _no_match_draw_down_date.append(c.DRAW_DOWN_DATE)
+
+    print(idx)
+    print()
+
+    df_matches = pd.DataFrame(_direct_customer)
+    df_matches.columns = ['CUSTOMER']
+    df_matches["MATCH_CUSTOMER"] = _direct_match
+    df_matches["DRAW_UP_DATE"] = _direct_draw_up_date
+    
+    df_multiple_matches = pd.DataFrame(_multiple_customer)
+    df_multiple_matches.columns = ['CUSTOMER']
+    df_multiple_matches["MATCH_CUSTOMER"] = _multiple_matches
+    df_multiple_matches["DRAW_UP_DATE"] = _multiple_drop_dates
+    
+    df_no_matches = pd.DataFrame(_no_match_customer)
+    df_no_matches.columns = ['CUSTOMER']
+    df_no_matches['DRAW_DOWN_DATE'] = _no_match_draw_down_date
+    
+    MATCHES_1_TO_N_FOR_MANUAL_REVIEW_df = df_multiple_matches
+    MACTHES_1_TO_N_FOR_MANUAL_REVIEW = dataiku.Dataset("MATCHES_1_TO_N_FOR_MANUAL_REVIEW")
+    MACTHES_1_TO_N_FOR_MANUAL_REVIEW.write_with_schema(MATCHES_1_TO_N_FOR_MANUAL_REVIEW_df)
+
+    MATCHES_1_TO_1_df = df_matches
+    MATCHES_1_TO_1 = dataiku.Dataset("MATCHES_1_TO_1")
+    MATCHES_1_TO_1.write_with_schema(MATCHES_1_TO_1_df)
