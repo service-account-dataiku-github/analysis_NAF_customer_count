@@ -54,17 +54,21 @@
         {
           "ref": "MATCHES_1_TO_1",
           "appendMode": true
+        },
+        {
+          "ref": "MATCHES_1_TO_NONE",
+          "appendMode": false
         }
       ]
     }
   },
   "labels": [],
   "versionTag": {
-    "versionNumber": 40,
+    "versionNumber": 41,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1666096442636
+    "lastModifiedOn": 1666096519673
   },
   "creationTag": {
     "versionNumber": 0,
