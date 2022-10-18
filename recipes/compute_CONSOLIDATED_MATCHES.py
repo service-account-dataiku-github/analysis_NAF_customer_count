@@ -145,7 +145,6 @@ for r in process_ranges:
             if idx>max_idx:
                 break;
     ##
-    print("processing range from", r_max, "to", r_min)
     
     idx = 0
 
