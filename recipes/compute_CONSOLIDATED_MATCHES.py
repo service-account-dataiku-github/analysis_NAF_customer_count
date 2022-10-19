@@ -106,6 +106,59 @@ class Draw_Down_Customer:
                         break;
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+def do_save_log(_matching_process_log_time, _matching_process_log_event):
+
+    df_matching_log = pd.DataFrame(_matching_process_log_time)
+    if len(df_matching_log)>0:
+
+        df_matching_log.columns = ['LOG_TIME']
+        df_matching_log['LOG_EVENT'] = _matching_process_log_event
+
+        MATCHING_PROCESS_LOG_df = df_matching_log
+        MATCHING_PROCESS_LOG = dataiku.Dataset("MATCHING_PROCESS_LOG")
+        MATCHING_PROCESS_LOG.write_with_schema(MATCHING_PROCESS_LOG_df)
+        
+        print()
+        
+def do_save_direct_matches(_direct_customer, _direct_match, _direct_draw_up_date):
+
+    df_matches = pd.DataFrame(_direct_customer)
+    if len(df_matches)>0:
+
+        print()
+        print("saving", len(df_matches), "1-1 matching records")
+        print()
+
+        df_matches.columns = ['CUSTOMER']
+        df_matches["MATCH_CUSTOMER"] = _direct_match
+        df_matches["DRAW_UP_DATE"] = _direct_draw_up_date
+
+        MATCHES_1_TO_1_df = df_matches
+        MATCHES_1_TO_1 = dataiku.Dataset("MATCHES_1_TO_1")
+        MATCHES_1_TO_1.write_with_schema(MATCHES_1_TO_1_df)
+        
+        print()
+
+def do_save_multiple_matches(_multiple_customer, _multiple_matches, _multiple_drop_dates):
+
+    df_multiple_matches = pd.DataFrame(_multiple_customer)
+
+    if len(df_multiple_matches)>0:
+
+        print()
+        print("saving", len(df_multiple_matches), "1-n matching records")
+        print()
+
+        df_multiple_matches.columns = ['CUSTOMER']
+        df_multiple_matches["MATCH_CUSTOMER"] = _multiple_matches
+        df_multiple_matches["DRAW_UP_DATE"] = _multiple_drop_dates
+
+        MATCHES_1_TO_N_FOR_MANUAL_REVIEW_df = df_multiple_matches
+        MATCHES_1_TO_N_FOR_MANUAL_REVIEW = dataiku.Dataset("MATCHES_1_TO_N_FOR_MANUAL_REVIEW")
+        MATCHES_1_TO_N_FOR_MANUAL_REVIEW.write_with_schema(MATCHES_1_TO_N_FOR_MANUAL_REVIEW_df)
+        
+        print()
+        
 
 _processed_customers = []
 verbose = True
@@ -115,6 +168,14 @@ process_ranges = [[100000,1000],[1100,900],[1000,600],[700,400],[500,200],[300,1
 
 _matching_process_log_time = []
 _matching_process_log_event = []
+
+_direct_customer = []
+_direct_match = []
+_direct_draw_up_date = []
+
+_multiple_customer = []
+_multiple_matches = []
+_multiple_drop_dates = []
 
 save_every_n = 100
 to_save_counter = 0
@@ -148,22 +209,11 @@ for r in process_ranges:
     idx = 0
 
     _matching_process_log_time.append(str(pd.Timestamp.now()))
-    _matching_process_log_event.append(" processing range from " + str(r_max) + " to " + str(r_min) + " " + str(len(_customers)) + " Draw Down Customers")
+    _matching_process_log_event.append(" processing range from " + str(r_max) + " to " + str(r_min) + " processing " + str(len(_customers)) + " Draw Down Customers")
     do_save_log(_matching_process_log_time, _matching_process_log_event)
-    
+
     if verbose:
-        print(" processing range from " + str(r_max) + " to " + str(r_min) + " " + str(len(_customers)) + " Draw Down Customers")
-    
-    _direct_customer = []
-    _direct_match = []
-    _direct_draw_up_date = []
-
-    _multiple_customer = []
-    _multiple_matches = []
-    _multiple_drop_dates = []
-
-    _no_match_customer = []
-    _no_match_draw_down_date = []
+        print(" processing range from " + str(r_max) + " to " + str(r_min) + " processing " + str(len(_customers)) + " Draw Down Customers")
 
     for c in _customers:
 
@@ -180,120 +230,57 @@ for r in process_ranges:
         if len(c.MATCHING_CUSTOMERS)==1:
 
             if not c.CUSTOMER in (_processed_customers):
+                
+                to_save_counter += 1
+                
                 _direct_customer.append(c.CUSTOMER)
                 _processed_customers.append(c.CUSTOMER)
                 _direct_match.append(c.MATCHING_CUSTOMERS[0])
                 _processed_customers.append(c.MATCHING_CUSTOMERS[0])
                 _direct_draw_up_date.append(c.DRAW_UP_DATE[0])
 
-                if verbose:
-                    print()
-                    print("DIRECT")
-                    print(c.CUSTOMER, c.WORD_LIST)
-                    print(c.MATCHING_CUSTOMERS)
-                    print(c.PERCENT_DIFFERENCE)
-                    print(c.DAYS_DIFFERENCE)
-                    print("=====")
-                    print()
+                #if verbose:
+                #    print()
+                #    print("DIRECT")
+                #    print(c.CUSTOMER, c.WORD_LIST)
+                #    print(c.MATCHING_CUSTOMERS)
+                #    print(c.PERCENT_DIFFERENCE)
+                #    print(c.DAYS_DIFFERENCE)
+                #    print("=====")
+                #    print()
 
         elif len(c.MATCHING_CUSTOMERS)>1:
 
             if not c.CUSTOMER in (_processed_customers):
+                
+                to_save_counter += 1
+                
                 _multiple_customer.append(c.CUSTOMER)
                 _processed_customers.append(c.CUSTOMER)
                 _multiple_matches.append(c.MATCHING_CUSTOMERS)
                 _multiple_drop_dates.append(c.DRAW_UP_DATE)
 
-            if verbose:
-                print()
-                print("MULTIPLE")
-                print(c.CUSTOMER, c.WORD_LIST)
-                print(c.MATCHING_CUSTOMERS)
-                print(c.PERCENT_DIFFERENCE)
-                print(c.DAYS_DIFFERENCE)
-                print("=====")
-                print()
-        else:
-            _no_match_customer.append(c.CUSTOMER)
-            _no_match_draw_down_date.append(c.DRAW_DOWN_DATE)
-            
-        to_save_counter += 1
-        
+            #if verbose:
+            #    print()
+            #    print("MULTIPLE")
+            #    print(c.CUSTOMER, c.WORD_LIST)
+            #    print(c.MATCHING_CUSTOMERS)
+            #    print(c.PERCENT_DIFFERENCE)
+            #    print(c.DAYS_DIFFERENCE)
+            #    print("=====")
+            #    print()
+
         if to_save_counter>=save_every_n:
-            
+
             _matching_process_log_time.append(str(pd.Timestamp.now()))
             _matching_process_log_event.append("writing datasets to snowflake")
             do_save_log(_matching_process_log_time, _matching_process_log_event)
-            
+
             do_save_direct_matches(_direct_customer, _direct_match, _direct_draw_up_date)
             do_save_multiple_matches(_multiple_customer, _multiple_matches, _multiple_drop_dates)
-            do_save_no_matches(_no_match_customer, _matching_process_log_event)
-            
+
             _matching_process_log_time.append(str(pd.Timestamp.now()))
-            _matching_process_log_event.append("saved snowflake.")
+            _matching_process_log_event.append("saved " + str(to_save_counter) + "records to snowflake.")
             do_save_log(_matching_process_log_time, _matching_process_log_event)
-            
+
             to_save_counter = 0
-
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-def do_save_log(_matching_process_log_time, _matching_process_log_event):
-    
-    df_matching_log = pd.DataFrame(_matching_process_log_time)
-    if len(df_matching_log)>0:
-        
-        print("saving", len(df_matching_log), "log records")
-        
-        df_matching_log.columns = ['LOG_TIME']
-        df_matching_log['LOG_EVENT'] = _matching_process_log_event
-
-        MATCHING_PROCESS_LOG_df = df_matching_log
-        MATCHING_PROCESS_LOG = dataiku.Dataset("MATCHING_PROCESS_LOG")
-        MATCHING_PROCESS_LOG.write_with_schema(MATCHING_PROCESS_LOG_df)
-    
-    
-def do_save_direct_matches(_direct_customer, _direct_match, _direct_draw_up_date):
-    
-    df_matches = pd.DataFrame(_direct_customer)
-    if len(df_matches)>0:
-        
-        print("saving", len(df_matches), "matching customer records")
-        
-        df_matches.columns = ['CUSTOMER']
-        df_matches["MATCH_CUSTOMER"] = _direct_match
-        df_matches["DRAW_UP_DATE"] = _direct_draw_up_date
-        
-        MATCHES_1_TO_1_df = df_matches
-        MATCHES_1_TO_1 = dataiku.Dataset("MATCHES_1_TO_1")
-        MATCHES_1_TO_1.write_with_schema(MATCHES_1_TO_1_df)
-        
-def do_save_multiple_matches(_multiple_customer, _multiple_matches, _multiple_drop_dates):
-    
-    df_multiple_matches = pd.DataFrame(_multiple_customer)
-    
-    if len(df_multiple_matches)>0:
-        
-        print("saving", len(df_multiple_matches), "matching multiple customer records")
-        
-        df_multiple_matches.columns = ['CUSTOMER']
-        df_multiple_matches["MATCH_CUSTOMER"] = _multiple_matches
-        df_multiple_matches["DRAW_UP_DATE"] = _multiple_drop_dates
-        
-        MATCHES_1_TO_N_FOR_MANUAL_REVIEW_df = df_multiple_matches
-        MATCHES_1_TO_N_FOR_MANUAL_REVIEW = dataiku.Dataset("MATCHES_1_TO_N_FOR_MANUAL_REVIEW")
-        MATCHES_1_TO_N_FOR_MANUAL_REVIEW.write_with_schema(MATCHES_1_TO_N_FOR_MANUAL_REVIEW_df)
-
-        
-def do_save_no_matches(_no_match_customer, _matching_process_log_event):
-        
-    df_no_matches = pd.DataFrame(_no_match_customer)
-    
-    if len(df_no_matches)>0:
-        
-        print("saving", len(df_no_matches), "no matches records")
-        
-        df_no_matches.columns = ['CUSTOMER']
-        df_no_matches['DRAW_DOWN_DATE'] = _no_match_draw_down_date
-
-        MATCHES_1_TO_NONE_df = df_no_matches
-        MATCHES_1_TO_NONE = dataiku.Dataset("MATCHES_1_TO_NONE")
-        MATCHES_1_TO_NONE.write_with_schema(MATCHES_1_TO_NONE_df)
