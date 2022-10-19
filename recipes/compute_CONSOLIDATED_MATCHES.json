@@ -49,30 +49,30 @@
       "items": [
         {
           "ref": "MATCHES_1_TO_N_FOR_MANUAL_REVIEW",
-          "appendMode": true
+          "appendMode": false
         },
         {
           "ref": "MATCHES_1_TO_1",
-          "appendMode": true
+          "appendMode": false
         },
         {
           "ref": "MATCHES_1_TO_NONE",
-          "appendMode": true
+          "appendMode": false
         },
         {
           "ref": "MATCHING_PROCESS_LOG",
-          "appendMode": true
+          "appendMode": false
         }
       ]
     }
   },
   "labels": [],
   "versionTag": {
-    "versionNumber": 105,
+    "versionNumber": 106,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1666176346006
+    "lastModifiedOn": 1666176361655
   },
   "creationTag": {
     "versionNumber": 0,
