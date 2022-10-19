@@ -111,10 +111,9 @@ max_idx = 0
 _processed_customers = []
 verbose = True
 
-#process_ranges = [[100000,1000],[1100,900],[1000,600],[700,400],[500,200],[300,100],[200,70],
-#                  [100,50],[70,40],[60,30],[40,20],[30,10],[30,0]]
+process_ranges = [[100000,1000],[1100,900],[1000,600],[700,400],[500,200],[300,100],[200,70],
+                  [100,50],[70,40],[60,30],[40,20],[30,10],[30,0]]
 
-process_ranges = [[70,40],[60,30],[40,20],[30,10],[30,0]]
 
 for r in process_ranges:
 
@@ -127,13 +126,10 @@ for r in process_ranges:
     print(len(df_down), "filtered down rows")
     print(len(df_up), "filtered up rows")
 
-    max_idx = 1000
-
     _customers = []
-    # Prepare Customer Set
+    # Prepare Customer Set for processing
+    
     for index, row in df_down.iterrows():
-
-        idx+=1
 
         customer = row['CUSTOMER']
         draw_down_date = row['DRAW_DOWN_DATE']
@@ -145,9 +141,6 @@ for r in process_ranges:
 
         _customers.append(c)
 
-    print(idx)
-
-    ##
     if verbose:
         print(" processing range from " + str(r_max) + " to " + str(r_min) + " " + str(len(_customers)) + " Draw Down Customers")
 
@@ -225,6 +218,11 @@ for r in process_ranges:
 
     print(idx)
     print()
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+
+
+
 
     _matching_process_log_time.append(str(pd.Timestamp.now()))
     _matching_process_log_event.append("writing datasets to snowflake")
