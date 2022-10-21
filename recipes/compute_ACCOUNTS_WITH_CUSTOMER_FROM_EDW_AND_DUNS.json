@@ -28,6 +28,10 @@
         {
           "ref": "ACCOUNTS_WITH_EBX_PARTY",
           "deps": []
+        },
+        {
+          "ref": "mdm_final",
+          "deps": []
         }
       ]
     }
@@ -48,11 +52,11 @@
   },
   "labels": [],
   "versionTag": {
-    "versionNumber": 70,
+    "versionNumber": 71,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1666359162056
+    "lastModifiedOn": 1666373307304
   },
   "creationTag": {
     "versionNumber": 0,
