@@ -12,30 +12,79 @@ ACCOUNTS_WITH_BUNDLER_AND_DUNS_df = ACCOUNTS_WITH_BUNDLER_AND_DUNS.get_dataframe
 ACCOUNTS_WITH_EBX_PARTY = dataiku.Dataset("ACCOUNTS_WITH_EBX_PARTY")
 ACCOUNTS_WITH_EBX_PARTY_df = ACCOUNTS_WITH_EBX_PARTY.get_dataframe()
 
-#"mdm_final"
+MDM_FINAL = dataiku.Dataset("mdm_final")
+MDM_FINAL_df = MDM_FINAL.get_dataframe()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-df = ACCOUNTS_WITH_BUNDLER_AND_DUNS_df
+df_mdm = MDM_FINAL_df[['accountnumber','wex_id','name','global_customer_id','global_customer_name']].copy()
+df_mdm.columns = ['CUSTOMER_ACCOUNT_ID','MDM_WEX_ID','MDM_WEX_NAME','MDM_PARTY_ID','MDM_PARTY_NAME']
+df_mdm.dropna(subset=['CUSTOMER_ACCOUNT_ID'], inplace=True)
+df_mdm['CUSTOMER_ACCOUNT_ID'] = df_mdm['CUSTOMER_ACCOUNT_ID'].astype('Int64', errors='ignore')
+df_mdm['MDM_WEX_ID'] = df_mdm['MDM_WEX_ID'].astype('Int64', errors='ignore')
+df_mdm['MDM_PARTY_ID'] = df_mdm['MDM_PARTY_ID'].astype('Int64', errors='ignore')
+print(len(df_mdm))
 
+df_mdm['MDM_WEX_NAME'] = df_mdm['MDM_WEX_NAME'].str.upper()
+df_mdm["MDM_WEX_NAME"] = df_mdm['MDM_WEX_NAME'].str.translate(str.maketrans('', '', string.punctuation))
+
+df_mdm['MDM_PARTY_NAME'] = df_mdm['MDM_PARTY_NAME'].str.upper()
+df_mdm["MDM_PART_NAME"] = df_mdm['MDM_PARTY_NAME'].str.translate(str.maketrans('', '', string.punctuation))
+
+df_mdm.head()
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+df_wex_id = df_mdm.groupby(['MDM_WEX_ID', 'MDM_WEX_NAME'])[['CUSTOMER_ACCOUNT_ID']].count().reset_index()
+df_wex_id.columns = ['MDM_WEX_ID','MDM_WEX_NAME','COUNT_OF_ACCOUNT']
+df_wex_id = df_wex_id[df_wex_id.COUNT_OF_ACCOUNT>1]
+df_wex_id['HAS_WEX_ID'] = True
+df_wex_id.sort_values(by=['COUNT_OF_ACCOUNT'],ascending=False, inplace=True)
+
+df_wex_id.tail()
+print(len(df_wex_id))
+df_wex_id.head()
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+df_account_with_wex_id = df_mdm[['CUSTOMER_ACCOUNT_ID','MDM_WEX_ID']].copy()
+df_account_with_wex_id.dropna(subset=['MDM_WEX_ID'], inplace=True)
+print(len(df_account_with_wex_id))
+df_account_with_wex_id = pd.merge(df_account_with_wex_id, df_wex_id, on='MDM_WEX_ID', how='left')
+print(len(df_account_with_wex_id))
+df_account_with_wex_id.head()
+df_account_with_wex_id.dropna(subset=['HAS_WEX_ID'], inplace=True)
+df_account_with_wex_id.drop_duplicates(subset=['CUSTOMER_ACCOUNT_ID'], inplace=True)
+df_account_with_wex_id = df_account_with_wex_id[['CUSTOMER_ACCOUNT_ID','MDM_WEX_ID','MDM_WEX_NAME']]
+
+print(len(df_account_with_wex_id))
+df_account_with_wex_id.head()
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+df = ACCOUNTS_WITH_BUNDLER_AND_DUNS_df.copy()
+print(len(df))
+
+df = pd.merge(df,df_account_with_wex_id, on='CUSTOMER_ACCOUNT_ID', how='left')
+print(len(df))
+df.head()
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 import warnings
 warnings.filterwarnings(action='once')
 
 df['DUNS'] = df['DUNS'].astype('Int64', errors='ignore')
 df['DNB_DUNS_NUMBER'] = df['DNB_DUNS_NUMBER'].astype('Int64', errors='ignore')
 df['DNB_BUSINESS_NAME'] = df['DNB_BUSINESS_NAME'].str.upper()
-df["DNB_BUSINESS_NAME"] = df['DNB_BUSINESS_NAME'].str.replace('[^\w\s]','')
+df["DNB_BUSINESS_NAME"] = df['DNB_BUSINESS_NAME'].str.translate(str.maketrans('', '', string.punctuation))
 
 df['DNB_GLOBAL_ULT_NUMBER'] = df['DNB_GLOBAL_ULT_NUMBER'].astype('Int64', errors='ignore')
 df['DNB_GLOBAL_ULT_NAME'] = df['DNB_GLOBAL_ULT_NAME'].str.upper()
-df["DNB_GLOBAL_ULT_NAME"] = df['DNB_GLOBAL_ULT_NAME'].str.replace('[^\w\s]','')
+df["DNB_GLOBAL_ULT_NAME"] = df['DNB_GLOBAL_ULT_NAME'].str.translate(str.maketrans('', '', string.punctuation))
 
 df['DNB_DOMESTIC_ULT_NUMBER'] = df['DNB_DOMESTIC_ULT_NUMBER'].astype('Int64', errors='ignore')
 df['DNB_DOMESTIC_ULTIMATE_NAME'] = df['DNB_DOMESTIC_ULTIMATE_NAME'].str.upper()
-df["DNB_DOMESTIC_ULTIMATE_NAME"] = df['DNB_DOMESTIC_ULTIMATE_NAME'].str.replace('[^\w\s]','')
+df["DNB_DOMESTIC_ULTIMATE_NAME"] = df['DNB_DOMESTIC_ULTIMATE_NAME'].str.translate(str.maketrans('', '', string.punctuation))
 
 df['DNB_HQ_NUMBER'] = df['DNB_HQ_NUMBER'].astype('Int64', errors='ignore')
 df['DNB_HQ_NAME'] = df['DNB_HQ_NAME'].str.upper()
-df["DNB_HQ_NAME"] = df['DNB_HQ_NAME'].str.replace('[^\w\s]','')
+df["DNB_HQ_NAME"] = df['DNB_HQ_NAME'].str.translate(str.maketrans('', '', string.punctuation))
 
 df['DNB_LEVEL'] = 'None'
 df['DNB_CUSTOMER_NAME'] = np.nan
@@ -81,6 +130,9 @@ df.loc[~df["EDW_CUSTOMER_NAME"].isnull(),'CUST_CALC_SOURCE'] = "EDW"
 
 df.loc[(df["CUSTOMER"].isnull())&(~df["DNB_CUSTOMER_NAME"].isnull()),'CUST_CALC_SOURCE'] = "DNB"
 df.loc[df["CUSTOMER"].isnull(),'CUSTOMER'] = df["DNB_CUSTOMER_NAME"]
+
+df.loc[df['CUSTOMER'].isnull(), 'CUST_CALC_SOURCE'] = 'MDM_WEX_ID'
+df.loc[df['CUSTOMER'].isnull(), 'CUSTOMER'] = 'MDM_WEX_ID'
 
 df.loc[df["CUSTOMER"].isnull(),'CUST_CALC_SOURCE'] = 'ACCOUNT'
 df.loc[df["CUSTOMER"].isnull(),'CUSTOMER'] = df["CUSTOMER_ACCOUNT_NAME"]
@@ -236,6 +288,9 @@ del(df_j['PARTY_ID'])
 del(df_j['PARTY_DEFAULT_NAME'])
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+df_j.CUST_CALC_SOURCE.value_counts()
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 unique_customer_list = df_j.CUSTOMER.unique()
 df_customer_ids = pd.DataFrame(unique_customer_list)
 df_customer_ids.columns = ["CUSTOMER"]
@@ -255,6 +310,9 @@ df_jj.head()
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 df_by_account = df_jj[['CUSTOMER_ACCOUNT_ID','CUSTOMER_ID', 'CUSTOMER']]
 df_by_account.head()
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+len(df_by_account.CUSTOMER_ID.unique())
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS_df = df_jj
