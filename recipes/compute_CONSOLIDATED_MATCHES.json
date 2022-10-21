@@ -22,14 +22,6 @@
     "main": {
       "items": [
         {
-          "ref": "CALCULATED_CARD_DRAW_UPS",
-          "deps": []
-        },
-        {
-          "ref": "CALCULATED_CARD_DRAW_DOWNS",
-          "deps": []
-        },
-        {
           "ref": "NAFCUSTOMER_COMMON_WORDS_IN_NAMES",
           "deps": []
         },
@@ -64,11 +56,11 @@
   },
   "labels": [],
   "versionTag": {
-    "versionNumber": 116,
+    "versionNumber": 117,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1666297355969
+    "lastModifiedOn": 1666358473969
   },
   "creationTag": {
     "versionNumber": 0,
