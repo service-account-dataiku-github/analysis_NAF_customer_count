@@ -61,6 +61,7 @@ df_account_with_wex_id.head()
 df = ACCOUNTS_WITH_BUNDLER_AND_DUNS_df.copy()
 print(len(df))
 
+df['CUSTOMER_ACCOUNT_ID'] = df['CUSTOMER_ACCOUNT_ID'].astype('Int64', errors='ignore')
 df = pd.merge(df,df_account_with_wex_id, on='CUSTOMER_ACCOUNT_ID', how='left')
 print(len(df))
 df.head()
