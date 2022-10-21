@@ -28,11 +28,11 @@
     "dimensions": []
   },
   "versionTag": {
-    "versionNumber": 2,
+    "versionNumber": 3,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1666387130051
+    "lastModifiedOn": 1666387645506
   },
   "creationTag": {
     "versionNumber": 0,
@@ -58,9 +58,10 @@
   "schema": {
     "columns": [
       {"name":"CUSTOMER","type":"string","maxLength":4194304},
-      {"name":"REVENUE_YEAR","type":"bigint"},
-      {"name":"REVENUE_MONTH","type":"bigint"},
-      {"name":"ACTIVE_CARD_COUNT","type":"double"}
+      {"name":"DRAW_UP_DATE","type":"date"},
+      {"name":"MEAN_DU","type":"double"},
+      {"name":"STD_DU","type":"double"},
+      {"name":"ACTIVE_CARD_MAX","type":"double"}
     ],
     "userModified": false
   },
