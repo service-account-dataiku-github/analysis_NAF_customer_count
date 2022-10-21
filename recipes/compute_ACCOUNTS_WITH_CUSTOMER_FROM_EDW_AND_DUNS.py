@@ -108,9 +108,10 @@ def apply_rule_contains(df, rule_name, compares_to, contains_string,final_name):
 
     return(df)
 
-# this set of rules represents high card count mappings
+# The following set of ~100 rules represents high card count mappings
 # these rules have been manually verified
 # as they impact large numbers of cards (and in turn gallons, spend and revenue)
+
 df = apply_rule(df, "RULE 001", ['QUANTA SERVICES INC','QUANTA SERVICES'], 'QUANTA SERVICES INC')
 df = apply_rule(df, "RULE 002", ['7325 ADVANCE STORES COMPANY 4','7325 ADVANCE AUTO','7325 ADVANCE STORES COMP','7325 ADVANCE STORES COMP 2'], 'ADVANCE AUTO')
 df = apply_rule(df, "RULE 003", ['17435-GE HEALTHCARE (3)','17435 GE HEALTHCARE','17435-GE HEALTHCARE','17435-GE HEALTHCARE (2)'], '17435-GE HEALTHCARE')
