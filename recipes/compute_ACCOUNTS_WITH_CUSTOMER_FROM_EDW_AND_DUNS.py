@@ -18,6 +18,11 @@ MDM_FINAL_df = MDM_FINAL.get_dataframe()
 MATCHES_VERIFIED = dataiku.Dataset("MATCHES_VERIFIED")
 MATCHES_VERIFIED_df = MATCHES_VERIFIED.get_dataframe()
 
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+df_matches_verified = MATCHES_VERIFIED_df
+df_matches_verified["CUSTOMER"] = df_matches_verified['CUSTOMER'].str.translate(str.maketrans('', '', string.punctuation))
+df_matches_verified["CUSTOMER_CLC"] = df_matches_verified['CUSTOMER_CLC'].str.translate(str.maketrans('', '', string.punctuation))
+df_matches_verified.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 df_mdm = MDM_FINAL_df[['accountnumber','wex_id','name','global_customer_id','global_customer_name']].copy()
@@ -33,9 +38,6 @@ df_mdm["MDM_WEX_NAME"] = df_mdm['MDM_WEX_NAME'].str.translate(str.maketrans('', 
 
 df_mdm['MDM_PARTY_NAME'] = df_mdm['MDM_PARTY_NAME'].str.upper()
 df_mdm["MDM_PART_NAME"] = df_mdm['MDM_PARTY_NAME'].str.translate(str.maketrans('', '', string.punctuation))
-
-
-
 df_mdm.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
@@ -294,6 +296,21 @@ del(df_j['PARTY_ID'])
 del(df_j['PARTY_DEFAULT_NAME'])
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+print(len(df_matches_verified))
+df_matches_verified.drop_duplicates(subset='CUSTOMER', inplace=True)
+print(len(df_matches_verified))
+
+print(len(df_j))
+df_j_w_verified = pd.merge(df_j, df_matches_verified, left_on='CUSTOMER', right_on='CUSTOMER', how='left')
+print(len(df_j_w_verified))
+
+df_j_w_verified.loc[~df_j_w_verified["CUSTOMER_CLC"].isnull(),'CUSTOMER'] = df_j_w_verified.CUSTOMER_CLC
+df_j_w_verified.loc[~df_j_w_verified["CUSTOMER_CLC"].isnull(),'CUST_CALC_SOURCE'] = 'CLC'
+
+df_j = df_j_w_verified
+del(df_j['CUSTOMER_CLC'])
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 df_j.CUST_CALC_SOURCE.value_counts()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
@@ -304,7 +321,7 @@ df_customer_ids = df_customer_ids.sort_values(['CUSTOMER']).reset_index(drop=Tru
 df_customer_ids = df_customer_ids.reset_index(drop=False)
 df_customer_ids['CUSTOMER_ID'] = df_customer_ids.index + 77000000
 del(df_customer_ids['index'])
-df_customer_ids.tail()
+df_customer_ids.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 print(len(df_j))
@@ -319,6 +336,9 @@ df_by_account.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 len(df_by_account.CUSTOMER_ID.unique())
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+df_jj.CUST_CALC_SOURCE.value_counts()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS_df = df_jj
