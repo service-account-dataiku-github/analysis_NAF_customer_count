@@ -4,7 +4,8 @@
   "optionalDependencies": false,
   "params": {
     "envSelection": {
-      "envMode": "INHERIT"
+      "envMode": "EXPLICIT_ENV",
+      "envName": "env_clc"
     },
     "containerSelection": {
       "containerMode": "INHERIT"
@@ -44,11 +45,11 @@
   },
   "labels": [],
   "versionTag": {
-    "versionNumber": 4,
+    "versionNumber": 5,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1666540761209
+    "lastModifiedOn": 1666540787712
   },
   "creationTag": {
     "versionNumber": 0,
