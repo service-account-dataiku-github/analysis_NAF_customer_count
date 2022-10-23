@@ -290,7 +290,7 @@ del(df['CUSTOMER_ACCOUNT_NAME_ORIGINAL'])
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 df_j = pd.merge(df, ACCOUNTS_WITH_EBX_PARTY_df, on='CUSTOMER_ACCOUNT_ID', how='left')
 df_j.loc[~df_j["PARTY_DEFAULT_NAME"].isnull(),'CUSTOMER'] = df_j.PARTY_DEFAULT_NAME
-df_j.loc[~df_j["PARTY_DEFAULT_NAME"].isnull(),'CUST_CALC_SOURCE'] = 'EBX'
+df_j.loc[~df_j["PARTY_DEFAULT_NAME"].isnull(),'CUST_CALC_SOURCE'] = 'MDM_PARTY_PARENT_ID'
 df_j.CUST_CALC_SOURCE.value_counts()
 
 del(df_j['PARTY_ID'])
