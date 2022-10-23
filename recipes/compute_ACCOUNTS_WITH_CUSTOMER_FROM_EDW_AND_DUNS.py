@@ -15,6 +15,10 @@ ACCOUNTS_WITH_EBX_PARTY_df = ACCOUNTS_WITH_EBX_PARTY.get_dataframe()
 MDM_FINAL = dataiku.Dataset("mdm_final")
 MDM_FINAL_df = MDM_FINAL.get_dataframe()
 
+MATCHES_VERIFIED = dataiku.Dataset("MATCHES_VERIFIED")
+MATCHES_VERIFIED_df = MATCHES_VERIFIED.get_dataframe()
+
+
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 df_mdm = MDM_FINAL_df[['accountnumber','wex_id','name','global_customer_id','global_customer_name']].copy()
 df_mdm.columns = ['CUSTOMER_ACCOUNT_ID','MDM_WEX_ID','MDM_WEX_NAME','MDM_PARTY_ID','MDM_PARTY_NAME']
@@ -29,6 +33,8 @@ df_mdm["MDM_WEX_NAME"] = df_mdm['MDM_WEX_NAME'].str.translate(str.maketrans('', 
 
 df_mdm['MDM_PARTY_NAME'] = df_mdm['MDM_PARTY_NAME'].str.upper()
 df_mdm["MDM_PART_NAME"] = df_mdm['MDM_PARTY_NAME'].str.translate(str.maketrans('', '', string.punctuation))
+
+
 
 df_mdm.head()
 
