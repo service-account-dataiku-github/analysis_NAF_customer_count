@@ -16,8 +16,8 @@
     },
     "sorting": [
       {
-        "column": "EDW_CUSTOMER_NAME",
-        "ascending": true
+        "column": "Distinct count of CUSTOMER_ACCOUNT_ID",
+        "ascending": false
       }
     ],
     "analysisColumnData": {},
