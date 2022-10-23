@@ -141,7 +141,7 @@ df.loc[(df["CUSTOMER"].isnull())&(~df["DNB_CUSTOMER_NAME"].isnull()),'CUST_CALC_
 df.loc[df["CUSTOMER"].isnull(),'CUSTOMER'] = df["DNB_CUSTOMER_NAME"]
 
 df.loc[df['CUSTOMER'].isnull(), 'CUST_CALC_SOURCE'] = 'MDM_WEX_ID'
-df.loc[df['CUSTOMER'].isnull(), 'CUSTOMER'] = 'MDM_WEX_ID'
+df.loc[df['CUSTOMER'].isnull(), 'CUSTOMER'] = df['MDM_WEX_NAME']
 
 df.loc[df["CUSTOMER"].isnull(),'CUST_CALC_SOURCE'] = 'ACCOUNT'
 df.loc[df["CUSTOMER"].isnull(),'CUSTOMER'] = df["CUSTOMER_ACCOUNT_NAME"]
