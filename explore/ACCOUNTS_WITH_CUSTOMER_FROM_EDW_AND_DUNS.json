@@ -73,7 +73,10 @@
       "DNB_CUSTOMER_NAME": 225,
       "EDW_STATE": 100,
       "CUSTOMER": 300,
-      "CUST_CALC_SOURCE": 135
+      "CUST_CALC_SOURCE": 135,
+      "MDM_WEX_ID": 100,
+      "MDM_WEX_NAME": 169,
+      "CUSTOMER_ID": 127
     },
     "coloring": {
       "scheme": "MEANING_AND_STATUS",
