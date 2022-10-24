@@ -19,12 +19,23 @@ MATCHES_VERIFIED = dataiku.Dataset("MATCHES_VERIFIED")
 MATCHES_VERIFIED_df = MATCHES_VERIFIED.get_dataframe()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+# load matches calculated by matching process, then verified with secondary matching step
+
 df_matches_verified = MATCHES_VERIFIED_df
 df_matches_verified["CUSTOMER"] = df_matches_verified['CUSTOMER'].str.translate(str.maketrans('', '', string.punctuation))
 df_matches_verified["CUSTOMER_CLC"] = df_matches_verified['CUSTOMER_CLC'].str.translate(str.maketrans('', '', string.punctuation))
 df_matches_verified.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+# load MDM matches, note we are using an older MDM Final extract from March
+# TODO: replace MDM final with snowflake source
+
+# prepare mdm final output:
+# retain key columns
+# cast ids to large ints
+# remove punctuation cast names upper case
+# filter out invalid grouping entries
+
 df_mdm = MDM_FINAL_df[['accountnumber','wex_id','name','global_customer_id','global_customer_name']].copy()
 df_mdm.columns = ['CUSTOMER_ACCOUNT_ID','MDM_WEX_ID','MDM_WEX_NAME','MDM_PARTY_ID','MDM_PARTY_NAME']
 df_mdm.dropna(subset=['CUSTOMER_ACCOUNT_ID'], inplace=True)
@@ -36,11 +47,20 @@ print(len(df_mdm))
 df_mdm['MDM_WEX_NAME'] = df_mdm['MDM_WEX_NAME'].str.upper()
 df_mdm["MDM_WEX_NAME"] = df_mdm['MDM_WEX_NAME'].str.translate(str.maketrans('', '', string.punctuation))
 
+print(len(df_mdm))
+df_mdm = df_mdm[df_mdm.MDM_WEX_NAME!='CARD TYPE 7 PRIMARY']
+df_mdm = df_mdm[df_mdm.MDM_WEX_NAME!='ELEMENT 1']
+df_mdm = df_mdm[df_mdm.MDM_WEX_NAME!='ELEMENT 2']
+print(len(df_mdm))
+
 df_mdm['MDM_PARTY_NAME'] = df_mdm['MDM_PARTY_NAME'].str.upper()
 df_mdm["MDM_PART_NAME"] = df_mdm['MDM_PARTY_NAME'].str.translate(str.maketrans('', '', string.punctuation))
 df_mdm.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+# create structure at account level with MDM WEX ID and MDM WEX NAME
+# that can be joined to source accounts
+
 df_wex_id = df_mdm.groupby(['MDM_WEX_ID', 'MDM_WEX_NAME'])[['CUSTOMER_ACCOUNT_ID']].count().reset_index()
 df_wex_id.columns = ['MDM_WEX_ID','MDM_WEX_NAME','COUNT_OF_ACCOUNT']
 df_wex_id = df_wex_id[df_wex_id.COUNT_OF_ACCOUNT>1]
@@ -51,7 +71,6 @@ df_wex_id.tail()
 print(len(df_wex_id))
 df_wex_id.head()
 
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 df_account_with_wex_id = df_mdm[['CUSTOMER_ACCOUNT_ID','MDM_WEX_ID']].copy()
 df_account_with_wex_id.dropna(subset=['MDM_WEX_ID'], inplace=True)
 print(len(df_account_with_wex_id))
@@ -66,6 +85,8 @@ print(len(df_account_with_wex_id))
 df_account_with_wex_id.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+# Join accounts with MDM grouping to accounts
+# ensure that counts before and after match, there should be no row duplication
 df = ACCOUNTS_WITH_BUNDLER_AND_DUNS_df.copy()
 print(len(df))
 
@@ -140,7 +161,7 @@ df.loc[~df["EDW_CUSTOMER_NAME"].isnull(),'CUST_CALC_SOURCE'] = "EDW"
 df.loc[(df["CUSTOMER"].isnull())&(~df["DNB_CUSTOMER_NAME"].isnull()),'CUST_CALC_SOURCE'] = "DNB"
 df.loc[df["CUSTOMER"].isnull(),'CUSTOMER'] = df["DNB_CUSTOMER_NAME"]
 
-df.loc[df['CUSTOMER'].isnull(), 'CUST_CALC_SOURCE'] = 'MDM_WEX_ID'
+df.loc[df['CUSTOMER'].isnull(), 'CUST_CALC_SOURCE'] = 'MDM'
 df.loc[df['CUSTOMER'].isnull(), 'CUSTOMER'] = df['MDM_WEX_NAME']
 
 df.loc[df["CUSTOMER"].isnull(),'CUST_CALC_SOURCE'] = 'ACCOUNT'
@@ -149,7 +170,7 @@ df.loc[df["CUSTOMER"].isnull(),'CUSTOMER'] = df["CUSTOMER_ACCOUNT_NAME"]
 # RULE SETs
 def apply_rule(df, rule_name,filter_name_list,final_name):
 
-    df.loc[df['CUSTOMER'].isin(filter_name_list),"CUST_CALC_SOURCE"] = "Rule (IsIn)"
+    df.loc[df['CUSTOMER'].isin(filter_name_list),"CUST_CALC_SOURCE"] = "CUSTOM RULE"
     df.loc[df['CUSTOMER'].isin(filter_name_list),"CUST_CALC_RULE"] = rule_name
     df.loc[df['CUSTOMER'].isin(filter_name_list),"CUSTOMER"] = final_name
 
@@ -157,7 +178,7 @@ def apply_rule(df, rule_name,filter_name_list,final_name):
 
 def apply_rule_starts_with(df, rule_name, compares_to, starts_with_string,final_name):
 
-    df.loc[df[compares_to].str.startswith(starts_with_string, na=False),"CUST_CALC_SOURCE"] = "RULE (Startswith)"
+    df.loc[df[compares_to].str.startswith(starts_with_string, na=False),"CUST_CALC_SOURCE"] = "CUSTOM RULE"
     df.loc[df[compares_to].str.startswith(starts_with_string, na=False),"CUST_CALC_RULE"] = rule_name
     df.loc[df[compares_to].str.startswith(starts_with_string, na=False),"CUSTOMER"] = final_name
 
@@ -165,7 +186,7 @@ def apply_rule_starts_with(df, rule_name, compares_to, starts_with_string,final_
 
 def apply_rule_contains(df, rule_name, compares_to, contains_string,final_name):
 
-    df.loc[df[compares_to].str.contains(contains_string, na=False),"CUST_CALC_SOURCE"] = "RULE (Contains)"
+    df.loc[df[compares_to].str.contains(contains_string, na=False),"CUST_CALC_SOURCE"] = "CUSTOM RULE"
     df.loc[df[compares_to].str.contains(contains_string, na=False),"CUST_CALC_RULE"] = rule_name
     df.loc[df[compares_to].str.contains(contains_string, na=False),"CUSTOMER"] = final_name
 
@@ -290,7 +311,7 @@ del(df['CUSTOMER_ACCOUNT_NAME_ORIGINAL'])
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 df_j = pd.merge(df, ACCOUNTS_WITH_EBX_PARTY_df, on='CUSTOMER_ACCOUNT_ID', how='left')
 df_j.loc[~df_j["PARTY_DEFAULT_NAME"].isnull(),'CUSTOMER'] = df_j.PARTY_DEFAULT_NAME
-df_j.loc[~df_j["PARTY_DEFAULT_NAME"].isnull(),'CUST_CALC_SOURCE'] = 'MDM_PARTY_PARENT_ID'
+df_j.loc[~df_j["PARTY_DEFAULT_NAME"].isnull(),'CUST_CALC_SOURCE'] = 'MDM'
 df_j.CUST_CALC_SOURCE.value_counts()
 
 del(df_j['PARTY_ID'])
