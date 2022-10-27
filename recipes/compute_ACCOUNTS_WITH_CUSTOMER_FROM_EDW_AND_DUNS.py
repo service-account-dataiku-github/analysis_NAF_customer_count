@@ -18,10 +18,8 @@ MDM_FINAL_df = MDM_FINAL.get_dataframe()
 MATCHES_VERIFIED = dataiku.Dataset("MATCHES_VERIFIED")
 MATCHES_VERIFIED_df = MATCHES_VERIFIED.get_dataframe()
 
-RDW_CONVERSIONS = dataiku.Dataset("RDW_CONVERSIONS")
+RDW_CONVERSIONS = dataiku.Dataset("NAFCUSTOMER_RDW_CONVERSIONS")
 RDW_CONVERSIONS_df = RDW_CONVERSIONS.get_dataframe()
-
-"NAFCUSTOMER_RDW_CONVERSIONS"
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 # load matches calculated by matching process, then verified with secondary matching step
@@ -30,6 +28,10 @@ df_matches_verified = MATCHES_VERIFIED_df
 df_matches_verified["CUSTOMER"] = df_matches_verified['CUSTOMER'].str.translate(str.maketrans('', '', string.punctuation))
 df_matches_verified["CUSTOMER_CLC"] = df_matches_verified['CUSTOMER_CLC'].str.translate(str.maketrans('', '', string.punctuation))
 df_matches_verified.head()
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+print(len(RDW_CONVERSIONS_df))
+RDW_CONVERSIONS_df.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 # load MDM matches, note we are using an older MDM Final extract from March
@@ -337,6 +339,57 @@ df_j_w_verified.loc[~df_j_w_verified["CUSTOMER_CLC"].isnull(),'CUST_CALC_SOURCE'
 
 df_j = df_j_w_verified
 del(df_j['CUSTOMER_CLC'])
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+df_j.head()
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+RDW_CONVERSIONS_df.head()
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+df_r = RDW_CONVERSIONS_df[['FLEET_ID','CLASSIC_ACCOUNT_NUMBER']].dropna(subset=['CLASSIC_ACCOUNT_NUMBER'])
+df_r.FLEET_ID = df_r.FLEET_ID.str.strip()
+df_r = df_r[~df_r['FLEET_ID'].str.contains('-')]
+df_r.FLEET_ID = df_r.FLEET_ID.astype('float')
+df_r.FLEET_ID = df_r.FLEET_ID.astype('Int64')
+print(len(df_r))
+print()
+
+df_cust = df_j[['CUSTOMER_ACCOUNT_ID','CUSTOMER']].copy()
+df_cust.CUSTOMER_ACCOUNT_ID = df_cust['CUSTOMER_ACCOUNT_ID'].astype('Int64')
+print(len(df_cust))
+print()
+
+df_rj = pd.merge(df_r, df_cust, left_on='FLEET_ID', right_on='CUSTOMER_ACCOUNT_ID', how='inner')
+df_rj = df_rj[pd.to_numeric(df_rj.CLASSIC_ACCOUNT_NUMBER, errors='coerce').notnull()]
+df_rj.CLASSIC_ACCOUNT_NUMBER = df_rj.CLASSIC_ACCOUNT_NUMBER.astype(float)
+df_rj.CLASSIC_ACCOUNT_NUMBER = df_rj.CLASSIC_ACCOUNT_NUMBER.astype(np.int64)
+print(len(df_rj))
+
+df_cust_classic = df_j[['CUSTOMER_ACCOUNT_ID','CUSTOMER']].copy()
+df_cust_classic.columns = ['CUSTOMER_ACCOUNT_ID', 'CLASSIC_CUSTOMER']
+df_cust_classic.CUSTOMER_ACCOUNT_ID = df_cust['CUSTOMER_ACCOUNT_ID'].astype('Int64')
+print(len(df_cust_classic))
+
+df_rj = df_rj[['FLEET_ID','CLASSIC_ACCOUNT_NUMBER','CUSTOMER']]
+df_rj = pd.merge(df_rj, df_cust_classic, left_on='CLASSIC_ACCOUNT_NUMBER', right_on='CUSTOMER_ACCOUNT_ID', how='inner')
+print(len(df_rj))
+
+df_rdw_conversions = df_rj[df_rj.CUSTOMER!=df_rj.CLASSIC_CUSTOMER]
+print(len(df_rdw_conversions))
+df_rdw_conversions.head()
+
+df_rdw_conversions = df_rdw_conversions[['CUSTOMER_ACCOUNT_ID','CUSTOMER']]
+df_rdw_conversions.columns = ['CUSTOMER_ACCOUNT_ID','CONVERSION_REPLACEMENT_CUSTOMER']
+df_rdw_conversions.drop_duplicates(subset=['CUSTOMER_ACCOUNT_ID'], inplace=True)
+print(len(df_rdw_conversions))
+df_rdw_conversions.head()
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+print(len(df_j))
+df_j = pd.merge(df_j, df_rdw_conversions, on='CUSTOMER_ACCOUNT_ID',how='left')
+print(len(df_j))
+df_j.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 df_j.CUST_CALC_SOURCE.value_counts()
