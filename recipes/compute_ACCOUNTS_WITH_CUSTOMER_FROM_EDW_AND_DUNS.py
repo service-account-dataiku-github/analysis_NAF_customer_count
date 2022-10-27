@@ -18,6 +18,11 @@ MDM_FINAL_df = MDM_FINAL.get_dataframe()
 MATCHES_VERIFIED = dataiku.Dataset("MATCHES_VERIFIED")
 MATCHES_VERIFIED_df = MATCHES_VERIFIED.get_dataframe()
 
+RDW_CONVERSIONS = dataiku.Dataset("RDW_CONVERSIONS")
+RDW_CONVERSIONS_df = RDW_CONVERSIONS.get_dataframe()
+
+"NAFCUSTOMER_RDW_CONVERSIONS"
+
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 # load matches calculated by matching process, then verified with secondary matching step
 
