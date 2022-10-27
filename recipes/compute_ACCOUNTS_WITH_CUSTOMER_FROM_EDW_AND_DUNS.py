@@ -347,9 +347,9 @@ df_j.head()
 RDW_CONVERSIONS_df.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-df_r = RDW_CONVERSIONS_df[['FLEET_ID','CLASSIC_ACCOUNT_NUMBER']].dropna(subset=['CLASSIC_ACCOUNT_NUMBER'])
+df_r = RDW_CONVERSIONS_df[['FLEET_ID','CLASSIC_ACCOUNT_NUMBER']].dropna(subset=['CLASSIC_ACCOUNT_NUMBER']).copy()
 df_r.FLEET_ID = df_r.FLEET_ID.str.strip()
-df_r = df_r[~df_r['FLEET_ID'].str.contains('-')]
+df_r = df_r[~df_r['FLEET_ID'].str.contains('-',na=False)]
 df_r.FLEET_ID = df_r.FLEET_ID.astype('float')
 df_r.FLEET_ID = df_r.FLEET_ID.astype('Int64')
 print(len(df_r))
@@ -386,10 +386,18 @@ print(len(df_rdw_conversions))
 df_rdw_conversions.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+df_j_with_rdw_conversions.head()
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 print(len(df_j))
-df_j = pd.merge(df_j, df_rdw_conversions, on='CUSTOMER_ACCOUNT_ID',how='left')
-print(len(df_j))
-df_j.head()
+df_j_with_rdw_conversions = pd.merge(df_j, df_rdw_conversions, on='CUSTOMER_ACCOUNT_ID',how='left')
+print(len(df_j_with_rdw_conversions))
+
+df_j_with_rdw_conversions.loc[~df_j_with_rdw_conversions["CONVERSION_REPLACEMENT_CUSTOMER"].isnull(),'CUSTOMER'] = df_j_with_rdw_conversions.CONVERSION_REPLACEMENT_CUSTOMER
+df_j_with_rdw_conversions.loc[~df_j_with_rdw_conversions["CONVERSION_REPLACEMENT_CUSTOMER"].isnull(),'CUST_CALC_SOURCE'] = 'RDW CONVERSIONS'
+
+df_j = df_j_with_rdw_conversions
+del(df_j['CONVERSION_REPLACEMENT_CUSTOMER'])
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 df_j.CUST_CALC_SOURCE.value_counts()
