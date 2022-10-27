@@ -386,8 +386,6 @@ df_rdw_conversions.drop_duplicates(subset=['CUSTOMER_ACCOUNT_ID'], inplace=True)
 print(len(df_rdw_conversions))
 df_rdw_conversions.head()
 
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-df_j_with_rdw_conversions.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 print(len(df_j))
