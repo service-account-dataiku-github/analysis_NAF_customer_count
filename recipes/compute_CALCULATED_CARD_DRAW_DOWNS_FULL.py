@@ -58,10 +58,11 @@ print(len(NAFCUSTOMER_ACTIVE_CARDS_FULL_df))
 NAFCUSTOMER_ACTIVE_CARDS_FULL_df.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-df_v[df_v.CUSTOMER.str.startswith('RARITAN')].head()
+customer_list = ['NORTHSHORE INC','JAYHAWK MILLWRIGHT','PAXTON ASSOCIATES INC','STATE OF NEW YORK',
+                'PAXTON ASSOCIATES INC', 'YNGRID COSMETICZ LLC', 'CYRGUS COMPANY INC.', 'THE HEALTHY STOP INC',
+                 'T F WALZ INC', 'JAYHAWK MILLWRIGHT', 'CREDIT SLAYERS LLC', 'A ABLE MOVING CO', 'STUDIO IMPACT INC']
 
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-df_v = NAFCUSTOMER_ACTIVE_CARDS_FULL_df
+df_v = NAFCUSTOMER_ACTIVE_CARDS_FULL_df[NAFCUSTOMER_ACTIVE_CARDS_FULL_df.CUSTOMER.isin(customer_list)]
 
 print(len(df_v))
 df_v['REVENUE_DATE'] = df_v.REVENUE_MONTH.astype(str) + "/01/" + df_v.REVENUE_YEAR.astype(str)
@@ -77,6 +78,9 @@ df_max.columns = ['CUSTOMER', 'ACTIVE_CARD_MAX']
 print(len(df_v))
 df_v.dropna(subset=['CUSTOMER'], inplace=True)
 print(len(df_v))
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+df_v.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 print(len(df_v))
@@ -96,6 +100,9 @@ df_v.head()
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 seen_accounts = df_v[df_v['ACTIVE_CARD_COUNT'] > 0].groupby(['CUSTOMER'], as_index=False)[['REVENUE_DATE']].first()
 seen_accounts['FIRST_DATE'] = seen_accounts['REVENUE_DATE'] - pd.DateOffset(months=1)
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+seen_accounts
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 df_v.REVENUE_DATE.value_counts(dropna=False)
@@ -127,14 +134,17 @@ if period_start_date:
     period_start_date = pd.to_datetime(period_start_date)
     df = df[df['REVENUE_DATE'] >= period_start_date].copy()
 
-all_account_ids = list(df['CUSTOMER'].unique())
+all_customer_names = list(df['CUSTOMER'].unique())
 
 if not split:
     split=1
 
-all_account_ids_n = list(split_list(all_account_ids, split))
+all_customer_names_n = list(split_list(all_customer_names, split))
 
 drop_df = pd.DataFrame()
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+all_customer_names_n
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 def find_consistent_cust(df, consecutive=3):
@@ -212,12 +222,12 @@ def find_average_func(dd_find, n=12):
 idx = 0
 max_idx = 5
 
-for sublist in all_account_ids_n:
+for sublist in all_customer_names_n:
 
     idx+=1
-    
+
     print(sublist)
-    
+
     dd_find = df[df['CUSTOMER'].isin(sublist)].copy()
 
     consistent_customers_dd = find_consistent_cust(dd_find, consecutive=consistency)
@@ -279,7 +289,7 @@ for sublist in all_account_ids_n:
                                         how='left')
 
     drop_df = pd.concat([drop_df, drop_month_df], ignore_index=True)
-    
+
     if(idx>max_idx):
         break;
 
@@ -288,7 +298,7 @@ drop_df.rename(columns={'DROP_DATE':'DRAW_DOWN_DATE',
                         'DROP':'DROP_QTY'}, inplace=True)
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-len(drop_df.CUSTOMER.unique())
+drop_df.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 drop_df
@@ -310,7 +320,6 @@ print(len(drop_df))
 # NB: DSS also supports other kinds of APIs for reading and writing data. Please see doc.
 
 CALCULATED_CARD_DRAW_DOWNS_FULL_df = drop_df
-
 
 # Write recipe outputs
 CALCULATED_CARD_DRAW_DOWNS_FULL = dataiku.Dataset("CALCULATED_CARD_DRAW_DOWNS_FULL")
