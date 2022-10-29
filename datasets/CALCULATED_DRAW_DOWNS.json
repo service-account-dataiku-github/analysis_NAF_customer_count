@@ -28,11 +28,11 @@
     "dimensions": []
   },
   "versionTag": {
-    "versionNumber": 1,
+    "versionNumber": 2,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1667063327456
+    "lastModifiedOn": 1667063455234
   },
   "creationTag": {
     "versionNumber": 0,
@@ -58,9 +58,16 @@
   "schema": {
     "columns": [
       {"name":"CUSTOMER","type":"string","maxLength":4194304},
-      {"name":"REVENUE_YEAR","type":"bigint"},
-      {"name":"REVENUE_MONTH","type":"bigint"},
-      {"name":"ACTIVE_CARD_COUNT","type":"double"}
+      {"name":"DRAW_DOWN_DATE","type":"date"},
+      {"name":"ACTIVE_CARD_COUNT","type":"double"},
+      {"name":"LAST_N_MONTHS_AVG","type":"double"},
+      {"name":"NEXT_N_MONTHS_AVG","type":"double"},
+      {"name":"DD_INDICATOR","type":"boolean"},
+      {"name":"DD_DATE","type":"date"},
+      {"name":"START_DATE","type":"date"},
+      {"name":"DROP_QTY","type":"double"},
+      {"name":"MEAN_DD","type":"double"},
+      {"name":"STD_DD","type":"double"}
     ],
     "userModified": false
   },
