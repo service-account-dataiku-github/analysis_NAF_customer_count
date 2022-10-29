@@ -28,11 +28,11 @@
     "dimensions": []
   },
   "versionTag": {
-    "versionNumber": 0,
+    "versionNumber": 1,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1667062112252
+    "lastModifiedOn": 1667063327456
   },
   "creationTag": {
     "versionNumber": 0,
@@ -56,8 +56,13 @@
     "readSQLDateColsAsDSSDates": true
   },
   "schema": {
-    "columns": [],
-    "userModified": true
+    "columns": [
+      {"name":"CUSTOMER","type":"string","maxLength":4194304},
+      {"name":"REVENUE_YEAR","type":"bigint"},
+      {"name":"REVENUE_MONTH","type":"bigint"},
+      {"name":"ACTIVE_CARD_COUNT","type":"double"}
+    ],
+    "userModified": false
   },
   "dkuProperties": [],
   "metrics": {
