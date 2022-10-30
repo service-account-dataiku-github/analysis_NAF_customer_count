@@ -28,11 +28,11 @@
     "dimensions": []
   },
   "versionTag": {
-    "versionNumber": 4,
+    "versionNumber": 5,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1667171454143
+    "lastModifiedOn": 1667171580909
   },
   "creationTag": {
     "versionNumber": 0,
@@ -59,16 +59,6 @@
     "columns": [
       {"name":"CUSTOMER","type":"string","maxLength":4194304},
       {"name":"DROP_DATE","type":"date"},
-      {"name":"ACTIVE_CARD_COUNT","type":"double"},
-      {"name":"LAST_N_MONTHS_AVG","type":"double"},
-      {"name":"NEXT_N_MONTHS_AVG","type":"double"},
-      {"name":"DD_INDICATOR","type":"boolean"},
-      {"name":"DD_DATE","type":"date"},
-      {"name":"START_DATE","type":"date"},
-      {"name":"DROP","type":"double"},
-      {"name":"CUSTOMER_DD","type":"string","maxLength":4194304},
-      {"name":"MEAN_DD","type":"double"},
-      {"name":"STD_DD","type":"double"},
       {"name":"ACTIVE_CARD_MAX","type":"double"}
     ],
     "userModified": false
