@@ -21,6 +21,9 @@ MATCHES_VERIFIED_df = MATCHES_VERIFIED.get_dataframe()
 RDW_CONVERSIONS = dataiku.Dataset("NAFCUSTOMER_RDW_CONVERSIONS")
 RDW_CONVERSIONS_df = RDW_CONVERSIONS.get_dataframe()
 
+ACCOUNT_NEW_SALES = dataiku.Dataset("ACCOUNT_NEW_SALES")
+ACCOUNT_NEW_SALES_df = ACCOUNT_NEW_SALES.get_dataframe()
+
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 # load matches calculated by matching process, then verified with secondary matching step
 
