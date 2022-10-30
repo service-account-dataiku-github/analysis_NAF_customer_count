@@ -162,8 +162,12 @@ while idx<len(customer_list_full):
 
     rise_df_ = du_agg.merge(du_stat, left_on='CUSTOMER', right_on='CUSTOMER', how='left')
     
+    rise_df_ = pd.merge(rise_df_, df_max, on='CUSTOMER', how='left')
+    
     print(len(rise_df_), "new rise records")
     rise_df = pd.concat([rise_df, rise_df_], ignore_index=True)
+    rise_df = rise_df[['CUSTOMER','DU_DATE','ACTIVE_CARD_MAX']]
+    rise_df.columns = ['CUSTOMER','DRAW_UP_DATE','ACTIVE_CARD_MAX']
     
     print(len(rise_df), "total rise records")
     print("saving to snowflake...")
