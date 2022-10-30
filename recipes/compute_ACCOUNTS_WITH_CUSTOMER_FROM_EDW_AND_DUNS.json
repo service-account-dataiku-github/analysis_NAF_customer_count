@@ -40,6 +40,10 @@
         {
           "ref": "NAFCUSTOMER_RDW_CONVERSIONS",
           "deps": []
+        },
+        {
+          "ref": "ACCOUNT_NEW_SALES",
+          "deps": []
         }
       ]
     }
@@ -60,11 +64,11 @@
   },
   "labels": [],
   "versionTag": {
-    "versionNumber": 115,
+    "versionNumber": 116,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1666895656161
+    "lastModifiedOn": 1667151329735
   },
   "creationTag": {
     "versionNumber": 0,
