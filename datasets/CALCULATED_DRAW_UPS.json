@@ -28,11 +28,11 @@
     "dimensions": []
   },
   "versionTag": {
-    "versionNumber": 0,
+    "versionNumber": 1,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1667145057797
+    "lastModifiedOn": 1667147248491
   },
   "creationTag": {
     "versionNumber": 0,
@@ -56,8 +56,14 @@
     "readSQLDateColsAsDSSDates": true
   },
   "schema": {
-    "columns": [],
-    "userModified": true
+    "columns": [
+      {"name":"CUSTOMER","type":"string","maxLength":4194304},
+      {"name":"DU_DATE","type":"date"},
+      {"name":"DU_INDICATOR","type":"boolean"},
+      {"name":"mean_du","type":"double"},
+      {"name":"std_du","type":"double"}
+    ],
+    "userModified": false
   },
   "dkuProperties": [],
   "metrics": {
