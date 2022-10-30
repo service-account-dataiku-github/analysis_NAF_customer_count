@@ -1,5 +1,4 @@
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 # -*- coding: utf-8 -*-
 import dataiku
 import pandas as pd, numpy as np
@@ -130,40 +129,40 @@ for sublist in tqdm(all_account_ids_n):
 
     ## Filter Non-Zero Records and find the first non zero transaction date
     du_find = du_find[du_find['ACTIVE_CARD_COUNT'] > 0]
-    
+
     du_find.sort_values(['REVENUE_DATE'], inplace=True)
 
     du_agg = du_find.groupby(['CUSTOMER'], as_index=False)[['REVENUE_DATE']].min()
-    
+
     du_agg['DU_INDICATOR'] = np.where((du_agg['REVENUE_DATE'] > period_start_date), True, False)
     du_agg.rename(columns={'REVENUE_DATE':'DU_DATE'}, inplace=True)
     du_agg['DU_DATE'] -= pd.DateOffset(months=1)
     du_agg = du_agg[du_agg['DU_INDICATOR'] == True].drop_duplicates(['CUSTOMER'])
-    
+
     ## list of customers who are drawing up
     du_customers = list(du_agg['CUSTOMER'])
-    
+
     if len(du_customers) == 0:
         continue
-    
+
     du_find = du_find[du_find['CUSTOMER'].isin(du_customers)].copy()
-    
+
     du_find = du_find.groupby('CUSTOMER').apply(lambda group: group.iloc[:-1, 1:]).reset_index()
     du_find.drop('level_1', axis=1, inplace=True)
-    
+
     du_find = du_find.merge(du_agg, left_on=['CUSTOMER'], right_on=['CUSTOMER'])
-    
+
     du_find['DU_AVG_START'] = du_find['DU_DATE']  + pd.DateOffset(months=drawup_window)
     du_find['DU_AVG_END'] = du_find['DU_DATE']  + pd.DateOffset(months=drawup_window+statistics_period-1)
-    
+
     du_find_12 = du_find[du_find['REVENUE_DATE'].between(du_find['DU_AVG_START'], du_find['DU_AVG_END'])].copy()
-    
+
     du_stat = du_find_12.groupby(['CUSTOMER'], as_index=False).agg({'ACTIVE_CARD_COUNT':['mean','std']})
-    
+
     du_stat.columns = ['CUSTOMER', 'mean_du','std_du']
-    
+
     rise_df_ = du_agg.merge(du_stat, left_on='CUSTOMER', right_on='CUSTOMER', how='left')
-    
+
     rise_df = pd.concat([rise_df, rise_df_], ignore_index=True)
 
 rise_df.rename(columns={'DU_DATE':'DRAW_UP_DATE',
