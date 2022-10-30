@@ -90,6 +90,215 @@ class Draw_Down_Customer:
                         break;
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+import time
+
+def do_save_log(_matching_process_log_time, _matching_process_log_event):
+
+    df_matching_log = pd.DataFrame(_matching_process_log_time)
+    if len(df_matching_log)>0:
+
+        df_matching_log.columns = ['LOG_TIME']
+        df_matching_log['LOG_EVENT'] = _matching_process_log_event
+
+        MATCHING_PROCESS_LOG_V_df = df_matching_log
+        MATCHING_PROCESS_LOG_V = dataiku.Dataset("MATCHING_PROCESS_LOG_V")
+        MATCHING_PROCESS_LOG_V.write_with_schema(MATCHING_PROCESS_LOG_V_df)
+
+        print()
+
+def do_save_direct_matches(_direct_customer, _direct_match, _direct_draw_up_date):
+
+    df_matches = pd.DataFrame(_direct_customer)
+    if len(df_matches)>0:
+
+        print()
+        print("saving", len(df_matches), "1-1 matching records")
+        print()
+
+        df_matches.columns = ['CUSTOMER']
+        df_matches["MATCH_CUSTOMER"] = _direct_match
+        df_matches["DRAW_UP_DATE"] = _direct_draw_up_date
+
+        MATCHES_1_TO_1_STAGING_V_df = df_matches
+        MATCHES_1_TO_1_STAGING_V = dataiku.Dataset("MATCHES_1_TO_1_STAGING_V")
+        MATCHES_1_TO_1_STAGING_V.write_with_schema(MATCHES_1_TO_1_STAGING_V_df)
+
+        print()
+
+def do_save_multiple_matches(_multiple_customer, _multiple_matches, _multiple_drop_dates):
+
+    df_multiple_matches = pd.DataFrame(_multiple_customer)
+
+    if len(df_multiple_matches)>0:
+
+        print()
+        print("saving", len(df_multiple_matches), "1-n matching records")
+        print()
+
+        df_multiple_matches.columns = ['CUSTOMER']
+        df_multiple_matches["MATCH_CUSTOMER"] = _multiple_matches
+        df_multiple_matches["DRAW_UP_DATE"] = _multiple_drop_dates
+
+        MATCHES_1_TO_N_STAGING_V_df = df_multiple_matches
+        MATCHES_1_TO_N_STAGING_V = dataiku.Dataset("MATCHES_1_TO_N_STAGING_V")
+        MATCHES_1_TO_N_STAGING_V.write_with_schema(MATCHES_1_TO_N_STAGING_V_df)
+
+        print()
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+df_down = df_down_full
+df_up = df_up_full
+
+_processed_customers = []
+verbose = False
+
+_matching_process_log_time = []
+_matching_process_log_event = []
+
+_direct_customer = []
+_direct_match = []
+_direct_draw_up_date = []
+
+_multiple_customer = []
+_multiple_matches = []
+_multiple_drop_dates = []
+
+_no_match_customer = []
+
+save_every_n = 50
+to_save_counter = 0
+print_every_n = 25
+
+print(len(df_down), "filtered down rows")
+print(len(df_up), "filtered up rows")
+
+_customers = []
+
+t0 = time.time()
+
+for index, row in df_down.iterrows():
+
+    customer = row['CUSTOMER']
+    draw_down_date = row['DRAW_DOWN_DATE']
+    mean_dd = row['MEAN_DD']
+    std_dd = row['STD_DD']
+    active_card_max = row['ACTIVE_CARD_MAX']
+
+    c = Draw_Down_Customer(customer, draw_down_date, mean_dd, std_dd, active_card_max)
+
+    _customers.append(c)
+
+idx = 0
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+_matching_process_log_time.append(str(pd.Timestamp.now()))
+_matching_process_log_event.append(" processing range " + str(len(_customers)) + " Draw Down Customers")
+do_save_log(_matching_process_log_time, _matching_process_log_event)
+
+if verbose:
+    print(" processing range from " + str(len(_customers)) + " Draw Down Customers")
+
+for c in _customers:
+
+    idx+=1
+    
+    for index_up, row_up in df_up.iterrows():
+
+        customer = row_up['CUSTOMER']
+        draw_up_date = row_up['DRAW_UP_DATE']
+        mean_du = row_up['MEAN_DU']
+        std_du = row_up['STD_DU']
+        active_card_max = row_up['ACTIVE_CARD_MAX']
+
+        c.Match_Draw_Up_Customer(customer, draw_up_date, mean_du, std_du, active_card_max)
+
+    if len(c.MATCHING_CUSTOMERS)==1:
+
+        if not c.CUSTOMER in (_processed_customers):
+
+            to_save_counter += 1
+
+            _direct_customer.append(c.CUSTOMER)
+            _processed_customers.append(c.CUSTOMER)
+            _direct_match.append(c.MATCHING_CUSTOMERS[0])
+            _processed_customers.append(c.MATCHING_CUSTOMERS[0])
+            _direct_draw_up_date.append(c.DRAW_UP_DATE[0])
+
+            if verbose:
+                print()
+                print("DIRECT")
+                print(c.CUSTOMER, c.WORD_LIST)
+                print(c.MATCHING_CUSTOMERS)
+                print(c.PERCENT_DIFFERENCE)
+                print(c.DAYS_DIFFERENCE)
+                print("=====")
+                print()
+
+    elif len(c.MATCHING_CUSTOMERS)>1:
+
+        if not c.CUSTOMER in (_processed_customers):
+
+            to_save_counter += 1
+
+            _multiple_customer.append(c.CUSTOMER)
+            _processed_customers.append(c.CUSTOMER)
+            _multiple_matches.append(c.MATCHING_CUSTOMERS)
+            _multiple_drop_dates.append(c.DRAW_UP_DATE)
+
+        if verbose:
+            print()
+            print("MULTIPLE")
+            print(c.CUSTOMER, c.WORD_LIST)
+            print(c.MATCHING_CUSTOMERS)
+            print(c.PERCENT_DIFFERENCE)
+            print(c.DAYS_DIFFERENCE)
+            print("=====")
+            print()
+
+    else:
+
+        # could not find a match, remove it from future processing
+        _no_match_customer.append(c.CUSTOMER)
+        _processed_customers.append(c.CUSTOMER)
+
+    if to_save_counter>=save_every_n:
+
+        _matching_process_log_time.append(str(pd.Timestamp.now()))
+        _matching_process_log_event.append("writing datasets to snowflake")
+        do_save_log(_matching_process_log_time, _matching_process_log_event)
+
+        do_save_direct_matches(_direct_customer, _direct_match, _direct_draw_up_date)
+        do_save_multiple_matches(_multiple_customer, _multiple_matches, _multiple_drop_dates)
+
+        _matching_process_log_time.append(str(pd.Timestamp.now()))
+        _matching_process_log_event.append("saved " + str(to_save_counter) + " records to snowflake.")
+        do_save_log(_matching_process_log_time, _matching_process_log_event)
+
+        to_save_counter = 0
+        
+    t1 = time.time()
+    
+    avg_duration = (((t1-t0)/idx)/60.0)
+    
+    if idx % print_every_n == 0:
+        idx_remaining = len(_customers)-idx
+        print("processing", idx, "current record:", c.CUSTOMER, ",", idx_remaining, "remaining")
+        print(round(avg_duration,2), "avg mins per iteration",  round((avg_duration*idx_remaining)/60,2), "estimated hrs remaining")
+        print(len(_direct_customer), "direct match records", len(_multiple_customer), "multiple match records", len(_no_match_customer), "no match records")
+        print()
+        
+_matching_process_log_time.append(str(pd.Timestamp.now()))
+_matching_process_log_event.append("writing datasets to snowflake")
+do_save_log(_matching_process_log_time, _matching_process_log_event)
+
+do_save_direct_matches(_direct_customer, _direct_match, _direct_draw_up_date)
+do_save_multiple_matches(_multiple_customer, _multiple_matches, _multiple_drop_dates)
+
+_matching_process_log_time.append(str(pd.Timestamp.now()))
+_matching_process_log_event.append("saved " + str(to_save_counter) + " records to snowflake.")
+do_save_log(_matching_process_log_time, _matching_process_log_event)
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 # Compute recipe outputs
 # TODO: Write here your actual code that computes the outputs
 # NB: DSS supports several kinds of APIs for reading and writing data. Please see doc.
