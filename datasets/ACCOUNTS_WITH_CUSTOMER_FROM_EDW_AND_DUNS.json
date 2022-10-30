@@ -28,11 +28,11 @@
     "dimensions": []
   },
   "versionTag": {
-    "versionNumber": 19,
+    "versionNumber": 20,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1666895834325
+    "lastModifiedOn": 1667151946734
   },
   "creationTag": {
     "versionNumber": 0,
@@ -57,27 +57,31 @@
   },
   "schema": {
     "columns": [
-      {"name":"CUSTOMER_ACCOUNT_ID","type":"bigint"},
+      {"name":"CUSTOMER_ACCOUNT_ID","type":"string","maxLength":4194304},
       {"name":"CUSTOMER_ACCOUNT_NAME","type":"string","maxLength":4194304},
       {"name":"EDW_CUSTOMER_NAME","type":"string","maxLength":4194304},
-      {"name":"DUNS","type":"double"},
+      {"name":"DUNS","type":"bigint"},
       {"name":"IS_BUNDLER","type":"boolean"},
-      {"name":"DNB_GLOBAL_ULT_NUMBER","type":"double"},
+      {"name":"DNB_GLOBAL_ULT_NUMBER","type":"bigint"},
       {"name":"DNB_GLOBAL_ULT_NAME","type":"string","maxLength":4194304},
-      {"name":"DNB_DOMESTIC_ULT_NUMBER","type":"double"},
+      {"name":"DNB_DOMESTIC_ULT_NUMBER","type":"bigint"},
       {"name":"DNB_DOMESTIC_ULTIMATE_NAME","type":"string","maxLength":4194304},
-      {"name":"DNB_HQ_NUMBER","type":"double"},
+      {"name":"DNB_HQ_NUMBER","type":"bigint"},
       {"name":"DNB_HQ_NAME","type":"string","maxLength":4194304},
-      {"name":"DNB_DUNS_NUMBER","type":"double"},
+      {"name":"DNB_DUNS_NUMBER","type":"bigint"},
       {"name":"DNB_BUSINESS_NAME","type":"string","maxLength":4194304},
-      {"name":"MDM_WEX_ID","type":"double"},
+      {"name":"MDM_WEX_ID","type":"bigint"},
       {"name":"MDM_WEX_NAME","type":"string","maxLength":4194304},
       {"name":"DNB_LEVEL","type":"string","maxLength":4194304},
       {"name":"DNB_CUSTOMER_NAME","type":"string","maxLength":4194304},
       {"name":"EDW_STATE","type":"string","maxLength":4194304},
       {"name":"CUSTOMER","type":"string","maxLength":4194304},
       {"name":"CUST_CALC_SOURCE","type":"string","maxLength":4194304},
-      {"name":"CUSTOMER_ID","type":"bigint"}
+      {"name":"CUSTOMER_ID","type":"bigint"},
+      {"name":"SALES_SETUP_DATE","type":"string","maxLength":4194304},
+      {"name":"SALES_REP","type":"string","maxLength":4194304},
+      {"name":"SALES_CHANNEL","type":"string","maxLength":4194304},
+      {"name":"HAS_SALES_FLAG","type":"string","maxLength":4194304}
     ],
     "userModified": false
   },
