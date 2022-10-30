@@ -28,11 +28,11 @@
     "dimensions": []
   },
   "versionTag": {
-    "versionNumber": 3,
+    "versionNumber": 4,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1667065769088
+    "lastModifiedOn": 1667171454143
   },
   "creationTag": {
     "versionNumber": 0,
@@ -68,7 +68,8 @@
       {"name":"DROP","type":"double"},
       {"name":"CUSTOMER_DD","type":"string","maxLength":4194304},
       {"name":"MEAN_DD","type":"double"},
-      {"name":"STD_DD","type":"double"}
+      {"name":"STD_DD","type":"double"},
+      {"name":"ACTIVE_CARD_MAX","type":"double"}
     ],
     "userModified": false
   },
