@@ -28,11 +28,11 @@
     "dimensions": []
   },
   "versionTag": {
-    "versionNumber": 0,
+    "versionNumber": 1,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1667150627156
+    "lastModifiedOn": 1667151081489
   },
   "creationTag": {
     "versionNumber": 0,
@@ -56,8 +56,13 @@
     "readSQLDateColsAsDSSDates": true
   },
   "schema": {
-    "columns": [],
-    "userModified": true
+    "columns": [
+      {"name":"CUSTOMER_ACCOUNT_ID","type":"bigint"},
+      {"name":"SALES_SETUP_DATE","type":"string","maxLength":4194304},
+      {"name":"SALES_REP","type":"string","maxLength":4194304},
+      {"name":"SALES_CHANNEL","type":"string","maxLength":4194304}
+    ],
+    "userModified": false
   },
   "dkuProperties": [],
   "metrics": {
