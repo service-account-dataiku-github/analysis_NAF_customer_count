@@ -28,6 +28,10 @@
         {
           "ref": "CALCULATED_DRAW_UPS",
           "deps": []
+        },
+        {
+          "ref": "NAFCUSTOMER_COMMON_WORDS_IN_NAMES",
+          "deps": []
         }
       ]
     }
@@ -48,11 +52,11 @@
   },
   "labels": [],
   "versionTag": {
-    "versionNumber": 3,
+    "versionNumber": 4,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1667170028357
+    "lastModifiedOn": 1667170064792
   },
   "creationTag": {
     "versionNumber": 0,
