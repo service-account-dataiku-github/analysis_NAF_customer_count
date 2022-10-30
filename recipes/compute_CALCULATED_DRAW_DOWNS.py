@@ -5,6 +5,7 @@ import pandas as pd, numpy as np
 from dataiku import pandasutils as pdu
 from dateutil.relativedelta import relativedelta
 from helper import *
+import time
 
 # -*- coding: utf-8 -*-
 import dataiku
@@ -67,74 +68,9 @@ NAFCUSTOMER_ACTIVE_CARDS_FULL_df.head()
 def date_tz_naive(pd_s):
     return pd.to_datetime(pd_s).apply(lambda x:x.tz_localize(None))
 
-# Read recipe inputs
-NAFCUSTOMER_ACTIVE_CARDS_FULL = dataiku.Dataset("NAFCUSTOMER_ACTIVE_CARDS_FULL")
-NAFCUSTOMER_ACTIVE_CARDS_FULL_df = NAFCUSTOMER_ACTIVE_CARDS_FULL.get_dataframe()
-
-print(len(NAFCUSTOMER_ACTIVE_CARDS_FULL_df))
-NAFCUSTOMER_ACTIVE_CARDS_FULL_df.head()
-
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-customer_list = ['NORTHSHORE INC','JAYHAWK MILLWRIGHT','PAXTON ASSOCIATES INC','STATE OF NEW YORK',
-                'PAXTON ASSOCIATES INC', 'YNGRID COSMETICZ LLC', 'CYRGUS COMPANY INC.', 'THE HEALTHY STOP INC',
-                 'T F WALZ INC', 'JAYHAWK MILLWRIGHT', 'CREDIT SLAYERS LLC', 'A ABLE MOVING CO', 'STUDIO IMPACT INC']
-
-df_v = NAFCUSTOMER_ACTIVE_CARDS_FULL_df[NAFCUSTOMER_ACTIVE_CARDS_FULL_df.CUSTOMER.isin(customer_list)]
-print(len(df_v.CUSTOMER.unique()), "unique customers")
-print(len(df_v), "records")
-
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-df_v.head()
-
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-print(len(df_v))
-df_v['REVENUE_DATE'] = date_tz_naive(df_v['REVENUE_DATE'])
-print(len(df_v))
-
-df_v = df_v[['CUSTOMER','REVENUE_DATE', 'ACTIVE_CARD_COUNT']]
-
-df_v_max = df_v[['CUSTOMER','ACTIVE_CARD_COUNT']]
-df_max = df_v_max.groupby(by=["CUSTOMER"]).max().reset_index()
-df_max.columns = ['CUSTOMER', 'ACTIVE_CARD_MAX']
-
-print(len(df_v))
-df_v.dropna(subset=['CUSTOMER'], inplace=True)
-print(len(df_v))
-
-df_v['REVENUE_DATE'] = pd.to_datetime(df_v['REVENUE_DATE'])
-df_v.sort_values(['REVENUE_DATE'], inplace=True)
-
-seen_accounts = df_v[df_v['ACTIVE_CARD_COUNT'] > 0].groupby(['CUSTOMER'], as_index=False)[['REVENUE_DATE']].first()
-seen_accounts['FIRST_DATE'] = seen_accounts['REVENUE_DATE'] - pd.DateOffset(months=1)
-
-df = df_v
-period_end_date = end_date
-match_type = 'program_flip'
-period_start_date=None
-split=None
-
-drawdown = (100 - drawdown)/100
-drawdown_fwd_check /= 100
-
-inactive_date_start = pd.to_datetime(period_end_date) + relativedelta(months=-inactive_period)
-
-df = df[df['REVENUE_DATE'] <= period_end_date].copy()
-
-if period_start_date:
-    period_start_date = pd.to_datetime(period_start_date)
-    df = df[df['REVENUE_DATE'] >= period_start_date].copy()
-
-all_customer_names = list(df['CUSTOMER'].unique())
-
-if not split:
-    split=1
-
-all_customer_names_n = list(split_list(all_customer_names, split))
-
-drop_df = pd.DataFrame()
-
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-all_customer_names_n
+customer_list_full = NAFCUSTOMER_ACTIVE_CARDS_FULL_df.CUSTOMER.unique()
+print(len(customer_list_full))
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 def find_consistent_cust(df, consecutive=3):
@@ -209,16 +145,70 @@ def find_average_func(dd_find, n=12):
     return dd_find
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+page_size = 50000
 idx = 0
-max_idx = 5
+current_page = 0
+max_pages = 0
 
-for sublist in all_customer_names_n:
+drop_df = pd.DataFrame()
+t0 = time.time()
 
-    idx+=1
+total_pages = len(customer_list_full)/page_size
 
-    print(sublist)
+while idx<len(customer_list_full):
+    
+    current_page+=1
+    print("page", current_page)
+        
+    to_range = idx+page_size
+    if to_range>len(customer_list_full):
+        to_range = len(customer_list_full)-1
+    
+    current_set = customer_list_full[idx:to_range]
 
-    dd_find = df[df['CUSTOMER'].isin(sublist)].copy()
+    #==============================================
+    
+    df_v = NAFCUSTOMER_ACTIVE_CARDS_FULL_df[NAFCUSTOMER_ACTIVE_CARDS_FULL_df.CUSTOMER.isin(current_set)]
+    print("processing", len(df_v.CUSTOMER.unique()), "customers")
+    print(len(df_v), "data frame records")
+    
+    df_v['REVENUE_DATE'] = df_v.REVENUE_MONTH.astype(str) + "/01/" + df_v.REVENUE_YEAR.astype(str)
+    df_v['REVENUE_DATE'] = date_tz_naive(df_v['REVENUE_DATE'])
+
+    df_v = df_v[['CUSTOMER','REVENUE_DATE', 'ACTIVE_CARD_COUNT']]
+
+    df_v_max = df_v[['CUSTOMER','ACTIVE_CARD_COUNT']]
+    df_max = df_v_max.groupby(by=["CUSTOMER"]).max().reset_index()
+    df_max.columns = ['CUSTOMER', 'ACTIVE_CARD_MAX']
+
+    df_v.dropna(subset=['CUSTOMER'], inplace=True)
+
+    df_v['REVENUE_DATE'] = pd.to_datetime(df_v['REVENUE_DATE'])
+    df_v.sort_values(['REVENUE_DATE'], inplace=True)
+
+    seen_accounts = df_v[df_v['ACTIVE_CARD_COUNT'] > 0].groupby(['CUSTOMER'], as_index=False)[['REVENUE_DATE']].first()
+    seen_accounts['FIRST_DATE'] = seen_accounts['REVENUE_DATE'] - pd.DateOffset(months=1)
+
+    df = df_v
+    period_end_date = end_date
+    match_type = 'program_flip'
+    period_start_date=None
+    split=None
+
+    drawdown = (100 - drawdown)/100
+    drawdown_fwd_check /= 100
+
+    inactive_date_start = pd.to_datetime(period_end_date) + relativedelta(months=-inactive_period)
+
+    df = df[df['REVENUE_DATE'] <= period_end_date].copy()
+
+    if period_start_date:
+        period_start_date = pd.to_datetime(period_start_date)
+        df = df[df['REVENUE_DATE'] >= period_start_date].copy()
+
+    all_customer_names = list(df['CUSTOMER'].unique())
+    
+    dd_find = df[df['CUSTOMER'].isin(all_customer_names)].copy()
 
     consistent_customers_dd = find_consistent_cust(dd_find, consecutive=consistency)
     if len(consistent_customers_dd) == 0:
@@ -278,28 +268,33 @@ for sublist in all_customer_names_n:
                                         right_on='CUSTOMER_DD',
                                         how='left')
 
+    drop_month_df = pd.merge(drop_month_df, df_max, on='CUSTOMER', how='left')
+    drop_month_df = drop_month_df[['CUSTOMER','DROP_DATE','ACTIVE_CARD_MAX']]
+    
+    print(len(drop_month_df), "new drop records")
     drop_df = pd.concat([drop_df, drop_month_df], ignore_index=True)
-
-    if(idx>max_idx):
-        break;
-
-drop_df.drop(['CUSTOMER_DD'], axis=1, inplace=True)
-drop_df.rename(columns={'DROP_DATE':'DRAW_DOWN_DATE',
-                        'DROP':'DROP_QTY'}, inplace=True)
-
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-drop_df.head()
-
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-print(len(drop_df))
-
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-# Compute recipe outputs from inputs
-# TODO: Replace this part by your actual code that computes the output, as a Pandas dataframe
-# NB: DSS also supports other kinds of APIs for reading and writing data. Please see doc.
-
-CALCULATED_DRAW_DOWNS_df = drop_df
-
-# Write recipe outputs
-CALCULATED_DRAW_DOWNS = dataiku.Dataset("CALCULATED_DRAW_DOWNS")
-CALCULATED_DRAW_DOWNS.write_with_schema(CALCULATED_DRAW_DOWNS_df)
+    
+    print(len(drop_df), "total drop records")
+    print("saving to snowflake...")
+    CALCULATED_DRAW_DOWNS_df = drop_df
+    CALCULATED_DRAW_DOWNS = dataiku.Dataset("CALCULATED_DRAW_DOWNS")
+    CALCULATED_DRAW_DOWNS.write_with_schema(CALCULATED_DRAW_DOWNS_df)
+    
+    pages_remaining = total_pages-current_page
+    
+    t1 = time.time()
+    avg_duration = (((t1-t0)/current_page)/60.0)
+    print(round(avg_duration,2), "avg mins per iteration")
+    print(round(pages_remaining,2), "pages remaining")
+    print(round(avg_duration*pages_remaining,2), "estimated minutes remaining")
+    print()
+    
+    #=====================================
+    
+    idx+=page_size
+    
+    if max_pages>0:
+        if current_page>=max_pages:
+            break;
+            
+print("done")
