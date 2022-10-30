@@ -46,17 +46,21 @@
         {
           "ref": "MATCHES_1_TO_1_STAGING_V",
           "appendMode": false
+        },
+        {
+          "ref": "MATCHING_PROCESS_LOG_V",
+          "appendMode": false
         }
       ]
     }
   },
   "labels": [],
   "versionTag": {
-    "versionNumber": 6,
+    "versionNumber": 7,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1667170235373
+    "lastModifiedOn": 1667170315140
   },
   "creationTag": {
     "versionNumber": 0,
