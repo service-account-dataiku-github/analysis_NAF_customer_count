@@ -28,11 +28,11 @@
     "dimensions": []
   },
   "versionTag": {
-    "versionNumber": 5,
+    "versionNumber": 6,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1667171580909
+    "lastModifiedOn": 1667172627841
   },
   "creationTag": {
     "versionNumber": 0,
@@ -58,7 +58,7 @@
   "schema": {
     "columns": [
       {"name":"CUSTOMER","type":"string","maxLength":4194304},
-      {"name":"DROP_DATE","type":"date"},
+      {"name":"DRAW_DOWN_DATE","type":"date"},
       {"name":"ACTIVE_CARD_MAX","type":"double"}
     ],
     "userModified": false
