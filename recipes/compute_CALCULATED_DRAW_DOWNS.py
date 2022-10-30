@@ -269,7 +269,7 @@ while idx<len(customer_list_full):
                                         how='left')
 
     drop_month_df = pd.merge(drop_month_df, df_max, on='CUSTOMER', how='left')
-    drop_month_df = drop_month_df[['CUSTOMER','DROP_DATE','ACTIVE_CARD_MAX']]
+    drop_month_df = drop_month_df[['CUSTOMER','DRAW_DOWN_DATE','ACTIVE_CARD_MAX']]
     
     print(len(drop_month_df), "new drop records")
     drop_df = pd.concat([drop_df, drop_month_df], ignore_index=True)
