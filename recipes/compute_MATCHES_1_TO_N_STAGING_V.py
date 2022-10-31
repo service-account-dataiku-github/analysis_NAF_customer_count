@@ -15,8 +15,18 @@ COMMON_WORDS = dataiku.Dataset("NAFCUSTOMER_COMMON_WORDS_IN_NAMES")
 COMMON_WORDS_df = COMMON_WORDS.get_dataframe()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+def date_tz_naive(pd_s):
+    return pd.to_datetime(pd_s).apply(lambda x:x.tz_localize(None))
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 df_down_full = CALCULATED_DRAW_DOWNS_df
 df_up_full = CALCULATED_DRAW_UPS_df
+
+df_down_full.DRAW_DOWN_DATE = date_tz_naive(df_down_full['DRAW_DOWN_DATE'])
+df_up_full.DRAW_UP_DATE = date_tz_naive(df_up_full['DRAW_UP_DATE'])
+
+df_up_full.dropna(subset=['DRAW_UP_DATE'], inplace=True)
+
 df_common = COMMON_WORDS_df
 
 df_down_full.sort_values(['CUSTOMER'], inplace=True)
@@ -35,7 +45,7 @@ print(len(_common_words), "screening against common words")
 
 class Draw_Down_Customer:
 
-    def __init__(self, name, draw_down_date, mean_dd, std_dd, active_card_max):
+    def __init__(self, name, draw_down_date, active_card_max):
 
         self.CUSTOMER = name
         self.DRAW_DOWN_DATE = draw_down_date
@@ -55,7 +65,7 @@ class Draw_Down_Customer:
             if w not in _common_words:
                 self.WORD_LIST.append(w)
 
-    def Match_Draw_Up_Customer(self, name, draw_up_date, mean_du, std_du, active_card_max):
+    def Match_Draw_Up_Customer(self, name, draw_up_date, active_card_max):
 
         if (self.CUSTOMER == name):
             # exact match, already captured
@@ -146,6 +156,8 @@ def do_save_multiple_matches(_multiple_customer, _multiple_matches, _multiple_dr
         print()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+from datetime import timedelta
+
 df_down = df_down_full
 df_up = df_up_full
 
@@ -177,41 +189,45 @@ _customers = []
 t0 = time.time()
 
 for index, row in df_down.iterrows():
-
+    
     customer = row['CUSTOMER']
     draw_down_date = row['DRAW_DOWN_DATE']
-    mean_dd = row['MEAN_DD']
-    std_dd = row['STD_DD']
     active_card_max = row['ACTIVE_CARD_MAX']
 
-    c = Draw_Down_Customer(customer, draw_down_date, mean_dd, std_dd, active_card_max)
+    c = Draw_Down_Customer(customer, draw_down_date, active_card_max)
 
     _customers.append(c)
 
 idx = 0
 
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 _matching_process_log_time.append(str(pd.Timestamp.now()))
 _matching_process_log_event.append(" processing range " + str(len(_customers)) + " Draw Down Customers")
 do_save_log(_matching_process_log_time, _matching_process_log_event)
 
-if verbose:
-    print(" processing range from " + str(len(_customers)) + " Draw Down Customers")
-
 for c in _customers:
-
+    
     idx+=1
+    
+    dt_start = pd.to_datetime(c.DRAW_DOWN_DATE) +timedelta(days=-120)
+    dt_end = pd.to_datetime(c.DRAW_DOWN_DATE) +timedelta(days=120)
+    
+    card_delta = c.ACTIVE_CARD_MAX * 0.5
+    card_start = c.ACTIVE_CARD_MAX - card_delta
+    card_end = c.ACTIVE_CARD_MAX + card_delta
+    
+    df_up = df_up_full[(df_up_full.ACTIVE_CARD_MAX>=card_start)&
+                   (df_up_full.ACTIVE_CARD_MAX<=card_end)&
+                    (df_up_full.DRAW_UP_DATE >= pd.to_datetime(date_start))&
+                  (df_up_full.DRAW_UP_DATE <= pd.to_datetime(date_end))]
     
     for index_up, row_up in df_up.iterrows():
 
         customer = row_up['CUSTOMER']
         draw_up_date = row_up['DRAW_UP_DATE']
-        mean_du = row_up['MEAN_DU']
-        std_du = row_up['STD_DU']
         active_card_max = row_up['ACTIVE_CARD_MAX']
 
-        c.Match_Draw_Up_Customer(customer, draw_up_date, mean_du, std_du, active_card_max)
-
+        c.Match_Draw_Up_Customer(customer, draw_up_date, active_card_max)
+        
     if len(c.MATCHING_CUSTOMERS)==1:
 
         if not c.CUSTOMER in (_processed_customers):
@@ -287,6 +303,7 @@ for c in _customers:
         print(len(_direct_customer), "direct match records", len(_multiple_customer), "multiple match records", len(_no_match_customer), "no match records")
         print()
         
+        
 _matching_process_log_time.append(str(pd.Timestamp.now()))
 _matching_process_log_event.append("writing datasets to snowflake")
 do_save_log(_matching_process_log_time, _matching_process_log_event)
@@ -297,18 +314,3 @@ do_save_multiple_matches(_multiple_customer, _multiple_matches, _multiple_drop_d
 _matching_process_log_time.append(str(pd.Timestamp.now()))
 _matching_process_log_event.append("saved " + str(to_save_counter) + " records to snowflake.")
 do_save_log(_matching_process_log_time, _matching_process_log_event)
-
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-# Compute recipe outputs
-# TODO: Write here your actual code that computes the outputs
-# NB: DSS supports several kinds of APIs for reading and writing data. Please see doc.
-
-#MATCHES_1_TO_N_STAGING_V_df = ... # Compute a Pandas dataframe to write into MATCHES_1_TO_N_STAGING_V
-#MATCHES_1_TO_1_STAGING_V_df = ... # Compute a Pandas dataframe to write into MATCHES_1_TO_1_STAGING_V
-
-
-# Write recipe outputs
-#MATCHES_1_TO_N_STAGING_V = dataiku.Dataset("MATCHES_1_TO_N_STAGING_V")
-#MATCHES_1_TO_N_STAGING_V.write_with_schema(MATCHES_1_TO_N_STAGING_V_df)
-#MATCHES_1_TO_1_STAGING_V = dataiku.Dataset("MATCHES_1_TO_1_STAGING_V")
-#MATCHES_1_TO_1_STAGING_V.write_with_schema(MATCHES_1_TO_1_STAGING_V_df)
