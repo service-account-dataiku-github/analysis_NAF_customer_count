@@ -58,11 +58,19 @@ print(len(NAFCUSTOMER_ACTIVE_CARDS_FULL_df))
 NAFCUSTOMER_ACTIVE_CARDS_FULL_df.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+l = ['STATE OF WASHINGTON','STATE OF COLORADO','STATE OF UTAH']
+df_v = NAFCUSTOMER_ACTIVE_CARDS_FULL_df[NAFCUSTOMER_ACTIVE_CARDS_FULL_df.CUSTOMER.isin(l) ]
+print(len(df_v))
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+df_v = NAFCUSTOMER_ACTIVE_CARDS_FULL_df
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 def date_tz_naive(pd_s):
     return pd.to_datetime(pd_s).apply(lambda x:x.tz_localize(None))
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-customer_list_full = NAFCUSTOMER_ACTIVE_CARDS_FULL_df.CUSTOMER.unique()
+customer_list_full = df_v.CUSTOMER.unique()
 print(len(customer_list_full))
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
@@ -165,9 +173,11 @@ while idx<len(customer_list_full):
     rise_df_ = pd.merge(rise_df_, df_max, on='CUSTOMER', how='left')
     
     print(len(rise_df_), "new rise records")
+    
+    rise_df_ = rise_df_[['CUSTOMER','DU_DATE','ACTIVE_CARD_MAX']]
+    rise_df_.columns = ['CUSTOMER','DRAW_UP_DATE','ACTIVE_CARD_MAX']
+    
     rise_df = pd.concat([rise_df, rise_df_], ignore_index=True)
-    rise_df = rise_df[['CUSTOMER','DU_DATE','ACTIVE_CARD_MAX']]
-    rise_df.columns = ['CUSTOMER','DRAW_UP_DATE','ACTIVE_CARD_MAX']
     
     print(len(rise_df), "total rise records")
     print("saving to snowflake...")
