@@ -19,7 +19,10 @@ def date_tz_naive(pd_s):
     return pd.to_datetime(pd_s).apply(lambda x:x.tz_localize(None))
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-# consider customers with 10 cards or more
+# consider customers with the card threshold or more
+# set this too low and the running time will balloon
+# recommend: 10 or higher
+
 card_cut_off_threshold = 5
 
 df_down_full = CALCULATED_DRAW_DOWNS_df[CALCULATED_DRAW_DOWNS_df.ACTIVE_CARD_MAX>card_cut_off_threshold].copy()
