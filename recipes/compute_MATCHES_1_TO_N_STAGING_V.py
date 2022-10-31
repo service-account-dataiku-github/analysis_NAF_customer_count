@@ -208,8 +208,8 @@ for c in _customers:
     
     idx+=1
     
-    dt_start = pd.to_datetime(c.DRAW_DOWN_DATE) +timedelta(days=-120)
-    dt_end = pd.to_datetime(c.DRAW_DOWN_DATE) +timedelta(days=120)
+    date_start = pd.to_datetime(c.DRAW_DOWN_DATE) +timedelta(days=-120)
+    date_end = pd.to_datetime(c.DRAW_DOWN_DATE) +timedelta(days=120)
     
     card_delta = c.ACTIVE_CARD_MAX * 0.5
     card_start = c.ACTIVE_CARD_MAX - card_delta
@@ -302,7 +302,6 @@ for c in _customers:
         print(round(avg_duration,2), "avg mins per iteration",  round((avg_duration*idx_remaining)/60,2), "estimated hrs remaining")
         print(len(_direct_customer), "direct match records", len(_multiple_customer), "multiple match records", len(_no_match_customer), "no match records")
         print()
-        
         
 _matching_process_log_time.append(str(pd.Timestamp.now()))
 _matching_process_log_event.append("writing datasets to snowflake")
