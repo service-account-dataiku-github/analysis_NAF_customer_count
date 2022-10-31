@@ -19,8 +19,10 @@ def date_tz_naive(pd_s):
     return pd.to_datetime(pd_s).apply(lambda x:x.tz_localize(None))
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-df_down_full = CALCULATED_DRAW_DOWNS_df
-df_up_full = CALCULATED_DRAW_UPS_df
+# consider customers with 10 cards or more
+
+df_down_full = CALCULATED_DRAW_DOWNS_df[CALCULATED_DRAW_DOWNS_df.ACTIVE_CARD_MAX>10].copy()
+df_up_full = CALCULATED_DRAW_UPS_df[CALCULATED_DRAW_UPS_df.ACTIVE_CARD_MAX>10].copy()
 
 df_down_full.DRAW_DOWN_DATE = date_tz_naive(df_down_full['DRAW_DOWN_DATE'])
 df_up_full.DRAW_UP_DATE = date_tz_naive(df_up_full['DRAW_UP_DATE'])
