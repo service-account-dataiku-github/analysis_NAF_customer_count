@@ -25,7 +25,7 @@ def date_tz_naive(pd_s):
 # set this too low and the running time will balloon
 # recommend: 10 or higher
 
-card_cut_off_threshold = 5
+card_cut_off_threshold = 2
 
 df_down_full = CALCULATED_DRAW_DOWNS_df[CALCULATED_DRAW_DOWNS_df.ACTIVE_CARD_MAX>card_cut_off_threshold].copy()
 df_up_full = CALCULATED_DRAW_UPS_df[CALCULATED_DRAW_UPS_df.ACTIVE_CARD_MAX>card_cut_off_threshold].copy()
