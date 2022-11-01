@@ -14,7 +14,16 @@ MATCHES_1_TO_N_QUEUED_df = MATCHES_1_TO_N_QUEUED.get_dataframe()
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 df_1_N = MATCHES_1_TO_1_QUEUED_df
 print(len(df_1_N))
-df_1_N.head()
+df_1_N.head(20)
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+from difflib import SequenceMatcher
+import Levenshtein
+
+df_1_N['distance'] = df_1_N.apply(lambda x: Levenshtein.ratio(x['CUSTOMER'],x['MATCH_CUSTOMER']),axis=1)
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+df_1_N.head(100)
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 # Compute recipe outputs
