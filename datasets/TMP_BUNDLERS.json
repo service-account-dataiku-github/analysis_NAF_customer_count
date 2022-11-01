@@ -28,11 +28,11 @@
     "dimensions": []
   },
   "versionTag": {
-    "versionNumber": 0,
+    "versionNumber": 1,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1667313421128
+    "lastModifiedOn": 1667314076219
   },
   "creationTag": {
     "versionNumber": 0,
@@ -56,8 +56,11 @@
     "readSQLDateColsAsDSSDates": true
   },
   "schema": {
-    "columns": [],
-    "userModified": true
+    "columns": [
+      {"name":"EDW_CUSTOMER_NAME","type":"string","maxLength":4194304},
+      {"name":"CUSTOMER_ACCOUNT_ID","type":"bigint"}
+    ],
+    "userModified": false
   },
   "dkuProperties": [],
   "metrics": {
