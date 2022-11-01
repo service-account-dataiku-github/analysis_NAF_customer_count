@@ -433,7 +433,17 @@ len(df_by_account.CUSTOMER_ID.unique())
 df_jj.CUST_CALC_SOURCE.value_counts()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS_df = df_jj
+print(len(df_jj))
+print(len(ACCOUNT_NEW_SALES_df))
+ACCOUNT_NEW_SALES_df['HAS_SALES_FLAG'] = True
+df_j_with_sales = pd.merge(df_jj, ACCOUNT_NEW_SALES_df, on='CUSTOMER_ACCOUNT_ID', how='left')
+print(len(df_j_with_sales))
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+df_j_with_sales.HAS_SALES_FLAG.value_counts(dropna=False)
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS_df = df_j_with_sales
 
 # Write recipe outputs
 ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS = dataiku.Dataset("ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS")
