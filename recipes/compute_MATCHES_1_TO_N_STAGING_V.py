@@ -3,6 +3,8 @@
 import dataiku
 import pandas as pd, numpy as np
 from dataiku import pandasutils as pdu
+from difflib import SequenceMatcher
+import Levenshtein
 
 # Read recipe inputs
 CALCULATED_DRAW_DOWNS = dataiku.Dataset("CALCULATED_DRAW_DOWNS")
@@ -195,7 +197,7 @@ _customers = []
 t0 = time.time()
 
 for index, row in df_down.iterrows():
-    
+
     customer = row['CUSTOMER']
     draw_down_date = row['DRAW_DOWN_DATE']
     active_card_max = row['ACTIVE_CARD_MAX']
@@ -210,21 +212,27 @@ _matching_process_log_time.append(str(pd.Timestamp.now()))
 _matching_process_log_event.append(" processing range " + str(len(_customers)) + " Draw Down Customers")
 do_save_log(_matching_process_log_time, _matching_process_log_event)
 
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+idx=0
 for c in _customers:
-    
+
     idx+=1
     
     date_start = pd.to_datetime(c.DRAW_DOWN_DATE) +timedelta(days=-120)
     date_end = pd.to_datetime(c.DRAW_DOWN_DATE) +timedelta(days=120)
-    
+
     card_delta = c.ACTIVE_CARD_MAX * 0.5
     card_start = c.ACTIVE_CARD_MAX - card_delta
     card_end = c.ACTIVE_CARD_MAX + card_delta
-    
+
     df_up = df_up_full[(df_up_full.ACTIVE_CARD_MAX>=card_start)&
                    (df_up_full.ACTIVE_CARD_MAX<=card_end)&
                     (df_up_full.DRAW_UP_DATE >= pd.to_datetime(date_start))&
-                  (df_up_full.DRAW_UP_DATE <= pd.to_datetime(date_end))]
+                  (df_up_full.DRAW_UP_DATE <= pd.to_datetime(date_end))].copy()
+    
+    df_up['distance'] = df_up.apply(lambda x: Levenshtein.ratio(x['CUSTOMER'],c.CUSTOMER),axis=1)
+    
+    df_up = df_up[df_up.distance>0.8]
     
     for index_up, row_up in df_up.iterrows():
 
@@ -233,7 +241,7 @@ for c in _customers:
         active_card_max = row_up['ACTIVE_CARD_MAX']
 
         c.Match_Draw_Up_Customer(customer, draw_up_date, active_card_max)
-        
+
     if len(c.MATCHING_CUSTOMERS)==1:
 
         if not c.CUSTOMER in (_processed_customers):
@@ -297,18 +305,18 @@ for c in _customers:
         do_save_log(_matching_process_log_time, _matching_process_log_event)
 
         to_save_counter = 0
-        
+
     t1 = time.time()
-    
+
     avg_duration = (((t1-t0)/idx)/60.0)
-    
+
     if idx % print_every_n == 0:
         idx_remaining = len(_customers)-idx
         print("processing", idx, "current record:", c.CUSTOMER, ",", idx_remaining, "remaining")
         print(round(avg_duration,2), "avg mins per iteration",  round((avg_duration*idx_remaining)/60,2), "estimated hrs remaining")
         print(len(_direct_customer), "direct match records", len(_multiple_customer), "multiple match records", len(_no_match_customer), "no match records")
         print()
-        
+
 _matching_process_log_time.append(str(pd.Timestamp.now()))
 _matching_process_log_event.append("writing datasets to snowflake")
 do_save_log(_matching_process_log_time, _matching_process_log_event)
