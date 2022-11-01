@@ -15,7 +15,7 @@ ACCOUNTS_WITH_EBX_PARTY_df = ACCOUNTS_WITH_EBX_PARTY.get_dataframe()
 MDM_FINAL = dataiku.Dataset("mdm_final")
 MDM_FINAL_df = MDM_FINAL.get_dataframe()
 
-MATCHES_VERIFIED = dataiku.Dataset("MATCHES_VERIFIED")
+MATCHES_VERIFIED = dataiku.Dataset("VERIFIED_MATCHES")
 MATCHES_VERIFIED_df = MATCHES_VERIFIED.get_dataframe()
 
 RDW_CONVERSIONS = dataiku.Dataset("NAFCUSTOMER_RDW_CONVERSIONS")
