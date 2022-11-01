@@ -230,7 +230,9 @@ for c in _customers:
                     (df_up_full.DRAW_UP_DATE >= pd.to_datetime(date_start))&
                   (df_up_full.DRAW_UP_DATE <= pd.to_datetime(date_end))].copy()
     
-    df_up['distance'] = df_up.apply(lambda x: Levenshtein.ratio(x['CUSTOMER'],c.CUSTOMER),axis=1)
+    df_up['distance'] = 0.0
+    df_up.distance = df_up.apply(lambda x: Levenshtein.ratio(x['CUSTOMER'],c.CUSTOMER),axis=1)
+    df_up.dropna(subset=['distance'], inplace=True)
     
     df_up = df_up[df_up.distance>0.8]
     
