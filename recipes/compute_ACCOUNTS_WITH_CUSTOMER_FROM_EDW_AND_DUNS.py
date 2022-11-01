@@ -27,10 +27,10 @@ ACCOUNT_NEW_SALES_df = ACCOUNT_NEW_SALES.get_dataframe()
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 # load matches calculated by matching process, then verified with secondary matching step
 
-df_matches_verified = MATCHES_VERIFIED_df
-df_matches_verified["CUSTOMER"] = df_matches_verified['CUSTOMER'].str.translate(str.maketrans('', '', string.punctuation))
-df_matches_verified["CUSTOMER_CLC"] = df_matches_verified['CUSTOMER_CLC'].str.translate(str.maketrans('', '', string.punctuation))
-df_matches_verified.head()
+#df_matches_verified = MATCHES_VERIFIED_df
+#df_matches_verified["CUSTOMER"] = df_matches_verified['CUSTOMER'].str.translate(str.maketrans('', '', string.punctuation))
+#df_matches_verified["CUSTOMER_CLC"] = df_matches_verified['CUSTOMER_CLC'].str.translate(str.maketrans('', '', string.punctuation))
+#df_matches_verified.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 print(len(RDW_CONVERSIONS_df))
@@ -311,6 +311,7 @@ df['CUSTOMER_ACCOUNT_NAME'] = df['CUSTOMER_ACCOUNT_NAME_ORIGINAL']
 
 # stupid Tableau can't deal with the addition of a column
 # need to figure out how to add this back in
+# okay -> turns out this is not down to Tableau, but the stupid way I built the view
 del(df['CUST_CALC_RULE'])
 del(df['EDW_CUSTOMER_NAME_ORIGINAL'])
 del(df['CUSTOMER_ACCOUNT_NAME_ORIGINAL'])
@@ -337,11 +338,11 @@ print(len(df_j))
 df_j_w_verified = pd.merge(df_j, df_matches_verified, left_on='CUSTOMER', right_on='CUSTOMER', how='left')
 print(len(df_j_w_verified))
 
-df_j_w_verified.loc[~df_j_w_verified["CUSTOMER_CLC"].isnull(),'CUSTOMER'] = df_j_w_verified.CUSTOMER_CLC
-df_j_w_verified.loc[~df_j_w_verified["CUSTOMER_CLC"].isnull(),'CUST_CALC_SOURCE'] = 'CLC'
+#df_j_w_verified.loc[~df_j_w_verified["CUSTOMER_CLC"].isnull(),'CUSTOMER'] = df_j_w_verified.CUSTOMER_CLC
+#df_j_w_verified.loc[~df_j_w_verified["CUSTOMER_CLC"].isnull(),'CUST_CALC_SOURCE'] = 'CLC'
 
 df_j = df_j_w_verified
-del(df_j['CUSTOMER_CLC'])
+#del(df_j['CUSTOMER_CLC'])
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 df_j.head()
@@ -387,9 +388,6 @@ df_rdw_conversions.columns = ['CUSTOMER_ACCOUNT_ID','CONVERSION_REPLACEMENT_CUST
 df_rdw_conversions.drop_duplicates(subset=['CUSTOMER_ACCOUNT_ID'], inplace=True)
 print(len(df_rdw_conversions))
 df_rdw_conversions.head()
-
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-df_j_with_rdw_conversions.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 print(len(df_j))
