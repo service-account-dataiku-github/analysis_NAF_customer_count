@@ -1,3 +1,4 @@
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 # -*- coding: utf-8 -*-
 import dataiku
 import pandas as pd, numpy as np
@@ -18,6 +19,9 @@ df['DUNS'] = df['DUNS'].astype('Int64', errors='ignore')
 
 df.loc[df["IS_BUNDLER"].isnull(),'IS_BUNDLER'] = False
 df.loc[df["IS_BUNDLER"],'EDW_CUSTOMER_NAME'] = np.nan
+
+# override --> need to figure out how to deal with these additions
+df.loc[df["EDW_CUSTOMER_NAME"]=='EXXONMOBIL PL CONVERSION L1','IS_BUNDLER'] = True
 
 ACCOUNTS_WITH_BUNDLER_df = df
 
