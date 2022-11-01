@@ -28,11 +28,11 @@
     "dimensions": []
   },
   "versionTag": {
-    "versionNumber": 0,
+    "versionNumber": 1,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1667264689701
+    "lastModifiedOn": 1667267932032
   },
   "creationTag": {
     "versionNumber": 0,
@@ -56,8 +56,13 @@
     "readSQLDateColsAsDSSDates": true
   },
   "schema": {
-    "columns": [],
-    "userModified": true
+    "columns": [
+      {"name":"CUSTOMER","type":"string","maxLength":4194304},
+      {"name":"MATCH_CUSTOMER","type":"string","maxLength":4194304},
+      {"name":"DRAW_UP_DATE","type":"date"},
+      {"name":"distance","type":"double"}
+    ],
+    "userModified": false
   },
   "dkuProperties": [],
   "metrics": {
