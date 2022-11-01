@@ -28,11 +28,11 @@
     "dimensions": []
   },
   "versionTag": {
-    "versionNumber": 20,
+    "versionNumber": 21,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1667151946734
+    "lastModifiedOn": 1667316664268
   },
   "creationTag": {
     "versionNumber": 0,
@@ -77,6 +77,12 @@
       {"name":"EDW_STATE","type":"string","maxLength":4194304},
       {"name":"CUSTOMER","type":"string","maxLength":4194304},
       {"name":"CUST_CALC_SOURCE","type":"string","maxLength":4194304},
+      {"name":"MATCH_CUSTOMER_x","type":"string","maxLength":4194304},
+      {"name":"DRAW_UP_DATE_x","type":"date"},
+      {"name":"distance_x","type":"double"},
+      {"name":"MATCH_CUSTOMER_y","type":"string","maxLength":4194304},
+      {"name":"DRAW_UP_DATE_y","type":"date"},
+      {"name":"distance_y","type":"double"},
       {"name":"CUSTOMER_ID","type":"bigint"},
       {"name":"SALES_SETUP_DATE","type":"string","maxLength":4194304},
       {"name":"SALES_REP","type":"string","maxLength":4194304},
