@@ -28,11 +28,11 @@
     "dimensions": []
   },
   "versionTag": {
-    "versionNumber": 1,
+    "versionNumber": 2,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1667314076219
+    "lastModifiedOn": 1667314500063
   },
   "creationTag": {
     "versionNumber": 0,
@@ -58,7 +58,7 @@
   "schema": {
     "columns": [
       {"name":"EDW_CUSTOMER_NAME","type":"string","maxLength":4194304},
-      {"name":"CUSTOMER_ACCOUNT_ID","type":"bigint"}
+      {"name":"COUNT_OF_ACCOUNT","type":"bigint"}
     ],
     "userModified": false
   },
