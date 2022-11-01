@@ -355,6 +355,7 @@ df_r = RDW_CONVERSIONS_df[['FLEET_ID','CLASSIC_ACCOUNT_NUMBER']].dropna(subset=[
 df_r.FLEET_ID = df_r.FLEET_ID.str.strip()
 df_r = df_r[~df_r['FLEET_ID'].str.contains('-',na=False)]
 df_r.FLEET_ID = df_r.FLEET_ID.astype('float')
+df_r.dropna(subset=['FLEET_ID'], inplace=True)
 df_r.FLEET_ID = df_r.FLEET_ID.astype('Int64')
 print(len(df_r))
 print()
