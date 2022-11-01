@@ -187,7 +187,7 @@ _no_match_customer = []
 
 save_every_n = 50
 to_save_counter = 0
-print_every_n = 25
+print_every_n = 100
 
 print(len(df_down), "filtered down rows")
 print(len(df_up), "filtered up rows")
