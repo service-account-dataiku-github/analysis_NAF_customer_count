@@ -28,11 +28,11 @@
     "dimensions": []
   },
   "versionTag": {
-    "versionNumber": 0,
+    "versionNumber": 1,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1668682593111
+    "lastModifiedOn": 1668683077689
   },
   "creationTag": {
     "versionNumber": 0,
@@ -56,8 +56,19 @@
     "readSQLDateColsAsDSSDates": true
   },
   "schema": {
-    "columns": [],
-    "userModified": true
+    "columns": [
+      {"name":"MARKETING_PARTNER_NM","type":"string","maxLength":4194304},
+      {"name":"BUSINESS_PROGRAM_NM","type":"string","maxLength":4194304},
+      {"name":"PROGRAM_ID","type":"string","maxLength":4194304},
+      {"name":"SOURCE_ACCOUNT_ID","type":"bigint"},
+      {"name":"CAMPAIGN_TYPE","type":"string","maxLength":4194304},
+      {"name":"COUPON_CODE","type":"string","maxLength":4194304},
+      {"name":"SALES_CHANNEL","type":"string","maxLength":4194304},
+      {"name":"SALES_REP","type":"string","maxLength":4194304},
+      {"name":"TRANS_RECORDS","type":"bigint"},
+      {"name":"DATA_SOURCE","type":"string","maxLength":4194304}
+    ],
+    "userModified": false
   },
   "dkuProperties": [],
   "metrics": {
