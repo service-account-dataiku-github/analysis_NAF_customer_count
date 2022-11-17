@@ -24,6 +24,9 @@ RDW_CONVERSIONS_df = RDW_CONVERSIONS.get_dataframe()
 ACCOUNT_NEW_SALES = dataiku.Dataset("ACCOUNT_NEW_SALES")
 ACCOUNT_NEW_SALES_df = ACCOUNT_NEW_SALES.get_dataframe()
 
+ACCOUNT_NEW_SALES_FULL = dataiku.Dataset("ACCOUNT_NEW_SALES_FULL")
+ACCOUNT_NEW_SALES_FULL_df = ACCOUNT_NEW_SALES_FULL.get_dataframe()
+
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 # load matches calculated by matching process, then verified with secondary matching step
 
@@ -330,18 +333,18 @@ del(df_j['PARTY_ID'])
 del(df_j['PARTY_DEFAULT_NAME'])
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-#print(len(df_matches_verified))
-#df_matches_verified.drop_duplicates(subset='CUSTOMER', inplace=True)
-#print(len(df_matches_verified))
+print(len(df_matches_verified))
+df_matches_verified.drop_duplicates(subset='CUSTOMER', inplace=True)
+print(len(df_matches_verified))
 
-#print(len(df_j))
-#df_j_w_verified = pd.merge(df_j, df_matches_verified, left_on='CUSTOMER', right_on='CUSTOMER', how='left')
-#print(len(df_j_w_verified))
+print(len(df_j))
+df_j_w_verified = pd.merge(df_j, df_matches_verified, left_on='CUSTOMER', right_on='CUSTOMER', how='left')
+print(len(df_j_w_verified))
 
 #df_j_w_verified.loc[~df_j_w_verified["CUSTOMER_CLC"].isnull(),'CUSTOMER'] = df_j_w_verified.CUSTOMER_CLC
 #df_j_w_verified.loc[~df_j_w_verified["CUSTOMER_CLC"].isnull(),'CUST_CALC_SOURCE'] = 'CLC'
 
-#df_j = df_j_w_verified
+df_j = df_j_w_verified
 #del(df_j['CUSTOMER_CLC'])
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
@@ -355,7 +358,6 @@ df_r = RDW_CONVERSIONS_df[['FLEET_ID','CLASSIC_ACCOUNT_NUMBER']].dropna(subset=[
 df_r.FLEET_ID = df_r.FLEET_ID.str.strip()
 df_r = df_r[~df_r['FLEET_ID'].str.contains('-',na=False)]
 df_r.FLEET_ID = df_r.FLEET_ID.astype('float')
-df_r.dropna(subset=['FLEET_ID'], inplace=True)
 df_r.FLEET_ID = df_r.FLEET_ID.astype('Int64')
 print(len(df_r))
 print()
@@ -432,10 +434,23 @@ len(df_by_account.CUSTOMER_ID.unique())
 df_jj.CUST_CALC_SOURCE.value_counts()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+ACCOUNT_NEW_SALES_FULL_df.head()
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+ACCOUNT_NEW_SALES_FULL_df.columns.tolist()
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+#print(len(df_jj))
+#print(len(ACCOUNT_NEW_SALES_df))
+#ACCOUNT_NEW_SALES_df['HAS_SALES_FLAG'] = True
+#df_j_with_sales = pd.merge(df_jj, ACCOUNT_NEW_SALES_df, on='CUSTOMER_ACCOUNT_ID', how='left')
+#print(len(df_j_with_sales))
+
 print(len(df_jj))
-print(len(ACCOUNT_NEW_SALES_df))
-ACCOUNT_NEW_SALES_df['HAS_SALES_FLAG'] = True
-df_j_with_sales = pd.merge(df_jj, ACCOUNT_NEW_SALES_df, on='CUSTOMER_ACCOUNT_ID', how='left')
+print(len(ACCOUNT_NEW_SALES_FULL_df))
+ACCOUNT_NEW_SALES_FULL_df.columns = ['SALES_MARKETING_PARTNER_NM','SALES_BUSINESS_PROGRAM_NM','SALES_PROGRAM_ID','CUSTOMER_ACCOUNT_ID','SALES_CAMPAIGN_TYPE','SALES_COUPON_CODE','SALES_CHANNEL','SALES_REP','SALES_TRANS_RECORDS','SALES_DATA_SOURCE','HAS_SALES_FLAG']
+ACCOUNT_NEW_SALES_FULL_df['HAS_SALES_FLAG'] = True
+df_j_with_sales = pd.merge(df_jj, ACCOUNT_NEW_SALES_FULL_df, on='CUSTOMER_ACCOUNT_ID', how='left')
 print(len(df_j_with_sales))
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
