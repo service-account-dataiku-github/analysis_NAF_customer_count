@@ -44,6 +44,10 @@
         {
           "ref": "VERIFIED_MATCHES",
           "deps": []
+        },
+        {
+          "ref": "ACCOUNT_NEW_SALES_FULL",
+          "deps": []
         }
       ]
     }
@@ -64,11 +68,11 @@
   },
   "labels": [],
   "versionTag": {
-    "versionNumber": 136,
+    "versionNumber": 137,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1668640638326
+    "lastModifiedOn": 1668683655071
   },
   "creationTag": {
     "versionNumber": 0,
