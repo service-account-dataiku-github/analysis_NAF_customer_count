@@ -333,18 +333,18 @@ del(df_j['PARTY_ID'])
 del(df_j['PARTY_DEFAULT_NAME'])
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-print(len(df_matches_verified))
-df_matches_verified.drop_duplicates(subset='CUSTOMER', inplace=True)
-print(len(df_matches_verified))
+#print(len(df_matches_verified))
+#df_matches_verified.drop_duplicates(subset='CUSTOMER', inplace=True)
+#print(len(df_matches_verified))
 
-print(len(df_j))
-df_j_w_verified = pd.merge(df_j, df_matches_verified, left_on='CUSTOMER', right_on='CUSTOMER', how='left')
-print(len(df_j_w_verified))
+#print(len(df_j))
+#df_j_w_verified = pd.merge(df_j, df_matches_verified, left_on='CUSTOMER', right_on='CUSTOMER', how='left')
+#print(len(df_j_w_verified))
 
 #df_j_w_verified.loc[~df_j_w_verified["CUSTOMER_CLC"].isnull(),'CUSTOMER'] = df_j_w_verified.CUSTOMER_CLC
 #df_j_w_verified.loc[~df_j_w_verified["CUSTOMER_CLC"].isnull(),'CUST_CALC_SOURCE'] = 'CLC'
 
-df_j = df_j_w_verified
+#df_j = df_j_w_verified
 #del(df_j['CUSTOMER_CLC'])
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
