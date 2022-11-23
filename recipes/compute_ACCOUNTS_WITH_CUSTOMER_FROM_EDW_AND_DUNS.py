@@ -12,6 +12,9 @@ ACCOUNTS_WITH_BUNDLER_AND_DUNS_df = ACCOUNTS_WITH_BUNDLER_AND_DUNS.get_dataframe
 ACCOUNTS_WITH_EBX_PARTY = dataiku.Dataset("ACCOUNTS_WITH_EBX_PARTY")
 ACCOUNTS_WITH_EBX_PARTY_df = ACCOUNTS_WITH_EBX_PARTY.get_dataframe()
 
+ACCOUNTS_PARTY_EXTRACT = dataiku.Dataset("Account_Party_extract")
+ACCOUNTS_PARTY_EXTRACT_df = ACCOUNTS_PARTY_EXTRACT.get_dataframe()
+
 MDM_FINAL = dataiku.Dataset("mdm_final")
 MDM_FINAL_df = MDM_FINAL.get_dataframe()
 
