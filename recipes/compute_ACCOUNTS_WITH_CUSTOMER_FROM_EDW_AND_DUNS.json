@@ -48,6 +48,10 @@
         {
           "ref": "ACCOUNT_NEW_SALES_FULL",
           "deps": []
+        },
+        {
+          "ref": "Account_Party_extract",
+          "deps": []
         }
       ]
     }
@@ -68,11 +72,11 @@
   },
   "labels": [],
   "versionTag": {
-    "versionNumber": 144,
+    "versionNumber": 145,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1669222790942
+    "lastModifiedOn": 1669223971880
   },
   "creationTag": {
     "versionNumber": 0,
