@@ -5,30 +5,58 @@ import pandas as pd, numpy as np
 from dataiku import pandasutils as pdu
 import string
 
+#===============
+# Purpose: Calculate NAFleet Customer hierarchy from best known sources of account groupings + custom rules
+# sources: EDW, Ebx, RDW Conversions, Drawdown/Drawups + entity matching
+#
+# Oct-Dec 2022
+# Daniel VanderMeer, email: daniel.vandermeer@wexinc.com
+#==============
+
 # Read recipe inputs
+
+#===============
+# Data Set: Accounts with Bundler and Duns
+# columns: CUSTOMER_ACCOUNT_ID, CUSTOMER_ACCOUNT_NAME, EDW_CUSTOMER_NAME, DUNS, IS_BUNDLER
+# Note Account bundlers are ~275 known instances where EDW customer names do not describe customer entities
+# in most cases these are either partner or program names 
+# examples: CIRCLE K STORES PRIMARY, WEX FLEET UNIVERSAL PRIMARY
+# the IS_BUNDLER columns allows the algorithm to ignore these cases
+
 ACCOUNTS_WITH_BUNDLER_AND_DUNS = dataiku.Dataset("ACCOUNTS_WITH_BUNDLER_AND_DUNS")
 ACCOUNTS_WITH_BUNDLER_AND_DUNS_df = ACCOUNTS_WITH_BUNDLER_AND_DUNS.get_dataframe()
 
+# MDM matches, shared by Wes Corbin during the week of Nov 17, 2022
+# key columns: ACCOUNTNUMBER, WEXBUSINESSID, NAME, DUNS
 ACCOUNTS_WITH_EBX_PARTY = dataiku.Dataset("ACCOUNTS_WITH_EBX_PARTY")
 ACCOUNTS_WITH_EBX_PARTY_df = ACCOUNTS_WITH_EBX_PARTY.get_dataframe()
 
-ACCOUNTS_PARTY_EXTRACT = dataiku.Dataset("Account_Party_extract")
-ACCOUNTS_PARTY_EXTRACT_df = ACCOUNTS_PARTY_EXTRACT.get_dataframe()
-
-MDM_FINAL = dataiku.Dataset("mdm_final")
-MDM_FINAL_df = MDM_FINAL.get_dataframe()
-
+# Verified matches, identified by matching algorithm
+# matching algorithm combines draw downs and draw ups along with name entity matching
+# key columns: CUSTOMER, MATCH_CUSTOMER, DRAW_UP_DATE, distance
 MATCHES_VERIFIED = dataiku.Dataset("VERIFIED_MATCHES")
 MATCHES_VERIFIED_df = MATCHES_VERIFIED.get_dataframe()
 
+# RDW Conversions
+# Conversion teams will track conversions in RDW
+# Here we use the source as a way to combine known conversions not yet handled by MDM or matching algorithm
 RDW_CONVERSIONS = dataiku.Dataset("NAFCUSTOMER_RDW_CONVERSIONS")
 RDW_CONVERSIONS_df = RDW_CONVERSIONS.get_dataframe()
 
-ACCOUNT_NEW_SALES = dataiku.Dataset("ACCOUNT_NEW_SALES")
-ACCOUNT_NEW_SALES_df = ACCOUNT_NEW_SALES.get_dataframe()
+# 
+#ACCOUNT_NEW_SALES_FULL = dataiku.Dataset("ACCOUNT_NEW_SALES_FULL")
+#ACCOUNT_NEW_SALES_FULL_df = ACCOUNT_NEW_SALES_FULL.get_dataframe()
 
-ACCOUNT_NEW_SALES_FULL = dataiku.Dataset("ACCOUNT_NEW_SALES_FULL")
-ACCOUNT_NEW_SALES_FULL_df = ACCOUNT_NEW_SALES_FULL.get_dataframe()
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+# older versions of MDM and MDM Final
+#ACCOUNTS_PARTY_EXTRACT = dataiku.Dataset("Account_Party_extract")
+#ACCOUNTS_PARTY_EXTRACT_df = ACCOUNTS_PARTY_EXTRACT.get_dataframe()
+
+#MDM_FINAL = dataiku.Dataset("mdm_final")
+#MDM_FINAL_df = MDM_FINAL.get_dataframe()
+
+#ACCOUNT_NEW_SALES = dataiku.Dataset("ACCOUNT_NEW_SALES")
+#ACCOUNT_NEW_SALES_df = ACCOUNT_NEW_SALES.get_dataframe()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 # load matches calculated by matching process, then verified with secondary matching step
