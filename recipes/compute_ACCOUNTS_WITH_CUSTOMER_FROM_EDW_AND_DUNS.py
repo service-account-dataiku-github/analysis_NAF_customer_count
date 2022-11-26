@@ -43,6 +43,22 @@ print(len(RDW_CONVERSIONS_df))
 RDW_CONVERSIONS_df.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+# New MDM matches, shared by Wes Corbin during the week of Nov 17, 2022
+
+ACCOUNTS_PARTY_EXTRACT_df.columns.tolist()
+
+print(len(ACCOUNTS_PARTY_EXTRACT_df))
+df_mdm_new = ACCOUNTS_PARTY_EXTRACT_df[['ACCOUNTNUMBER','WEXBUSINESSID','NAME','DUNS']].copy()
+df_mdm_new.columns = ['CUSTOMER_ACCOUNT_ID','WEXBUSINESSID','NAME','DUNS']
+df_mdm_new.dropna(subset=['CUSTOMER_ACCOUNT_ID'], inplace=True)
+df_mdm_new['CUSTOMER_ACCOUNT_ID'] = df_mdm_new['CUSTOMER_ACCOUNT_ID'].astype('Int64', errors='ignore')
+df_mdm_new['WEXBUSINESSID'] = df_mdm_new['WEXBUSINESSID'].astype('Int64', errors='ignore')
+
+df_mdm_new['NAME'] = df_mdm_new['NAME'].str.upper()
+df_mdm_new['NAME'] = df_mdm_new['NAME'].str.translate(str.maketrans('','', string.punctuation))
+print(len(df_mdm_new))
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 # load MDM matches, note we are using an older MDM Final extract from March
 # TODO: replace MDM final with snowflake source
 
@@ -51,7 +67,6 @@ RDW_CONVERSIONS_df.head()
 # cast ids to large ints
 # remove punctuation cast names upper case
 # filter out invalid grouping entries
-
 df_mdm = MDM_FINAL_df[['accountnumber','wex_id','name','global_customer_id','global_customer_name']].copy()
 df_mdm.columns = ['CUSTOMER_ACCOUNT_ID','MDM_WEX_ID','MDM_WEX_NAME','MDM_PARTY_ID','MDM_PARTY_NAME']
 df_mdm.dropna(subset=['CUSTOMER_ACCOUNT_ID'], inplace=True)
@@ -327,13 +342,13 @@ del(df['CUSTOMER_ACCOUNT_NAME_ORIGINAL'])
 #df.CUST_CALC_SOURCE.value_counts()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-df_j = pd.merge(df, ACCOUNTS_WITH_EBX_PARTY_df, on='CUSTOMER_ACCOUNT_ID', how='left')
-df_j.loc[~df_j["PARTY_DEFAULT_NAME"].isnull(),'CUSTOMER'] = df_j.PARTY_DEFAULT_NAME
-df_j.loc[~df_j["PARTY_DEFAULT_NAME"].isnull(),'CUST_CALC_SOURCE'] = 'MDM'
-df_j.CUST_CALC_SOURCE.value_counts()
+#df_j = pd.merge(df, ACCOUNTS_WITH_EBX_PARTY_df, on='CUSTOMER_ACCOUNT_ID', how='left')
+#df_j.loc[~df_j["PARTY_DEFAULT_NAME"].isnull(),'CUSTOMER'] = df_j.PARTY_DEFAULT_NAME
+#df_j.loc[~df_j["PARTY_DEFAULT_NAME"].isnull(),'CUST_CALC_SOURCE'] = 'MDM'
+#df_j.CUST_CALC_SOURCE.value_counts()
 
-del(df_j['PARTY_ID'])
-del(df_j['PARTY_DEFAULT_NAME'])
+#del(df_j['PARTY_ID'])
+#del(df_j['PARTY_DEFAULT_NAME'])
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 #print(len(df_matches_verified))
@@ -351,96 +366,96 @@ del(df_j['PARTY_DEFAULT_NAME'])
 #del(df_j['CUSTOMER_CLC'])
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-df_j.head()
+#df_j.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-RDW_CONVERSIONS_df.head()
+#RDW_CONVERSIONS_df.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-df_r = RDW_CONVERSIONS_df[['FLEET_ID','CLASSIC_ACCOUNT_NUMBER']].dropna(subset=['CLASSIC_ACCOUNT_NUMBER']).copy()
-df_r.FLEET_ID = df_r.FLEET_ID.str.strip()
-df_r = df_r[~df_r['FLEET_ID'].str.contains('-',na=False)]
-df_r.FLEET_ID = df_r.FLEET_ID.astype('float')
-df_r.FLEET_ID = df_r.FLEET_ID.astype('Int64')
-print(len(df_r))
-print()
+#df_r = RDW_CONVERSIONS_df[['FLEET_ID','CLASSIC_ACCOUNT_NUMBER']].dropna(subset=['CLASSIC_ACCOUNT_NUMBER']).copy()
+#df_r.FLEET_ID = df_r.FLEET_ID.str.strip()
+#df_r = df_r[~df_r['FLEET_ID'].str.contains('-',na=False)]
+#df_r.FLEET_ID = df_r.FLEET_ID.astype('float')
+#df_r.FLEET_ID = df_r.FLEET_ID.astype('Int64')
+#print(len(df_r))
+#print()
 
-df_cust = df_j[['CUSTOMER_ACCOUNT_ID','CUSTOMER']].copy()
-df_cust.CUSTOMER_ACCOUNT_ID = df_cust['CUSTOMER_ACCOUNT_ID'].astype('Int64')
-print(len(df_cust))
-print()
+#df_cust = df_j[['CUSTOMER_ACCOUNT_ID','CUSTOMER']].copy()
+#df_cust.CUSTOMER_ACCOUNT_ID = df_cust['CUSTOMER_ACCOUNT_ID'].astype('Int64')
+#print(len(df_cust))
+#print()
 
-df_rj = pd.merge(df_r, df_cust, left_on='FLEET_ID', right_on='CUSTOMER_ACCOUNT_ID', how='inner')
-df_rj = df_rj[pd.to_numeric(df_rj.CLASSIC_ACCOUNT_NUMBER, errors='coerce').notnull()]
-df_rj.CLASSIC_ACCOUNT_NUMBER = df_rj.CLASSIC_ACCOUNT_NUMBER.astype(float)
-df_rj.CLASSIC_ACCOUNT_NUMBER = df_rj.CLASSIC_ACCOUNT_NUMBER.astype(np.int64)
-print(len(df_rj))
+#df_rj = pd.merge(df_r, df_cust, left_on='FLEET_ID', right_on='CUSTOMER_ACCOUNT_ID', how='inner')
+#df_rj = df_rj[pd.to_numeric(df_rj.CLASSIC_ACCOUNT_NUMBER, errors='coerce').notnull()]
+#df_rj.CLASSIC_ACCOUNT_NUMBER = df_rj.CLASSIC_ACCOUNT_NUMBER.astype(float)
+#df_rj.CLASSIC_ACCOUNT_NUMBER = df_rj.CLASSIC_ACCOUNT_NUMBER.astype(np.int64)
+#print(len(df_rj))
 
-df_cust_classic = df_j[['CUSTOMER_ACCOUNT_ID','CUSTOMER']].copy()
-df_cust_classic.columns = ['CUSTOMER_ACCOUNT_ID', 'CLASSIC_CUSTOMER']
-df_cust_classic.CUSTOMER_ACCOUNT_ID = df_cust['CUSTOMER_ACCOUNT_ID'].astype('Int64')
-print(len(df_cust_classic))
+#df_cust_classic = df_j[['CUSTOMER_ACCOUNT_ID','CUSTOMER']].copy()
+#df_cust_classic.columns = ['CUSTOMER_ACCOUNT_ID', 'CLASSIC_CUSTOMER']
+#df_cust_classic.CUSTOMER_ACCOUNT_ID = df_cust['CUSTOMER_ACCOUNT_ID'].astype('Int64')
+#print(len(df_cust_classic))
 
-df_rj = df_rj[['FLEET_ID','CLASSIC_ACCOUNT_NUMBER','CUSTOMER']]
-df_rj = pd.merge(df_rj, df_cust_classic, left_on='CLASSIC_ACCOUNT_NUMBER', right_on='CUSTOMER_ACCOUNT_ID', how='inner')
-print(len(df_rj))
+#df_rj = df_rj[['FLEET_ID','CLASSIC_ACCOUNT_NUMBER','CUSTOMER']]
+#df_rj = pd.merge(df_rj, df_cust_classic, left_on='CLASSIC_ACCOUNT_NUMBER', right_on='CUSTOMER_ACCOUNT_ID', how='inner')
+#print(len(df_rj))
 
-df_rdw_conversions = df_rj[df_rj.CUSTOMER!=df_rj.CLASSIC_CUSTOMER]
-print(len(df_rdw_conversions))
-df_rdw_conversions.head()
+#df_rdw_conversions = df_rj[df_rj.CUSTOMER!=df_rj.CLASSIC_CUSTOMER]
+#print(len(df_rdw_conversions))
+#df_rdw_conversions.head()
 
-df_rdw_conversions = df_rdw_conversions[['CUSTOMER_ACCOUNT_ID','CUSTOMER']]
-df_rdw_conversions.columns = ['CUSTOMER_ACCOUNT_ID','CONVERSION_REPLACEMENT_CUSTOMER']
-df_rdw_conversions.drop_duplicates(subset=['CUSTOMER_ACCOUNT_ID'], inplace=True)
-print(len(df_rdw_conversions))
-df_rdw_conversions.head()
-
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-print(len(df_j))
-df_j_with_rdw_conversions = pd.merge(df_j, df_rdw_conversions, on='CUSTOMER_ACCOUNT_ID',how='left')
-print(len(df_j_with_rdw_conversions))
-
-df_j_with_rdw_conversions.loc[~df_j_with_rdw_conversions["CONVERSION_REPLACEMENT_CUSTOMER"].isnull(),'CUSTOMER'] = df_j_with_rdw_conversions.CONVERSION_REPLACEMENT_CUSTOMER
-df_j_with_rdw_conversions.loc[~df_j_with_rdw_conversions["CONVERSION_REPLACEMENT_CUSTOMER"].isnull(),'CUST_CALC_SOURCE'] = 'RDW CONVERSIONS'
-
-df_j = df_j_with_rdw_conversions
-del(df_j['CONVERSION_REPLACEMENT_CUSTOMER'])
+#df_rdw_conversions = df_rdw_conversions[['CUSTOMER_ACCOUNT_ID','CUSTOMER']]
+#df_rdw_conversions.columns = ['CUSTOMER_ACCOUNT_ID','CONVERSION_REPLACEMENT_CUSTOMER']
+#df_rdw_conversions.drop_duplicates(subset=['CUSTOMER_ACCOUNT_ID'], inplace=True)
+#print(len(df_rdw_conversions))
+#df_rdw_conversions.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-df_j.CUST_CALC_SOURCE.value_counts()
+#print(len(df_j))
+#df_j_with_rdw_conversions = pd.merge(df_j, df_rdw_conversions, on='CUSTOMER_ACCOUNT_ID',how='left')
+#print(len(df_j_with_rdw_conversions))
+
+#df_j_with_rdw_conversions.loc[~df_j_with_rdw_conversions["CONVERSION_REPLACEMENT_CUSTOMER"].isnull(),'CUSTOMER'] = df_j_with_rdw_conversions.CONVERSION_REPLACEMENT_CUSTOMER
+#df_j_with_rdw_conversions.loc[~df_j_with_rdw_conversions["CONVERSION_REPLACEMENT_CUSTOMER"].isnull(),'CUST_CALC_SOURCE'] = 'RDW CONVERSIONS'
+
+#df_j = df_j_with_rdw_conversions
+#del(df_j['CONVERSION_REPLACEMENT_CUSTOMER'])
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-unique_customer_list = df_j.CUSTOMER.unique()
-df_customer_ids = pd.DataFrame(unique_customer_list)
-df_customer_ids.columns = ["CUSTOMER"]
-df_customer_ids = df_customer_ids.sort_values(['CUSTOMER']).reset_index(drop=True)
-df_customer_ids = df_customer_ids.reset_index(drop=False)
-df_customer_ids['CUSTOMER_ID'] = df_customer_ids.index + 77000000
-del(df_customer_ids['index'])
-df_customer_ids.head()
+#df_j.CUST_CALC_SOURCE.value_counts()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-print(len(df_j))
-df_jj = pd.merge(df_j, df_customer_ids, on='CUSTOMER')
-df_jj.dropna(subset=['CUSTOMER'], inplace=True)
-print(len(df_jj))
-df_jj.head()
+#unique_customer_list = df_j.CUSTOMER.unique()
+#df_customer_ids = pd.DataFrame(unique_customer_list)
+#df_customer_ids.columns = ["CUSTOMER"]
+#df_customer_ids = df_customer_ids.sort_values(['CUSTOMER']).reset_index(drop=True)
+#df_customer_ids = df_customer_ids.reset_index(drop=False)
+#df_customer_ids['CUSTOMER_ID'] = df_customer_ids.index + 77000000
+#del(df_customer_ids['index'])
+#df_customer_ids.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-df_by_account = df_jj[['CUSTOMER_ACCOUNT_ID','CUSTOMER_ID', 'CUSTOMER']]
-df_by_account.head()
+#print(len(df_j))
+#df_jj = pd.merge(df_j, df_customer_ids, on='CUSTOMER')
+#df_jj.dropna(subset=['CUSTOMER'], inplace=True)
+#print(len(df_jj))
+#df_jj.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-len(df_by_account.CUSTOMER_ID.unique())
+#df_by_account = df_jj[['CUSTOMER_ACCOUNT_ID','CUSTOMER_ID', 'CUSTOMER']]
+#df_by_account.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-df_jj.CUST_CALC_SOURCE.value_counts()
+#len(df_by_account.CUSTOMER_ID.unique())
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-ACCOUNT_NEW_SALES_FULL_df.head()
+#df_jj.CUST_CALC_SOURCE.value_counts()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-ACCOUNT_NEW_SALES_FULL_df.columns.tolist()
+#ACCOUNT_NEW_SALES_FULL_df.head()
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+#ACCOUNT_NEW_SALES_FULL_df.columns.tolist()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 #print(len(df_jj))
@@ -449,22 +464,22 @@ ACCOUNT_NEW_SALES_FULL_df.columns.tolist()
 #df_j_with_sales = pd.merge(df_jj, ACCOUNT_NEW_SALES_df, on='CUSTOMER_ACCOUNT_ID', how='left')
 #print(len(df_j_with_sales))
 
-print(len(df_jj))
-print(len(ACCOUNT_NEW_SALES_FULL_df))
-ACCOUNT_NEW_SALES_FULL_df.columns = ['SALES_MARKETING_PARTNER_NM','SALES_BUSINESS_PROGRAM_NM','SALES_PROGRAM_ID','CUSTOMER_ACCOUNT_ID','SALES_CAMPAIGN_TYPE','SALES_COUPON_CODE','SALES_CHANNEL','SALES_REP','SALES_TRANS_RECORDS','SALES_DATA_SOURCE','HAS_SALES_FLAG']
-ACCOUNT_NEW_SALES_FULL_df['HAS_SALES_FLAG'] = True
-df_j_with_sales = pd.merge(df_jj, ACCOUNT_NEW_SALES_FULL_df, on='CUSTOMER_ACCOUNT_ID', how='left')
-print(len(df_j_with_sales))
+#print(len(df_jj))
+#print(len(ACCOUNT_NEW_SALES_FULL_df))
+#ACCOUNT_NEW_SALES_FULL_df.columns = ['SALES_MARKETING_PARTNER_NM','SALES_BUSINESS_PROGRAM_NM','SALES_PROGRAM_ID','CUSTOMER_ACCOUNT_ID','SALES_CAMPAIGN_TYPE','SALES_COUPON_CODE','SALES_CHANNEL','SALES_REP','SALES_TRANS_RECORDS','SALES_DATA_SOURCE','HAS_SALES_FLAG']
+#ACCOUNT_NEW_SALES_FULL_df['HAS_SALES_FLAG'] = True
+#df_j_with_sales = pd.merge(df_jj, ACCOUNT_NEW_SALES_FULL_df, on='CUSTOMER_ACCOUNT_ID', how='left')
+#print(len(df_j_with_sales))
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-df_j_with_sales.HAS_SALES_FLAG.value_counts(dropna=False)
+#df_j_with_sales.HAS_SALES_FLAG.value_counts(dropna=False)
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS_df = df_j_with_sales
+#ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS_df = df_j_with_sales
 
 # Write recipe outputs
-ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS = dataiku.Dataset("ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS")
-ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS.write_with_schema(ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS_df)
+#ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS = dataiku.Dataset("ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS")
+#ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS.write_with_schema(ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS_df)
 
-BY_ACCOUNT = dataiku.Dataset("BY_ACCOUNT")
-BY_ACCOUNT.write_with_schema(df_by_account)
+#BY_ACCOUNT = dataiku.Dataset("BY_ACCOUNT")
+#BY_ACCOUNT.write_with_schema(df_by_account)
