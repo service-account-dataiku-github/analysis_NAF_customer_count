@@ -26,10 +26,6 @@
           "deps": []
         },
         {
-          "ref": "ACCOUNTS_WITH_EBX_PARTY",
-          "deps": []
-        },
-        {
           "ref": "NAFCUSTOMER_RDW_CONVERSIONS",
           "deps": []
         },
@@ -68,11 +64,11 @@
   },
   "labels": [],
   "versionTag": {
-    "versionNumber": 157,
+    "versionNumber": 158,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1669582099472
+    "lastModifiedOn": 1669582124028
   },
   "creationTag": {
     "versionNumber": 0,
