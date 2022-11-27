@@ -28,10 +28,6 @@
         {
           "ref": "ACCOUNT_BUNDLER_LIST",
           "deps": []
-        },
-        {
-          "ref": "Account_Party_extract",
-          "deps": []
         }
       ]
     }
@@ -48,11 +44,11 @@
   },
   "labels": [],
   "versionTag": {
-    "versionNumber": 14,
+    "versionNumber": 15,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1669584465004
+    "lastModifiedOn": 1669584660260
   },
   "creationTag": {
     "versionNumber": 0,
