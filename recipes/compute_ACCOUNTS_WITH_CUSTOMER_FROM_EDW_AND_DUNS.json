@@ -40,6 +40,10 @@
         {
           "ref": "ACCOUNT_NEW_SALES_FULL",
           "deps": []
+        },
+        {
+          "ref": "NAFCUSTOMER_MDM_ACCOUNT_WITH_BUSINESS_ID",
+          "deps": []
         }
       ]
     }
@@ -60,11 +64,11 @@
   },
   "labels": [],
   "versionTag": {
-    "versionNumber": 161,
+    "versionNumber": 162,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1669582515243
+    "lastModifiedOn": 1669586102705
   },
   "creationTag": {
     "versionNumber": 0,
