@@ -338,7 +338,7 @@ df_r = RDW_CONVERSIONS_df[['FLEET_ID','CLASSIC_ACCOUNT_NUMBER']].dropna(subset=[
 df_r.FLEET_ID = df_r.FLEET_ID.str.strip()
 df_r = df_r[~df_r['FLEET_ID'].str.contains('-',na=False)]
 df_r.FLEET_ID = df_r.FLEET_ID.astype('float')
-df_r.FLEET_ID = df_r.FLEET_ID.astype('Int64')
+df_r.FLEET_ID = df_r.FLEET_ID.astype('Int64', errors='ignore')
 print(len(df_r), "total RDW conversions")
 
 # create a copy of a subset of columns of customer hierarchy calculated up to this point
