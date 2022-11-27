@@ -439,13 +439,8 @@ df_j_with_mdm.dropna(subset=['WEX_BUSINESS_ID'],inplace=True)
 df_j_with_mdm_with_matches = pd.merge(df_j_with_mdm,df_g, left_on='WEX_BUSINESS_ID',right_on='MATCH_WEX_BUSINESS_ID', how='left')
 print(len(df_j_with_mdm_with_matches))
 
-df_j_with_mdm_with_matches.loc[~df_j_with_mdm_with_matches['MATCH_WEX_BUSINESS_ID'].isnull(),'CUSTOMER'] = df_j_with_mdm_with_matches['MATCH_WEX_BUSINESS_NAME']
-df_j_with_mdm_with_matches.loc[~df_j_with_mdm_with_matches['MATCH_WEX_BUSINESS_ID'].isnull(),'CUST_CALC_SOURCE'] = "MDM"
-
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-print(len(df_g))
-df_g = df_g[~df_g.MATCH_WEX_BUSINESS_NAME.str.contains('.').isnull()]
-print(len(df_g))
+df_j_with_mdm_with_matches.loc[~df_j_with_mdm_with_matches['MATCH_WEX_BUSINESS_NAME'].isnull(),'CUSTOMER'] = df_j_with_mdm_with_matches['MATCH_WEX_BUSINESS_NAME']
+df_j_with_mdm_with_matches.loc[~df_j_with_mdm_with_matches['MATCH_WEX_BUSINESS_NAME'].isnull(),'CUST_CALC_SOURCE'] = "MDM"
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 print(len(df_j_with_mdm_with_matches), "account rows")
@@ -472,6 +467,8 @@ df_v_w_verified.loc[~df_v_w_verified["MATCH_CUSTOMER"].isnull(),'CUST_CALC_SOURC
 
 print(len(df_v_w_verified))
 del(df_v_w_verified['MATCH_CUSTOMER'])
+del(df_v_w_verified['DRAW_UP_DATE'])
+del(df_v_w_verified['distance'])
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 print(len(df_v_w_verified), "account rows")
@@ -497,44 +494,37 @@ print(len(df_jj))
 df_jj.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-#df_by_account = df_jj[['CUSTOMER_ACCOUNT_ID','CUSTOMER_ID', 'CUSTOMER']]
-#df_by_account.head()
+df_by_account = df_jj[['CUSTOMER_ACCOUNT_ID','CUSTOMER_ID', 'CUSTOMER']]
+df_by_account.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-#len(df_by_account.CUSTOMER_ID.unique())
+print(len(df_jj), "account rows")
+print(len(df_jj.CUSTOMER.unique()), "customer rows")
+df_jj.CUST_CALC_SOURCE.value_counts()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-#df_jj.CUST_CALC_SOURCE.value_counts()
+ACCOUNT_NEW_SALES_FULL_df.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-#ACCOUNT_NEW_SALES_FULL_df.head()
+ACCOUNT_NEW_SALES_FULL_df.columns.tolist()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-#ACCOUNT_NEW_SALES_FULL_df.columns.tolist()
+print(len(df_jj))
+print(len(ACCOUNT_NEW_SALES_FULL_df))
+ACCOUNT_NEW_SALES_FULL_df.columns = ['SALES_MARKETING_PARTNER_NM','SALES_BUSINESS_PROGRAM_NM','SALES_PROGRAM_ID','CUSTOMER_ACCOUNT_ID','SALES_CAMPAIGN_TYPE','SALES_COUPON_CODE','SALES_CHANNEL','SALES_REP','SALES_TRANS_RECORDS','SALES_DATA_SOURCE']
+ACCOUNT_NEW_SALES_FULL_df['HAS_SALES_FLAG'] = True
+df_j_with_sales = pd.merge(df_jj, ACCOUNT_NEW_SALES_FULL_df, on='CUSTOMER_ACCOUNT_ID', how='left')
+print(len(df_j_with_sales))
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-#print(len(df_jj))
-#print(len(ACCOUNT_NEW_SALES_df))
-#ACCOUNT_NEW_SALES_df['HAS_SALES_FLAG'] = True
-#df_j_with_sales = pd.merge(df_jj, ACCOUNT_NEW_SALES_df, on='CUSTOMER_ACCOUNT_ID', how='left')
-#print(len(df_j_with_sales))
-
-#print(len(df_jj))
-#print(len(ACCOUNT_NEW_SALES_FULL_df))
-#ACCOUNT_NEW_SALES_FULL_df.columns = ['SALES_MARKETING_PARTNER_NM','SALES_BUSINESS_PROGRAM_NM','SALES_PROGRAM_ID','CUSTOMER_ACCOUNT_ID','SALES_CAMPAIGN_TYPE','SALES_COUPON_CODE','SALES_CHANNEL','SALES_REP','SALES_TRANS_RECORDS','SALES_DATA_SOURCE','HAS_SALES_FLAG']
-#ACCOUNT_NEW_SALES_FULL_df['HAS_SALES_FLAG'] = True
-#df_j_with_sales = pd.merge(df_jj, ACCOUNT_NEW_SALES_FULL_df, on='CUSTOMER_ACCOUNT_ID', how='left')
-#print(len(df_j_with_sales))
+df_j_with_sales.HAS_SALES_FLAG.value_counts(dropna=False)
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-#df_j_with_sales.HAS_SALES_FLAG.value_counts(dropna=False)
-
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-#ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS_df = df_j_with_sales
+ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS_df = df_j_with_sales
 
 # Write recipe outputs
-#ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS = dataiku.Dataset("ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS")
-#ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS.write_with_schema(ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS_df)
+ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS = dataiku.Dataset("ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS")
+ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS.write_with_schema(ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS_df)
 
-#BY_ACCOUNT = dataiku.Dataset("BY_ACCOUNT")
-#BY_ACCOUNT.write_with_schema(df_by_account)
+BY_ACCOUNT = dataiku.Dataset("BY_ACCOUNT")
+BY_ACCOUNT.write_with_schema(df_by_account)
