@@ -1,0 +1,130 @@
+{
+  "script": {
+    "steps": [],
+    "maxProcessedMemTableBytes": -1,
+    "fullSampleStatistics": {
+      "engineConfig": {
+        "padRunsWithMetrics": false,
+        "hive": {
+          "active": true,
+          "extraConf": []
+        },
+        "basic": {},
+        "dss": {
+          "active": true,
+          "selection": {
+            "useMemTable": false,
+            "filter": {
+              "distinct": false,
+              "enabled": false
+            },
+            "partitionSelectionMethod": "ALL",
+            "latestPartitionsN": 1,
+            "ordering": {
+              "enabled": false,
+              "rules": []
+            },
+            "samplingMethod": "FULL",
+            "maxRecords": -1,
+            "targetRatio": 0.02,
+            "withinFirstN": -1,
+            "maxReadUncompressedBytes": -1
+          }
+        },
+        "sql": {
+          "active": true
+        },
+        "impala": {
+          "active": true
+        },
+        "spark": {
+          "active": true,
+          "extraConf": []
+        },
+        "python": {}
+      },
+      "basic": true,
+      "countDistinct": true,
+      "advanced": true,
+      "percentile": false,
+      "validity": false,
+      "updateOnAnalyzeBoxOpen": false,
+      "computeCostFreeMetrics": false,
+      "numberTopValues": 10
+    },
+    "columnsSelection": {
+      "mode": "ALL"
+    },
+    "columnWidthsByName": {
+      "WEXBUSINESSID": 141,
+      "ACCOUNTPARTYROLE": 135,
+      "EBXMATCHGROUPID": 176,
+      "GROUPSIZE": 100,
+      "DUNS": 100,
+      "NAME": 295,
+      "ACCOUNTNUMBER": 141,
+      "ACCOUNTPLATFORM_": 135,
+      "RPLACCOUNTSETUPDATE": 158
+    },
+    "coloring": {
+      "scheme": "MEANING_AND_STATUS",
+      "individualColumns": [],
+      "valueColoringMode": "HASH"
+    },
+    "sorting": [],
+    "analysisColumnData": {},
+    "explorationSampling": {
+      "selection": {
+        "maxRecordsForDisplay": -1,
+        "maxStoredBytes": 104857600,
+        "timeout": -1,
+        "filter": {
+          "distinct": false,
+          "enabled": false
+        },
+        "partitionSelectionMethod": "ALL",
+        "latestPartitionsN": 1,
+        "ordering": {
+          "enabled": false,
+          "rules": []
+        },
+        "samplingMethod": "HEAD_SEQUENTIAL",
+        "maxRecords": 10000,
+        "targetRatio": 0.02,
+        "withinFirstN": -1,
+        "maxReadUncompressedBytes": -1
+      },
+      "autoRefreshSample": false,
+      "_refreshTrigger": 0
+    },
+    "vizSampling": {
+      "selection": {
+        "useMemTable": false,
+        "filter": {
+          "distinct": false,
+          "enabled": false
+        },
+        "partitionSelectionMethod": "ALL",
+        "latestPartitionsN": 1,
+        "ordering": {
+          "enabled": false,
+          "rules": []
+        },
+        "samplingMethod": "FULL",
+        "maxRecords": -1,
+        "targetRatio": 0.02,
+        "withinFirstN": -1,
+        "maxReadUncompressedBytes": -1
+      },
+      "autoRefreshSample": false,
+      "_refreshTrigger": 0
+    },
+    "exploreUIParams": {
+      "autoRefresh": true
+    },
+    "globalSearchQuery": "",
+    "explorationFilters": [],
+    "previewMode": "ALL_ROWS"
+  },
+  "charts": []
+}
