@@ -28,11 +28,11 @@
     "dimensions": []
   },
   "versionTag": {
-    "versionNumber": 23,
+    "versionNumber": 24,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1668684449624
+    "lastModifiedOn": 1669590855235
   },
   "creationTag": {
     "versionNumber": 0,
@@ -57,7 +57,7 @@
   },
   "schema": {
     "columns": [
-      {"name":"CUSTOMER_ACCOUNT_ID","type":"string","maxLength":4194304},
+      {"name":"CUSTOMER_ACCOUNT_ID","type":"bigint"},
       {"name":"CUSTOMER_ACCOUNT_NAME","type":"string","maxLength":4194304},
       {"name":"EDW_CUSTOMER_NAME","type":"string","maxLength":4194304},
       {"name":"DUNS","type":"bigint"},
@@ -70,13 +70,14 @@
       {"name":"DNB_HQ_NAME","type":"string","maxLength":4194304},
       {"name":"DNB_DUNS_NUMBER","type":"bigint"},
       {"name":"DNB_BUSINESS_NAME","type":"string","maxLength":4194304},
-      {"name":"MDM_WEX_ID","type":"bigint"},
-      {"name":"MDM_WEX_NAME","type":"string","maxLength":4194304},
-      {"name":"DNB_LEVEL","type":"string","maxLength":4194304},
       {"name":"DNB_CUSTOMER_NAME","type":"string","maxLength":4194304},
+      {"name":"DNB_LEVEL","type":"string","maxLength":4194304},
       {"name":"EDW_STATE","type":"string","maxLength":4194304},
       {"name":"CUSTOMER","type":"string","maxLength":4194304},
       {"name":"CUST_CALC_SOURCE","type":"string","maxLength":4194304},
+      {"name":"CUST_CALC_RULE","type":"string","maxLength":4194304},
+      {"name":"WEX_BUSINESS_ID","type":"bigint"},
+      {"name":"WEX_BUSINESS_NAME","type":"string","maxLength":4194304},
       {"name":"CUSTOMER_ID","type":"bigint"},
       {"name":"SALES_MARKETING_PARTNER_NM","type":"string","maxLength":4194304},
       {"name":"SALES_BUSINESS_PROGRAM_NM","type":"string","maxLength":4194304},
