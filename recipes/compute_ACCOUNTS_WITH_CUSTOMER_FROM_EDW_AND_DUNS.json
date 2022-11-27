@@ -30,10 +30,6 @@
           "deps": []
         },
         {
-          "ref": "mdm_final",
-          "deps": []
-        },
-        {
           "ref": "NAFCUSTOMER_RDW_CONVERSIONS",
           "deps": []
         },
@@ -72,11 +68,11 @@
   },
   "labels": [],
   "versionTag": {
-    "versionNumber": 156,
+    "versionNumber": 157,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1669581949368
+    "lastModifiedOn": 1669582099472
   },
   "creationTag": {
     "versionNumber": 0,
