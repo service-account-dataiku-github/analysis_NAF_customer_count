@@ -439,61 +439,62 @@ df_j_with_mdm.dropna(subset=['WEX_BUSINESS_ID'],inplace=True)
 df_j_with_mdm_with_matches = pd.merge(df_j_with_mdm,df_g, left_on='WEX_BUSINESS_ID',right_on='MATCH_WEX_BUSINESS_ID', how='left')
 print(len(df_j_with_mdm_with_matches))
 
-df_j_with_mdm_with_matches.loc[~df_j_with_mdm_with_matches['MATCH_WEX_BUSINESS_ID'].isnull(),'CUSTOMER'] = df_j_with_mdm_with_matches['MATCH_WEX_BUSINESS_ID']
+df_j_with_mdm_with_matches.loc[~df_j_with_mdm_with_matches['MATCH_WEX_BUSINESS_ID'].isnull(),'CUSTOMER'] = df_j_with_mdm_with_matches['MATCH_WEX_BUSINESS_NAME']
 df_j_with_mdm_with_matches.loc[~df_j_with_mdm_with_matches['MATCH_WEX_BUSINESS_ID'].isnull(),'CUST_CALC_SOURCE'] = "MDM"
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+print(len(df_g))
+df_g = df_g[~df_g.MATCH_WEX_BUSINESS_NAME.str.contains('.').isnull()]
+print(len(df_g))
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+print(len(df_j_with_mdm_with_matches), "account rows")
+print(len(df_j_with_mdm_with_matches.CUSTOMER.unique()), "customer rows")
 df_j_with_mdm_with_matches.CUST_CALC_SOURCE.value_counts()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-#df_j = pd.merge(df, ACCOUNTS_WITH_EBX_PARTY_df, on='CUSTOMER_ACCOUNT_ID', how='left')
-#df_j.loc[~df_j["PARTY_DEFAULT_NAME"].isnull(),'CUSTOMER'] = df_j.PARTY_DEFAULT_NAME
-#df_j.loc[~df_j["PARTY_DEFAULT_NAME"].isnull(),'CUST_CALC_SOURCE'] = 'MDM'
-#df_j.CUST_CALC_SOURCE.value_counts()
-
-#del(df_j['PARTY_ID'])
-#del(df_j['PARTY_DEFAULT_NAME'])
+df_v = df_j_with_mdm_with_matches.copy()
+del(df_v['MATCH_WEX_BUSINESS_ID'])
+del(df_v['MATCH_WEX_BUSINESS_NAME'])
+df_v.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-#print(len(df_matches_verified))
-#df_matches_verified.drop_duplicates(subset='CUSTOMER', inplace=True)
-#print(len(df_matches_verified))
+print(len(df_matches_verified))
+df_matches_verified.drop_duplicates(subset='CUSTOMER', inplace=True)
+print(len(df_matches_verified))
 
-#print(len(df_j))
-#df_j_w_verified = pd.merge(df_j, df_matches_verified, left_on='CUSTOMER', right_on='CUSTOMER', how='left')
-#print(len(df_j_w_verified))
+print(len(df_v))
+df_v_w_verified = pd.merge(df_v, df_matches_verified, left_on='CUSTOMER', right_on='CUSTOMER', how='left')
+print(len(df_v_w_verified))
 
-#df_j_w_verified.loc[~df_j_w_verified["CUSTOMER_CLC"].isnull(),'CUSTOMER'] = df_j_w_verified.CUSTOMER_CLC
-#df_j_w_verified.loc[~df_j_w_verified["CUSTOMER_CLC"].isnull(),'CUST_CALC_SOURCE'] = 'CLC'
+df_v_w_verified.loc[~df_v_w_verified["MATCH_CUSTOMER"].isnull(),'CUSTOMER'] = df_v_w_verified.MATCH_CUSTOMER
+df_v_w_verified.loc[~df_v_w_verified["MATCH_CUSTOMER"].isnull(),'CUST_CALC_SOURCE'] = 'CLC'
 
-#df_j = df_j_w_verified
-#del(df_j['CUSTOMER_CLC'])
-
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-#df_j.head()
+print(len(df_v_w_verified))
+del(df_v_w_verified['MATCH_CUSTOMER'])
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-#RDW_CONVERSIONS_df.head()
+print(len(df_v_w_verified), "account rows")
+print(len(df_v_w_verified.CUSTOMER.unique()), "customer rows")
+df_v_w_verified.CUST_CALC_SOURCE.value_counts()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-#df_j.CUST_CALC_SOURCE.value_counts()
+unique_customer_list = df_v_w_verified.CUSTOMER.unique()
+df_customer_ids = pd.DataFrame(unique_customer_list)
+df_customer_ids.columns = ["CUSTOMER"]
+df_customer_ids = df_customer_ids[~df_customer_ids.CUSTOMER.str.contains('.').isnull()]
+df_customer_ids = df_customer_ids.sort_values(['CUSTOMER']).reset_index(drop=True)
+df_customer_ids = df_customer_ids.reset_index(drop=False)
+df_customer_ids['CUSTOMER_ID'] = df_customer_ids.index + 77000000
+del(df_customer_ids['index'])
+df_customer_ids.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-#unique_customer_list = df_j.CUSTOMER.unique()
-#df_customer_ids = pd.DataFrame(unique_customer_list)
-#df_customer_ids.columns = ["CUSTOMER"]
-#df_customer_ids = df_customer_ids.sort_values(['CUSTOMER']).reset_index(drop=True)
-#df_customer_ids = df_customer_ids.reset_index(drop=False)
-#df_customer_ids['CUSTOMER_ID'] = df_customer_ids.index + 77000000
-#del(df_customer_ids['index'])
-#df_customer_ids.head()
-
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-#print(len(df_j))
-#df_jj = pd.merge(df_j, df_customer_ids, on='CUSTOMER')
-#df_jj.dropna(subset=['CUSTOMER'], inplace=True)
-#print(len(df_jj))
-#df_jj.head()
+print(len(df_v_w_verified))
+df_jj = pd.merge(df_v_w_verified, df_customer_ids, on='CUSTOMER')
+df_jj.dropna(subset=['CUSTOMER'], inplace=True)
+print(len(df_jj))
+df_jj.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 #df_by_account = df_jj[['CUSTOMER_ACCOUNT_ID','CUSTOMER_ID', 'CUSTOMER']]
