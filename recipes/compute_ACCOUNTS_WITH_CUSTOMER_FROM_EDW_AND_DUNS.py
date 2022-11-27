@@ -29,12 +29,12 @@ ACCOUNTS_WITH_BUNDLER_AND_DUNS_df = ACCOUNTS_WITH_BUNDLER_AND_DUNS.get_dataframe
 
 # MDM matches, shared by Wes Corbin during the week of Nov 17, 2022
 # key columns: ACCOUNTNUMBER, WEXBUSINESSID, NAME, DUNS
-ACCOUNTS_PARTY_EXTRACT = dataiku.Dataset("Account_Party_extract")
-ACCOUNTS_PARTY_EXTRACT_df = ACCOUNTS_PARTY_EXTRACT.get_dataframe()
-ACCOUNTS_PARTY_EXTRACT_df = ACCOUNTS_PARTY_EXTRACT_df[~ACCOUNTS_PARTY_EXTRACT_df.ACCOUNTNUMBER.str.contains('-', na=False)]
-ACCOUNTS_PARTY_EXTRACT_df['ACCOUNTNUMBER'] = ACCOUNTS_PARTY_EXTRACT_df['ACCOUNTNUMBER'].str.strip()
-ACCOUNTS_PARTY_EXTRACT_df['ACCOUNTNUMBER'] = ACCOUNTS_PARTY_EXTRACT_df['ACCOUNTNUMBER'].astype('float')
-ACCOUNTS_PARTY_EXTRACT_df['ACCOUNTNUMBER'] = ACCOUNTS_PARTY_EXTRACT_df['ACCOUNTNUMBER'].astype('Int64')
+#ACCOUNTS_PARTY_EXTRACT = dataiku.Dataset("Account_Party_extract")
+#ACCOUNTS_PARTY_EXTRACT_df = ACCOUNTS_PARTY_EXTRACT.get_dataframe()
+#ACCOUNTS_PARTY_EXTRACT_df = ACCOUNTS_PARTY_EXTRACT_df[~ACCOUNTS_PARTY_EXTRACT_df.ACCOUNTNUMBER.str.contains('-', na=False)]
+#ACCOUNTS_PARTY_EXTRACT_df['ACCOUNTNUMBER'] = ACCOUNTS_PARTY_EXTRACT_df['ACCOUNTNUMBER'].str.strip()
+#ACCOUNTS_PARTY_EXTRACT_df['ACCOUNTNUMBER'] = ACCOUNTS_PARTY_EXTRACT_df['ACCOUNTNUMBER'].astype('float')
+#ACCOUNTS_PARTY_EXTRACT_df['ACCOUNTNUMBER'] = ACCOUNTS_PARTY_EXTRACT_df['ACCOUNTNUMBER'].astype('Int64')
 
 # Verified matches, identified by matching algorithm
 # matching algorithm combines draw downs and draw ups along with name entity matching
@@ -402,25 +402,25 @@ df_j.CUST_CALC_SOURCE.value_counts()
 # incorporate un matched rows from MDM
 # New MDM matches, shared by Wes Corbin during the week of Nov 17, 2022
 
-print(len(ACCOUNTS_PARTY_EXTRACT_df), 'MDM account rows')
-df_mdm = ACCOUNTS_PARTY_EXTRACT_df[['ACCOUNTNUMBER','WEXBUSINESSID','NAME']].copy()
-df_mdm.columns = ['CUSTOMER_ACCOUNT_ID','WEX_BUSINESS_ID','WEX_BUSINESS_NAME']
-print(len(df_mdm))
-df_mdm.dropna(subset=['CUSTOMER_ACCOUNT_ID'], inplace=True)
-print(len(df_mdm))
+#print(len(ACCOUNTS_PARTY_EXTRACT_df), 'MDM account rows')
+#df_mdm = ACCOUNTS_PARTY_EXTRACT_df[['ACCOUNTNUMBER','WEXBUSINESSID','NAME']].copy()
+#df_mdm.columns = ['CUSTOMER_ACCOUNT_ID','WEX_BUSINESS_ID','WEX_BUSINESS_NAME']
+#print(len(df_mdm))
+#df_mdm.dropna(subset=['CUSTOMER_ACCOUNT_ID'], inplace=True)
+#print(len(df_mdm))
 
-df_mdm['WEX_BUSINESS_NAME'] = df_mdm['WEX_BUSINESS_NAME'].str.upper()
-df_mdm['WEX_BUSINESS_NAME'] = df_mdm['WEX_BUSINESS_NAME'].str.translate(str.maketrans('','', string.punctuation))
+#df_mdm['WEX_BUSINESS_NAME'] = df_mdm['WEX_BUSINESS_NAME'].str.upper()
+#df_mdm['WEX_BUSINESS_NAME'] = df_mdm['WEX_BUSINESS_NAME'].str.translate(str.maketrans('','', string.punctuation))
 
 # filter out known non-customer entities expressed in MDM
-df_mdm = df_mdm[df_mdm.WEX_BUSINESS_NAME!='CARD TYPE 7 PRIMARY']
-df_mdm = df_mdm[df_mdm.WEX_BUSINESS_NAME!='ELEMENT 1']
-df_mdm = df_mdm[df_mdm.WEX_BUSINESS_NAME!='ELEMENT 2']
-print(len(df_mdm), "MDM account rows after filter rules")
+#df_mdm = df_mdm[df_mdm.WEX_BUSINESS_NAME!='CARD TYPE 7 PRIMARY']
+#df_mdm = df_mdm[df_mdm.WEX_BUSINESS_NAME!='ELEMENT 1']
+#df_mdm = df_mdm[df_mdm.WEX_BUSINESS_NAME!='ELEMENT 2']
+#print(len(df_mdm), "MDM account rows after filter rules")
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-df_j_with_mdm = pd.merge(df_j, df_mdm, on='CUSTOMER_ACCOUNT_ID', how='left')
-df_j_with_mdm.head()
+#df_j_with_mdm = pd.merge(df_j, df_mdm, on='CUSTOMER_ACCOUNT_ID', how='left')
+#df_j_with_mdm.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 #df_j = pd.merge(df, ACCOUNTS_WITH_EBX_PARTY_df, on='CUSTOMER_ACCOUNT_ID', how='left')
