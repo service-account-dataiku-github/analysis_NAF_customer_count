@@ -404,7 +404,7 @@ print(len(NAFCUSTOMER_MDM_ACCOUNT_WITH_BUSINESS_ID_df), 'MDM account rows')
 NAFCUSTOMER_MDM_ACCOUNT_WITH_BUSINESS_ID_df.head()
 df_mdm = NAFCUSTOMER_MDM_ACCOUNT_WITH_BUSINESS_ID_df[['ACCOUNTNUMBER','WEXBUSINESSID','NAME']].copy()
 df_mdm.columns = ['CUSTOMER_ACCOUNT_ID','WEX_BUSINESS_ID','WEX_BUSINESS_NAME']
-df_mdm.CUSTOMER_ACCOUNT_ID = df_mdm['CUSTOMER_ACCOUNT_ID'].astype('Int64')
+df_mdm.CUSTOMER_ACCOUNT_ID = df_mdm['CUSTOMER_ACCOUNT_ID'].astype('Int64', errors='ignore')
 df_mdm.WEX_BUSINESS_ID  = df_mdm['WEX_BUSINESS_ID'].astype('Int64')
 print(len(df_mdm))
 
