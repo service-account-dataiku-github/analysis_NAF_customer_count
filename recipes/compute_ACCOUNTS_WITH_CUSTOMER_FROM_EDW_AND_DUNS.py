@@ -27,17 +27,12 @@ import string
 ACCOUNTS_WITH_BUNDLER_AND_DUNS = dataiku.Dataset("ACCOUNTS_WITH_BUNDLER_AND_DUNS")
 ACCOUNTS_WITH_BUNDLER_AND_DUNS_df = ACCOUNTS_WITH_BUNDLER_AND_DUNS.get_dataframe()
 
-NAFCUSTOMER_MDM_ACCOUNT_WITH_BUSINESS_ID = dataiku.Dataset("NAFCUSTOMER_MDM_ACCOUNT_WITH_BUSINESS_ID")
-NAFCUSTOMER_MDM_ACCOUNT_WITH_BUSINESS_ID_df = NAFCUSTOMER_MDM_ACCOUNT_WITH_BUSINESS_ID.get_dataframe()
 
 # MDM matches, shared by Wes Corbin during the week of Nov 17, 2022
 # key columns: ACCOUNTNUMBER, WEXBUSINESSID, NAME, DUNS
-#ACCOUNTS_PARTY_EXTRACT = dataiku.Dataset("Account_Party_extract")
-#ACCOUNTS_PARTY_EXTRACT_df = ACCOUNTS_PARTY_EXTRACT.get_dataframe()
-#ACCOUNTS_PARTY_EXTRACT_df = ACCOUNTS_PARTY_EXTRACT_df[~ACCOUNTS_PARTY_EXTRACT_df.ACCOUNTNUMBER.str.contains('-', na=False)]
-#ACCOUNTS_PARTY_EXTRACT_df['ACCOUNTNUMBER'] = ACCOUNTS_PARTY_EXTRACT_df['ACCOUNTNUMBER'].str.strip()
-#ACCOUNTS_PARTY_EXTRACT_df['ACCOUNTNUMBER'] = ACCOUNTS_PARTY_EXTRACT_df['ACCOUNTNUMBER'].astype('float')
-#ACCOUNTS_PARTY_EXTRACT_df['ACCOUNTNUMBER'] = ACCOUNTS_PARTY_EXTRACT_df['ACCOUNTNUMBER'].astype('Int64')
+NAFCUSTOMER_MDM_ACCOUNT_WITH_BUSINESS_ID = dataiku.Dataset("NAFCUSTOMER_MDM_ACCOUNT_WITH_BUSINESS_ID")
+NAFCUSTOMER_MDM_ACCOUNT_WITH_BUSINESS_ID_df = NAFCUSTOMER_MDM_ACCOUNT_WITH_BUSINESS_ID.get_dataframe()
+
 
 # Verified matches, identified by matching algorithm
 # matching algorithm combines draw downs and draw ups along with name entity matching
@@ -405,25 +400,50 @@ df_j.CUST_CALC_SOURCE.value_counts()
 # incorporate un matched rows from MDM
 # New MDM matches, shared by Wes Corbin during the week of Nov 17, 2022
 
-#print(len(ACCOUNTS_PARTY_EXTRACT_df), 'MDM account rows')
-#df_mdm = ACCOUNTS_PARTY_EXTRACT_df[['ACCOUNTNUMBER','WEXBUSINESSID','NAME']].copy()
-#df_mdm.columns = ['CUSTOMER_ACCOUNT_ID','WEX_BUSINESS_ID','WEX_BUSINESS_NAME']
-#print(len(df_mdm))
-#df_mdm.dropna(subset=['CUSTOMER_ACCOUNT_ID'], inplace=True)
-#print(len(df_mdm))
+print(len(NAFCUSTOMER_MDM_ACCOUNT_WITH_BUSINESS_ID_df), 'MDM account rows')
+NAFCUSTOMER_MDM_ACCOUNT_WITH_BUSINESS_ID_df.head()
+df_mdm = NAFCUSTOMER_MDM_ACCOUNT_WITH_BUSINESS_ID_df[['ACCOUNTNUMBER','WEXBUSINESSID','NAME']].copy()
+df_mdm.columns = ['CUSTOMER_ACCOUNT_ID','WEX_BUSINESS_ID','WEX_BUSINESS_NAME']
+df_mdm.CUSTOMER_ACCOUNT_ID = df_mdm['CUSTOMER_ACCOUNT_ID'].astype('Int64')
+df_mdm.WEX_BUSINESS_ID  = df_mdm['WEX_BUSINESS_ID'].astype('Int64')
+print(len(df_mdm))
 
-#df_mdm['WEX_BUSINESS_NAME'] = df_mdm['WEX_BUSINESS_NAME'].str.upper()
-#df_mdm['WEX_BUSINESS_NAME'] = df_mdm['WEX_BUSINESS_NAME'].str.translate(str.maketrans('','', string.punctuation))
+df_mdm.dropna(subset=['CUSTOMER_ACCOUNT_ID'], inplace=True)
+print(len(df_mdm))
+
+df_mdm['WEX_BUSINESS_NAME'] = df_mdm['WEX_BUSINESS_NAME'].str.upper()
+df_mdm['WEX_BUSINESS_NAME'] = df_mdm['WEX_BUSINESS_NAME'].str.translate(str.maketrans('','', string.punctuation))
 
 # filter out known non-customer entities expressed in MDM
-#df_mdm = df_mdm[df_mdm.WEX_BUSINESS_NAME!='CARD TYPE 7 PRIMARY']
-#df_mdm = df_mdm[df_mdm.WEX_BUSINESS_NAME!='ELEMENT 1']
-#df_mdm = df_mdm[df_mdm.WEX_BUSINESS_NAME!='ELEMENT 2']
-#print(len(df_mdm), "MDM account rows after filter rules")
+df_mdm = df_mdm[df_mdm.WEX_BUSINESS_NAME!='CARD TYPE 7 PRIMARY']
+df_mdm = df_mdm[df_mdm.WEX_BUSINESS_NAME!='ELEMENT 1']
+df_mdm = df_mdm[df_mdm.WEX_BUSINESS_NAME!='ELEMENT 2']
+print(len(df_mdm), "MDM account rows after filter rules")
+
+print(len(df_j))
+df_j_with_mdm = pd.merge(df_j, df_mdm, on='CUSTOMER_ACCOUNT_ID', how='left')
+df_j_with_mdm.drop_duplicates(subset=['CUSTOMER_ACCOUNT_ID'],inplace=True)
+print(len(df_j_with_mdm))
+df_j_with_mdm.head()
+
+df_g = df_j_with_mdm.groupby(['WEX_BUSINESS_ID','WEX_BUSINESS_NAME']).CUSTOMER.nunique().reset_index()
+print(len(df_g))
+df_g = df_g[df_g.CUSTOMER>1]
+print(len(df_g), "unhandled MDM WEX Businesses")
+df_g = df_g[['WEX_BUSINESS_ID','WEX_BUSINESS_NAME']]
+df_g.columns = ['MATCH_WEX_BUSINESS_ID','MATCH_WEX_BUSINESS_NAME']
+df_g.head()
+
+print(len(df_j_with_mdm))
+df_j_with_mdm.dropna(subset=['WEX_BUSINESS_ID'],inplace=True)
+df_j_with_mdm_with_matches = pd.merge(df_j_with_mdm,df_g, left_on='WEX_BUSINESS_ID',right_on='MATCH_WEX_BUSINESS_ID', how='left')
+print(len(df_j_with_mdm_with_matches))
+
+df_j_with_mdm_with_matches.loc[~df_j_with_mdm_with_matches['MATCH_WEX_BUSINESS_ID'].isnull(),'CUSTOMER'] = df_j_with_mdm_with_matches['MATCH_WEX_BUSINESS_ID']
+df_j_with_mdm_with_matches.loc[~df_j_with_mdm_with_matches['MATCH_WEX_BUSINESS_ID'].isnull(),'CUST_CALC_SOURCE'] = "MDM"
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-#df_j_with_mdm = pd.merge(df_j, df_mdm, on='CUSTOMER_ACCOUNT_ID', how='left')
-#df_j_with_mdm.head()
+df_j_with_mdm_with_matches.CUST_CALC_SOURCE.value_counts()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 #df_j = pd.merge(df, ACCOUNTS_WITH_EBX_PARTY_df, on='CUSTOMER_ACCOUNT_ID', how='left')
