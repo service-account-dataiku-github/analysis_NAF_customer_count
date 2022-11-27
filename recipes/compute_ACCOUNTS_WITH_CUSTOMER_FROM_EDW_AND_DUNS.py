@@ -10,7 +10,7 @@ import string
 # sources: EDW, Ebx, RDW Conversions, Drawdown/Drawups + entity matching
 #
 # Oct-Dec 2022
-# Daniel VanderMeer, 
+# Daniel VanderMeer,
 # email: daniel.vandermeer@wexinc.com
 #==============
 
@@ -20,7 +20,7 @@ import string
 # Data Set: Accounts with Bundler and Duns
 # columns: CUSTOMER_ACCOUNT_ID, CUSTOMER_ACCOUNT_NAME, EDW_CUSTOMER_NAME, DUNS, IS_BUNDLER
 # Note Account bundlers are ~275 known instances where EDW customer names do not describe customer entities
-# in most cases these are either partner or program names 
+# in most cases these are either partner or program names
 # examples: CIRCLE K STORES PRIMARY, WEX FLEET UNIVERSAL PRIMARY
 # the IS_BUNDLER columns allows the algorithm to ignore these cases
 
@@ -52,24 +52,11 @@ RDW_CONVERSIONS_df = RDW_CONVERSIONS.get_dataframe()
 # this dataset comes from Alan Hougham which originates in SAP
 # We don't use this dataset in the logic Customer Hierarchy
 # It is joined to the detailed dataset (ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS_df)
-# and then we use it as a reconciliation step: 
+# and then we use it as a reconciliation step:
 # All new customer accounts in 2019-2022 SHOULD be in this dataset
-# new accounts not in this dataset are likely existing accounts that have been converted to a new account 
+# new accounts not in this dataset are likely existing accounts that have been converted to a new account
 ACCOUNT_NEW_SALES_FULL = dataiku.Dataset("ACCOUNT_NEW_SALES_FULL")
 ACCOUNT_NEW_SALES_FULL_df = ACCOUNT_NEW_SALES_FULL.get_dataframe()
-
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-ACCOUNTS_PARTY_EXTRACT_df.dtypes
-
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-ACCOUNTS_PARTY_EXTRACT = dataiku.Dataset("Account_Party_extract")
-ACCOUNTS_PARTY_EXTRACT_df = ACCOUNTS_PARTY_EXTRACT.get_dataframe()
-#ACCOUNTS_PARTY_EXTRACT_df = ACCOUNTS_PARTY_EXTRACT_df[~ACCOUNTS_PARTY_EXTRACT_df.ACCOUNTNUMBER.str.contains('-', na=False)]
-#ACCOUNTS_PARTY_EXTRACT_df['ACCOUNTNUMBER'] = ACCOUNTS_PARTY_EXTRACT_df['ACCOUNTNUMBER'].str.strip()
-#ACCOUNTS_PARTY_EXTRACT_df['ACCOUNTNUMBER'] = ACCOUNTS_PARTY_EXTRACT_df['ACCOUNTNUMBER'].astype('float')
-#ACCOUNTS_PARTY_EXTRACT_df['ACCOUNTNUMBER'] = ACCOUNTS_PARTY_EXTRACT_df['ACCOUNTNUMBER'].astype('Int64')
-
-ACCOUNTS_PARTY_EXTRACT_df.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 # Matches Verified come from an earlier step in the DataIku Flow
@@ -90,7 +77,7 @@ print(len(df))
 #=====================
 # Source: DNB
 # DNB levels available (high to low): DNB_GLOBAL_ULT_NAME, DNB_DOMESTIC_ULTIMATE_NAME, DNB_HQ_NAME, DNB_BUSINESS_NAME
-# DNB CUSTOMER is the highest available DUNS level customer 
+# DNB CUSTOMER is the highest available DUNS level customer
 # DNB LEVEL keeps track of the DUNS level used
 # default DNB CUSTOMER and DNB LEVEL to Null and None
 
@@ -160,7 +147,7 @@ for s in ending_tokens:
     df.loc[df['CUSTOMER_ACCOUNT_NAME'].str.endswith(s, na=False),"CUSTOMER_ACCOUNT_NAME"] = df['CUSTOMER_ACCOUNT_NAME'].str[:index_offset]
 
 #=======================
-    
+
 # SET PRIORITIES OF SOURCES
 # Priority 1: EDW Customer
 # Priority 2: DNB Customer
@@ -187,7 +174,7 @@ df.loc[df["CUSTOMER"].isnull(),'CUST_CALC_SOURCE'] = 'ACCOUNT'
 df.loc[df["CUSTOMER"].isnull(),'CUSTOMER'] = df["CUSTOMER_ACCOUNT_NAME"]
 
 # reset the original EDW and Account Names
-# this is done for QA purposes 
+# this is done for QA purposes
 # retaining the ability to see what the EDW Customer name as well as the account name look like in EDW
 df['EDW_CUSTOMER_NAME'] = df['EDW_CUSTOMER_NAME_ORIGINAL']
 df['CUSTOMER_ACCOUNT_NAME'] = df['CUSTOMER_ACCOUNT_NAME_ORIGINAL']
@@ -212,7 +199,7 @@ df.CUST_CALC_SOURCE.value_counts()
 def apply_rule_with_list(df, filter_name_list,final_name):
 
     # rule: all customer names with customer names in filter_name_list are replaced with final_name
-    
+
     df.loc[df['CUSTOMER'].isin(filter_name_list),"CUST_CALC_SOURCE"] = "CUSTOM RULE"
     df.loc[df['CUSTOMER'].isin(filter_name_list),"CUSTOMER"] = final_name
 
@@ -222,7 +209,7 @@ def apply_rule_starts_with(df, compares_to, starts_with_string,final_name):
 
     # rule: all customer names with rows that have compares_to field value that starts with starts_with_string are replaced with final_name
     # compares_to field uses below include 'CUSTOMER' or 'DNB_CUSTOMER_NAME'
-    
+
     df.loc[df[compares_to].str.startswith(starts_with_string, na=False),"CUST_CALC_SOURCE"] = "CUSTOM RULE"
     df.loc[df[compares_to].str.startswith(starts_with_string, na=False),"CUSTOMER"] = final_name
 
@@ -230,9 +217,9 @@ def apply_rule_starts_with(df, compares_to, starts_with_string,final_name):
 
 def apply_rule_contains(df, compares_to, contains_string,final_name):
 
-    # rule: all rows with compares_to field value that contains contains_string are replaced with 
+    # rule: all rows with compares_to field value that contains contains_string are replaced with
     # this rule is not currently used below, these instances have been replaced with 'starts with rules'
-    
+
     df.loc[df[compares_to].str.contains(contains_string, na=False),"CUST_CALC_SOURCE"] = "CUSTOM RULE"
     df.loc[df[compares_to].str.contains(contains_string, na=False),"CUSTOMER"] = final_name
 
@@ -374,13 +361,13 @@ df_cust_classic = df[['CUSTOMER_ACCOUNT_ID','CUSTOMER']].copy()
 df_cust_classic.columns = ['CUSTOMER_ACCOUNT_ID', 'CLASSIC_CUSTOMER']
 df_cust_classic.CUSTOMER_ACCOUNT_ID = df_cust['CUSTOMER_ACCOUNT_ID'].astype('Int64')
 
-# join this structure to the RDW conversion dataset 
+# join this structure to the RDW conversion dataset
 # so that we now have both the new acount id, the old account id
 # as well as the new CUSTOMER Name and the old CUSTOMER NAME
 df_rj = df_rj[['FLEET_ID','CLASSIC_ACCOUNT_NUMBER','CUSTOMER']]
 df_rj = pd.merge(df_rj, df_cust_classic, left_on='CLASSIC_ACCOUNT_NUMBER', right_on='CUSTOMER_ACCOUNT_ID', how='inner')
 
-# we are interested in those conversion cases 
+# we are interested in those conversion cases
 # where we see a different before customer name compared to the after customer name
 df_rdw_conversions = df_rj[df_rj.CUSTOMER!=df_rj.CLASSIC_CUSTOMER]
 print(len(df_rdw_conversions), "unhandled conversions from RDW")
@@ -412,16 +399,15 @@ print(len(df_j.CUSTOMER.unique()), "customer rows")
 df_j.CUST_CALC_SOURCE.value_counts()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-ACCOUNTS_PARTY_EXTRACT_df[ACCOUNTS_PARTY_EXTRACT_df.ACCOUNTNUMBER==410005905690].head()
-
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 # incorporate un matched rows from MDM
 # New MDM matches, shared by Wes Corbin during the week of Nov 17, 2022
 
 print(len(ACCOUNTS_PARTY_EXTRACT_df), 'MDM account rows')
 df_mdm = ACCOUNTS_PARTY_EXTRACT_df[['ACCOUNTNUMBER','WEXBUSINESSID','NAME']].copy()
 df_mdm.columns = ['CUSTOMER_ACCOUNT_ID','WEX_BUSINESS_ID','WEX_BUSINESS_NAME']
+print(len(df_mdm))
 df_mdm.dropna(subset=['CUSTOMER_ACCOUNT_ID'], inplace=True)
+print(len(df_mdm))
 
 df_mdm['WEX_BUSINESS_NAME'] = df_mdm['WEX_BUSINESS_NAME'].str.upper()
 df_mdm['WEX_BUSINESS_NAME'] = df_mdm['WEX_BUSINESS_NAME'].str.translate(str.maketrans('','', string.punctuation))
