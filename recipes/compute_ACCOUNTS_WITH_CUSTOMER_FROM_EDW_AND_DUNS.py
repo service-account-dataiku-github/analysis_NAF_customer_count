@@ -396,6 +396,7 @@ df_j.CUST_CALC_SOURCE.value_counts()
 # New MDM matches, shared by Wes Corbin during the week of Nov 17, 2022
 # todo: once MDM to snowflake pipeline is available, update this flow to use it in place of the extract
 
+# rename columns and cast IDs as Int64
 print(len(NAFCUSTOMER_MDM_ACCOUNT_WITH_BUSINESS_ID_df), 'MDM account rows')
 NAFCUSTOMER_MDM_ACCOUNT_WITH_BUSINESS_ID_df.head()
 df_mdm = NAFCUSTOMER_MDM_ACCOUNT_WITH_BUSINESS_ID_df[['ACCOUNTNUMBER','WEXBUSINESSID','NAME']].copy()
@@ -404,6 +405,7 @@ df_mdm.CUSTOMER_ACCOUNT_ID = df_mdm['CUSTOMER_ACCOUNT_ID'].astype('Int64', error
 df_mdm.WEX_BUSINESS_ID  = df_mdm['WEX_BUSINESS_ID'].astype('Int64')
 print(len(df_mdm))
 
+# drop nulls
 df_mdm.dropna(subset=['CUSTOMER_ACCOUNT_ID'], inplace=True)
 print(len(df_mdm))
 
@@ -416,12 +418,15 @@ df_mdm = df_mdm[df_mdm.WEX_BUSINESS_NAME!='ELEMENT 1']
 df_mdm = df_mdm[df_mdm.WEX_BUSINESS_NAME!='ELEMENT 2']
 print(len(df_mdm), "MDM account rows after filter rules")
 
+# join with customer hierarchy and drop duplicates
 print(len(df_j))
 df_j_with_mdm = pd.merge(df_j, df_mdm, on='CUSTOMER_ACCOUNT_ID', how='left')
 df_j_with_mdm.drop_duplicates(subset=['CUSTOMER_ACCOUNT_ID'],inplace=True)
 print(len(df_j_with_mdm))
 df_j_with_mdm.head()
 
+# group by WEX Business Id and WEX Business Name, counting unique customers
+# Those WEX Business Ids with a customer count > 1 is retained
 df_g = df_j_with_mdm.groupby(['WEX_BUSINESS_ID','WEX_BUSINESS_NAME']).CUSTOMER.nunique().reset_index()
 print(len(df_g))
 df_g = df_g[df_g.CUSTOMER>1]
@@ -430,11 +435,13 @@ df_g = df_g[['WEX_BUSINESS_ID','WEX_BUSINESS_NAME']]
 df_g.columns = ['MATCH_WEX_BUSINESS_ID','MATCH_WEX_BUSINESS_NAME']
 df_g.head()
 
+# drop null WEX Business IDs, join back to customer hierarchy on WEX_BUSINESS_ID in order to get WEX_BUSINESS_NAME on the dataset
 print(len(df_j_with_mdm))
 df_j_with_mdm.dropna(subset=['WEX_BUSINESS_ID'],inplace=True)
 df_j_with_mdm_with_matches = pd.merge(df_j_with_mdm,df_g, left_on='WEX_BUSINESS_ID',right_on='MATCH_WEX_BUSINESS_ID', how='left')
 print(len(df_j_with_mdm_with_matches))
 
+# where-ever we have a MATCH_WEX_BUSINESS_NAME we want to replace the CUSTOMER names with the MATCH
 df_j_with_mdm_with_matches.loc[~df_j_with_mdm_with_matches['MATCH_WEX_BUSINESS_NAME'].isnull(),'CUSTOMER'] = df_j_with_mdm_with_matches['MATCH_WEX_BUSINESS_NAME']
 df_j_with_mdm_with_matches.loc[~df_j_with_mdm_with_matches['MATCH_WEX_BUSINESS_NAME'].isnull(),'CUST_CALC_SOURCE'] = "MDM"
 
