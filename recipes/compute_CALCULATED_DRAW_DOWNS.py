@@ -156,22 +156,22 @@ t0 = time.time()
 total_pages = len(customer_list_full)/page_size
 
 while idx<len(customer_list_full):
-    
+
     current_page+=1
     print("page", current_page)
-        
+
     to_range = idx+page_size
     if to_range>len(customer_list_full):
         to_range = len(customer_list_full)-1
-    
+
     current_set = customer_list_full[idx:to_range]
 
     #==============================================
-    
+
     df_v = NAFCUSTOMER_ACTIVE_CARDS_FULL_df[NAFCUSTOMER_ACTIVE_CARDS_FULL_df.CUSTOMER.isin(current_set)]
     print("processing", len(df_v.CUSTOMER.unique()), "customers")
     print(len(df_v), "data frame records")
-    
+
     df_v['REVENUE_DATE'] = df_v.REVENUE_MONTH.astype(str) + "/01/" + df_v.REVENUE_YEAR.astype(str)
     df_v['REVENUE_DATE'] = date_tz_naive(df_v['REVENUE_DATE'])
 
@@ -207,7 +207,7 @@ while idx<len(customer_list_full):
         df = df[df['REVENUE_DATE'] >= period_start_date].copy()
 
     all_customer_names = list(df['CUSTOMER'].unique())
-    
+
     dd_find = df[df['CUSTOMER'].isin(all_customer_names)].copy()
 
     consistent_customers_dd = find_consistent_cust(dd_find, consecutive=consistency)
@@ -271,31 +271,31 @@ while idx<len(customer_list_full):
     drop_month_df = pd.merge(drop_month_df, df_max, on='CUSTOMER', how='left')
     drop_month_df = drop_month_df[['CUSTOMER','DROP_DATE','ACTIVE_CARD_MAX']]
     drop_month_df.columns = ['CUSTOMER','DRAW_DOWN_DATE','ACTIVE_CARD_MAX']
-    
+
     print(len(drop_month_df), "new drop records")
     drop_df = pd.concat([drop_df, drop_month_df], ignore_index=True)
-    
+
     print(len(drop_df), "total drop records")
     print("saving to snowflake...")
     CALCULATED_DRAW_DOWNS_df = drop_df
     CALCULATED_DRAW_DOWNS = dataiku.Dataset("CALCULATED_DRAW_DOWNS")
     CALCULATED_DRAW_DOWNS.write_with_schema(CALCULATED_DRAW_DOWNS_df)
-    
+
     pages_remaining = total_pages-current_page
-    
+
     t1 = time.time()
     avg_duration = (((t1-t0)/current_page)/60.0)
     print(round(avg_duration,2), "avg mins per iteration")
     print(round(pages_remaining,2), "pages remaining")
     print(round(avg_duration*pages_remaining,2), "estimated minutes remaining")
     print()
-    
+
     #=====================================
-    
+
     idx+=page_size
-    
+
     if max_pages>0:
         if current_page>=max_pages:
             break;
-            
+
 print("done")
