@@ -1,6 +1,6 @@
 {
   "start_date": "2019-01-01",
-  "end_date": "2022-10-01",
+  "end_date": "2022-11-01",
   "run_type": "base_run",
   "consistency": 4,
   "drawdown_period_average": 12,
