@@ -30,9 +30,9 @@ ACCOUNTS_WITH_BUNDLER_AND_DUNS_df = ACCOUNTS_WITH_BUNDLER_AND_DUNS.get_dataframe
 
 # MDM matches, shared by Wes Corbin during the week of Nov 17, 2022
 # key columns: ACCOUNTNUMBER, WEXBUSINESSID, NAME, DUNS
+# todo: once MDM to snowflake pipeline is available, update this flow to use it in place of the extract
 NAFCUSTOMER_MDM_ACCOUNT_WITH_BUSINESS_ID = dataiku.Dataset("NAFCUSTOMER_MDM_ACCOUNT_WITH_BUSINESS_ID")
 NAFCUSTOMER_MDM_ACCOUNT_WITH_BUSINESS_ID_df = NAFCUSTOMER_MDM_ACCOUNT_WITH_BUSINESS_ID.get_dataframe()
-
 
 # Verified matches, identified by matching algorithm
 # matching algorithm combines draw downs and draw ups along with name entity matching
@@ -47,11 +47,11 @@ RDW_CONVERSIONS = dataiku.Dataset("NAFCUSTOMER_RDW_CONVERSIONS")
 RDW_CONVERSIONS_df = RDW_CONVERSIONS.get_dataframe()
 
 # dataset that contains all New Sales 2019-2022 Current
-# this dataset comes from Alan Hougham which originates in SAP
-# We don't use this dataset in the logic Customer Hierarchy
-# It is joined to the detailed dataset (ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS_df)
-# and then we use it as a reconciliation step:
-# All new customer accounts in 2019-2022 SHOULD be in this dataset
+# this dataset comes from Alan Hougham which originates in SAP for purposes of Commissions Analytics
+# We don't use this dataset in the logic of the Customer Hierarchy
+# We add fields from it to our the detailed dataset (ACCOUNTS_WITH_CUSTOMER_FROM_EDW_AND_DUNS_df)
+# for the purposes of reconciliation:
+# All NEW customer accounts in 2019-2022 SHOULD be in this dataset
 # new accounts not in this dataset are likely existing accounts that have been converted to a new account
 ACCOUNT_NEW_SALES_FULL = dataiku.Dataset("ACCOUNT_NEW_SALES_FULL")
 ACCOUNT_NEW_SALES_FULL_df = ACCOUNT_NEW_SALES_FULL.get_dataframe()
@@ -63,7 +63,7 @@ ACCOUNT_NEW_SALES_FULL_df = ACCOUNT_NEW_SALES_FULL.get_dataframe()
 df_matches_verified = MATCHES_VERIFIED_df
 df_matches_verified["CUSTOMER"] = df_matches_verified['CUSTOMER'].str.translate(str.maketrans('', '', string.punctuation))
 df_matches_verified["MATCH_CUSTOMER"] = df_matches_verified['MATCH_CUSTOMER'].str.translate(str.maketrans('', '', string.punctuation))
-df_matches_verified.head()
+print(len(df_matches_verified))
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 import warnings
@@ -128,11 +128,12 @@ df.loc[~df["EDW_CUSTOMER_NAME"].isnull(),'EDW_STATE'] = "Set"
 df['EDW_CUSTOMER_NAME_ORIGINAL'] = df['EDW_CUSTOMER_NAME']
 df['CUSTOMER_ACCOUNT_NAME_ORIGINAL'] = df['CUSTOMER_ACCOUNT_NAME']
 
-# remove tokens used to differentiate between customer names across conversions
-df['EDW_CUSTOMER_NAME'].str.strip()
 ending_tokens = [' 2', ' 3', ' 4', ' 04', ' 5', ' 6', ' 7', ' 8', ' 9',' (2)',
                  ' (3)',' (04)',' (4)', ' (5)', ' (6)', ' (7)', ' (8)',
                  ' (9)',' (25)','  (32)', ' AD', ' LD']
+
+# remove tokens used to differentiate between customer names across conversions
+df['EDW_CUSTOMER_NAME'].str.strip()
 
 for s in ending_tokens:
     index_offset = -1*(len(s))
@@ -149,8 +150,7 @@ for s in ending_tokens:
 # SET PRIORITIES OF SOURCES
 # Priority 1: EDW Customer
 # Priority 2: DNB Customer
-# Priority 3: MDM Customer
-# Priority 4: ACCOUNT Name
+# Priority 3: ACCOUNT Name
 
 df['CUSTOMER'] = np.nan
 df['CUST_CALC_SOURCE'] = 'Unknown'
@@ -162,10 +162,6 @@ df.loc[~df["EDW_CUSTOMER_NAME"].isnull(),'CUST_CALC_SOURCE'] = "EDW"
 # Otherwise, if we have an DnB Customer Name use it and set the Cust Calc Source to DNB
 df.loc[(df["CUSTOMER"].isnull())&(~df["DNB_CUSTOMER_NAME"].isnull()),'CUST_CALC_SOURCE'] = "DNB"
 df.loc[df["CUSTOMER"].isnull(),'CUSTOMER'] = df["DNB_CUSTOMER_NAME"]
-
-# Move the MDM this section to the following section in order to combine MDM matches into the new customer structure
-#df.loc[df['CUSTOMER'].isnull(), 'CUST_CALC_SOURCE'] = 'MDM'
-#df.loc[df['CUSTOMER'].isnull(), 'CUSTOMER'] = df['MDM_WEX_NAME']
 
 # Otherwise, use the Account Name
 df.loc[df["CUSTOMER"].isnull(),'CUST_CALC_SOURCE'] = 'ACCOUNT'
@@ -188,15 +184,13 @@ df.CUST_CALC_SOURCE.value_counts()
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 #=======================
 # Apply Custom Rules
-# These Rules are modelled after the rules present in the legacy customer relationship report
-# these rules only affect about 4,000 accounts nut they act very large customers
-# in terms of cards/gallons/spend/revenue
-# and in turn have been manually verified
+# These Rules are modelled after the legacy customer relationship report
+# these rules only affect about 4,000 accounts primarily very large customers (in terms of cards/gallons/spend/revenue)
 
 # RULE SETs
 def apply_rule_with_list(df, filter_name_list,final_name):
 
-    # rule: all customer names with customer names in filter_name_list are replaced with final_name
+    # rule: all customers with names present in filter_name_list are replaced with final_name
 
     df.loc[df['CUSTOMER'].isin(filter_name_list),"CUST_CALC_SOURCE"] = "CUSTOM RULE"
     df.loc[df['CUSTOMER'].isin(filter_name_list),"CUSTOMER"] = final_name
@@ -205,8 +199,9 @@ def apply_rule_with_list(df, filter_name_list,final_name):
 
 def apply_rule_starts_with(df, compares_to, starts_with_string,final_name):
 
-    # rule: all customer names with rows that have compares_to field value that starts with starts_with_string are replaced with final_name
-    # compares_to field uses below include 'CUSTOMER' or 'DNB_CUSTOMER_NAME'
+    # rule: all customers with rows that have compares_to field value that starts with starts_with_string 
+    # are replaced with final_name
+    # compares_to field uses include 'CUSTOMER' or 'DNB_CUSTOMER_NAME', but can be extended to other fields as well
 
     df.loc[df[compares_to].str.startswith(starts_with_string, na=False),"CUST_CALC_SOURCE"] = "CUSTOM RULE"
     df.loc[df[compares_to].str.startswith(starts_with_string, na=False),"CUSTOMER"] = final_name
@@ -216,7 +211,7 @@ def apply_rule_starts_with(df, compares_to, starts_with_string,final_name):
 def apply_rule_contains(df, compares_to, contains_string,final_name):
 
     # rule: all rows with compares_to field value that contains contains_string are replaced with
-    # this rule is not currently used below, these instances have been replaced with 'starts with rules'
+    # this rule is currently no longer used below, but left here for potential future use
 
     df.loc[df[compares_to].str.contains(contains_string, na=False),"CUST_CALC_SOURCE"] = "CUSTOM RULE"
     df.loc[df[compares_to].str.contains(contains_string, na=False),"CUSTOMER"] = final_name
@@ -399,6 +394,7 @@ df_j.CUST_CALC_SOURCE.value_counts()
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 # incorporate un matched rows from MDM
 # New MDM matches, shared by Wes Corbin during the week of Nov 17, 2022
+# todo: once MDM to snowflake pipeline is available, update this flow to use it in place of the extract
 
 print(len(NAFCUSTOMER_MDM_ACCOUNT_WITH_BUSINESS_ID_df), 'MDM account rows')
 NAFCUSTOMER_MDM_ACCOUNT_WITH_BUSINESS_ID_df.head()
