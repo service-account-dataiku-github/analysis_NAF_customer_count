@@ -52,6 +52,13 @@ print("end_date", end_date)
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 # Read recipe inputs
+
+ACCOUNT_NEW_SALES_FULL = dataiku.Dataset("ACCOUNT_NEW_SALES_FULL")
+ACCOUNT_NEW_SALES_FULL_df = ACCOUNT_NEW_SALES_FULL.get_dataframe()
+print(len(ACCOUNT_NEW_SALES_FULL_df))
+ACCOUNT_NEW_SALES_FULL_df.head()
+
+
 NAFCUSTOMER_ACTIVE_CARDS_FULL = dataiku.Dataset("NAFCUSTOMER_ACTIVE_CARDS_FULL")
 NAFCUSTOMER_ACTIVE_CARDS_FULL_df = NAFCUSTOMER_ACTIVE_CARDS_FULL.get_dataframe()
 print(len(NAFCUSTOMER_ACTIVE_CARDS_FULL_df))
