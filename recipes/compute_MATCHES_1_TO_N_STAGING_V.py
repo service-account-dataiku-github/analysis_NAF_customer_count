@@ -23,7 +23,6 @@ def date_tz_naive(pd_s):
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 # consider customers with the card threshold or more
 # set this too low and the running time will balloon
-# recommend: 10 or higher
 
 card_cut_off_threshold = 2
 
@@ -217,7 +216,7 @@ idx=0
 for c in _customers:
 
     idx+=1
-    
+
     date_start = pd.to_datetime(c.DRAW_DOWN_DATE) +timedelta(days=-120)
     date_end = pd.to_datetime(c.DRAW_DOWN_DATE) +timedelta(days=120)
 
@@ -229,13 +228,13 @@ for c in _customers:
                    (df_up_full.ACTIVE_CARD_MAX<=card_end)&
                     (df_up_full.DRAW_UP_DATE >= pd.to_datetime(date_start))&
                   (df_up_full.DRAW_UP_DATE <= pd.to_datetime(date_end))].copy()
-    
+
     df_up['distance'] = 0.0
     df_up.distance = df_up.apply(lambda x: Levenshtein.ratio(x['CUSTOMER'],c.CUSTOMER),axis=1)
     df_up.dropna(subset=['distance'], inplace=True)
-    
+
     df_up = df_up[df_up.distance>0.8]
-    
+
     for index_up, row_up in df_up.iterrows():
 
         customer = row_up['CUSTOMER']
