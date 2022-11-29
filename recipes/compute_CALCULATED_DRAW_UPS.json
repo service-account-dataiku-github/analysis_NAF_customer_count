@@ -25,6 +25,10 @@
         {
           "ref": "NAFCUSTOMER_ACTIVE_CARDS_FULL",
           "deps": []
+        },
+        {
+          "ref": "ACCOUNT_NEW_SALES_FULL",
+          "deps": []
         }
       ]
     }
@@ -41,11 +45,11 @@
   },
   "labels": [],
   "versionTag": {
-    "versionNumber": 15,
+    "versionNumber": 16,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1669679651672
+    "lastModifiedOn": 1669747483402
   },
   "creationTag": {
     "versionNumber": 0,
