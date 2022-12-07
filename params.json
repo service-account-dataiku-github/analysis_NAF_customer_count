@@ -10,7 +10,24 @@
   "projectAppType": "REGULAR",
   "owner": "Daniel.Vandermeer",
   "permissionsVersion": "V2",
-  "permissions": [],
+  "permissions": [
+    {
+      "user": "Ivy.Mead",
+      "admin": false,
+      "readProjectContent": false,
+      "writeProjectContent": true,
+      "exportDatasetsData": true,
+      "readDashboards": false,
+      "writeDashboards": false,
+      "moderateDashboards": false,
+      "shareToWorkspaces": true,
+      "runScenarios": false,
+      "manageDashboardAuthorizations": false,
+      "manageExposedElements": false,
+      "manageAdditionalDashboardUsers": false,
+      "executeApp": false
+    }
+  ],
   "additionalDashboardUsers": {
     "users": []
   },
@@ -184,11 +201,11 @@
     }
   },
   "versionTag": {
-    "versionNumber": 1,
+    "versionNumber": 2,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1664881911707
+    "lastModifiedOn": 1670435098123
   },
   "creationTag": {
     "versionNumber": 0,
