@@ -28,6 +28,14 @@
         {
           "ref": "Managed_Sold_20190101_20220920",
           "deps": []
+        },
+        {
+          "ref": "Managed_Sold_20190101_20230130",
+          "deps": []
+        },
+        {
+          "ref": "WEX_and_Non_Managed_Sold_20190101_20230130",
+          "deps": []
         }
       ]
     }
@@ -44,11 +52,11 @@
   },
   "labels": [],
   "versionTag": {
-    "versionNumber": 4,
+    "versionNumber": 5,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1668683560965
+    "lastModifiedOn": 1675195258368
   },
   "creationTag": {
     "versionNumber": 0,
