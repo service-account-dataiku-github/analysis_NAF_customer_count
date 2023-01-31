@@ -5,20 +5,20 @@ import pandas as pd, numpy as np
 from dataiku import pandasutils as pdu
 
 # Read recipe inputs
-WEX_and_Non_Managed_Sold_20190101_20220920 = dataiku.Dataset("WEX_and_Non_Managed_Sold_20190101_20220920")
-WEX_and_Non_Managed_Sold_20190101_20220920_df = WEX_and_Non_Managed_Sold_20190101_20220920.get_dataframe()
+WEX_and_Non_Managed_Sold_20190101_20230130 = dataiku.Dataset("WEX_and_Non_Managed_Sold_20190101_20230130")
+WEX_and_Non_Managed_Sold_20190101_20230130_df = WEX_and_Non_Managed_Sold_20190101_20230130.get_dataframe()
 
-Managed_Sold_20190101_20220920 = dataiku.Dataset("Managed_Sold_20190101_20220920")
-Managed_Sold_20190101_20220920_df = Managed_Sold_20190101_20220920.get_dataframe()
-
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-WEX_and_Non_Managed_Sold_20190101_20220920_df['DATA_SOURCE'] = 'WEX_and_Non_Managed_Sold'
-Managed_Sold_20190101_20220920_df['DATA_SOURCE'] = 'Managed_Sold'
+Managed_Sold_20190101_20230130 = dataiku.Dataset("Managed_Sold_20190101_20230130")
+Managed_Sold_20190101_20230130_df = Managed_Sold_20190101_20230130.get_dataframe()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-print(len(WEX_and_Non_Managed_Sold_20190101_20220920_df))
-print(len(Managed_Sold_20190101_20220920_df))
-df = pd.concat([WEX_and_Non_Managed_Sold_20190101_20220920_df,Managed_Sold_20190101_20220920_df])
+WEX_and_Non_Managed_Sold_20190101_20230130_df['DATA_SOURCE'] = 'WEX_and_Non_Managed_Sold'
+Managed_Sold_20190101_20230130_df['DATA_SOURCE'] = 'Managed_Sold'
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+print(len(WEX_and_Non_Managed_Sold_20190101_20230130_df))
+print(len(Managed_Sold_20190101_20230130_df))
+df = pd.concat([WEX_and_Non_Managed_Sold_20190101_20230130_df,Managed_Sold_20190101_20230130_df])
 print(len(df))
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
