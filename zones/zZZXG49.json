@@ -5,6 +5,10 @@
     {
       "objectId": "NAFCUSTOMER_ACCOUNT_ACTIVE_CARDS_BY_QUARTER",
       "objectType": "DATASET"
+    },
+    {
+      "objectId": "NAFCUSTOMER_LONG_HISTORY_MATCHES",
+      "objectType": "DATASET"
     }
   ],
   "shared": [],
