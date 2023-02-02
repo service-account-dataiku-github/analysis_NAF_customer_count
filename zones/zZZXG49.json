@@ -1,7 +1,12 @@
 {
   "name": "Tenure Calculation over EDW History",
   "color": "#C54F00",
-  "items": [],
+  "items": [
+    {
+      "objectId": "NAFCUSTOMER_ACCOUNT_ACTIVE_CARDS_BY_QUARTER",
+      "objectType": "DATASET"
+    }
+  ],
   "shared": [],
   "tags": [],
   "customFields": {},
