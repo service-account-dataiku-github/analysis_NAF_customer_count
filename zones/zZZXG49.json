@@ -9,6 +9,10 @@
     {
       "objectId": "NAFCUSTOMER_LONG_HISTORY_MATCHES",
       "objectType": "DATASET"
+    },
+    {
+      "objectId": "compute_NAFCUSTOMER_LONG_HISTORY_MATCHES",
+      "objectType": "RECIPE"
     }
   ],
   "shared": [],
