@@ -13,6 +13,8 @@ NAFCUSTOMER_ACCOUNT_ACTIVE_CARDS_BY_QUARTER_df = NAFCUSTOMER_ACCOUNT_ACTIVE_CARD
 # NB: DSS also supports other kinds of APIs for reading and writing data. Please see doc.
 
 NAFCUSTOMER_LONG_HISTORY_MATCHES_df = NAFCUSTOMER_ACCOUNT_ACTIVE_CARDS_BY_QUARTER_df # For this sample code, simply copy input to output
+NAFCUSTOMER_RDW_CONVERSIONS_df = NAFCUSTOMER_RDW_CONVERSIONS_df # For this sample code, simply copy input to output
+
 
 
 # Write recipe outputs
