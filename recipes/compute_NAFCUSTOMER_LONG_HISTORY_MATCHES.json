@@ -24,6 +24,10 @@
         {
           "ref": "NAFCUSTOMER_ACCOUNT_ACTIVE_CARDS_BY_QUARTER",
           "deps": []
+        },
+        {
+          "ref": "NAFCUSTOMER_RDW_CONVERSIONS",
+          "deps": []
         }
       ]
     }
@@ -40,11 +44,11 @@
   },
   "labels": [],
   "versionTag": {
-    "versionNumber": 1,
+    "versionNumber": 2,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1675368834301
+    "lastModifiedOn": 1675428271335
   },
   "creationTag": {
     "versionNumber": 0,
