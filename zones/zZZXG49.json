@@ -15,7 +15,12 @@
       "objectType": "RECIPE"
     }
   ],
-  "shared": [],
+  "shared": [
+    {
+      "objectId": "NAFCUSTOMER_RDW_CONVERSIONS",
+      "objectType": "DATASET"
+    }
+  ],
   "tags": [],
   "customFields": {},
   "checklists": {
