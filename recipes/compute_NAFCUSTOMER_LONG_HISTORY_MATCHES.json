@@ -28,6 +28,10 @@
         {
           "ref": "NAFCUSTOMER_RDW_CONVERSIONS",
           "deps": []
+        },
+        {
+          "ref": "ACCOUNT_BUNDLER_LIST",
+          "deps": []
         }
       ]
     }
@@ -44,11 +48,11 @@
   },
   "labels": [],
   "versionTag": {
-    "versionNumber": 7,
+    "versionNumber": 8,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1675526074686
+    "lastModifiedOn": 1675526812869
   },
   "creationTag": {
     "versionNumber": 0,
