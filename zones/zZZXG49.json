@@ -19,6 +19,10 @@
     {
       "objectId": "NAFCUSTOMER_RDW_CONVERSIONS",
       "objectType": "DATASET"
+    },
+    {
+      "objectId": "ACCOUNT_BUNDLER_LIST",
+      "objectType": "DATASET"
     }
   ],
   "tags": [],
