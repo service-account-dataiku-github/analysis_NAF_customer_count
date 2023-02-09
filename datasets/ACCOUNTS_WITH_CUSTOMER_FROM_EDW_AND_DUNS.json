@@ -28,11 +28,11 @@
     "dimensions": []
   },
   "versionTag": {
-    "versionNumber": 25,
+    "versionNumber": 26,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1669592090636
+    "lastModifiedOn": 1675908310283
   },
   "creationTag": {
     "versionNumber": 0,
@@ -90,7 +90,7 @@
       {"name":"SALES_DATA_SOURCE","type":"string","maxLength":4194304},
       {"name":"HAS_SALES_FLAG","type":"string","maxLength":4194304}
     ],
-    "userModified": false
+    "userModified": true
   },
   "dkuProperties": [],
   "metrics": {
