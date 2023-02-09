@@ -13,6 +13,10 @@
     {
       "objectId": "compute_NAFCUSTOMER_LONG_HISTORY_MATCHES",
       "objectType": "RECIPE"
+    },
+    {
+      "objectId": "NAFCUST_HISTORY_TENURE_2010_DORMANT",
+      "objectType": "DATASET"
     }
   ],
   "shared": [
