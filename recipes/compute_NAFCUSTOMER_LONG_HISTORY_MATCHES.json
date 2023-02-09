@@ -42,17 +42,25 @@
         {
           "ref": "NAFCUSTOMER_LONG_HISTORY_MATCHES",
           "appendMode": false
+        },
+        {
+          "ref": "NAFCUST_HISTORY_TENURE_2010_DORMANT",
+          "appendMode": false
+        },
+        {
+          "ref": "NAFCUST_HISTORY_TENURE_2010_2011_ORIGINATE",
+          "appendMode": false
         }
       ]
     }
   },
   "labels": [],
   "versionTag": {
-    "versionNumber": 17,
+    "versionNumber": 18,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1675905428830
+    "lastModifiedOn": 1675906131520
   },
   "creationTag": {
     "versionNumber": 0,
