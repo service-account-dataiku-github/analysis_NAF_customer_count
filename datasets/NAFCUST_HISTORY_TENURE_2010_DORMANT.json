@@ -28,11 +28,11 @@
     "dimensions": []
   },
   "versionTag": {
-    "versionNumber": 4,
+    "versionNumber": 5,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1675908348875
+    "lastModifiedOn": 1675909037157
   },
   "creationTag": {
     "versionNumber": 0,
@@ -60,7 +60,7 @@
       {"name":"CUSTOMER","type":"string","maxLength":4194304},
       {"name":"MAX_REVENUE_DATE","type":"date"}
     ],
-    "userModified": true
+    "userModified": false
   },
   "dkuProperties": [],
   "metrics": {
