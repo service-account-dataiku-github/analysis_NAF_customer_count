@@ -28,11 +28,11 @@
     "dimensions": []
   },
   "versionTag": {
-    "versionNumber": 1,
+    "versionNumber": 2,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1675908118073
+    "lastModifiedOn": 1675908366903
   },
   "creationTag": {
     "versionNumber": 0,
@@ -48,7 +48,7 @@
     "mode": "table",
     "partitioningType": "custom",
     "normalizeDoubles": true,
-    "table": "${projectKey}_NAFCUST_HISTORY_TENURE_2010_2011_ORIGINATE",
+    "table": "${projectKey}_HISTORY_TENURE_2010_2011_ORIGINATE",
     "tableCreationMode": "auto",
     "writeInsertBatchSize": 10000,
     "writeJDBCBadDataBehavior": "DISCARD_ROW",
@@ -60,7 +60,7 @@
       {"name":"CUSTOMER","type":"string","maxLength":4194304},
       {"name":"MIN_REVENUE_DATE","type":"date"}
     ],
-    "userModified": false
+    "userModified": true
   },
   "dkuProperties": [],
   "metrics": {
