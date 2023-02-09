@@ -28,11 +28,11 @@
     "dimensions": []
   },
   "versionTag": {
-    "versionNumber": 0,
+    "versionNumber": 1,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1675905810185
+    "lastModifiedOn": 1675908118073
   },
   "creationTag": {
     "versionNumber": 0,
@@ -56,8 +56,11 @@
     "readSQLDateColsAsDSSDates": true
   },
   "schema": {
-    "columns": [],
-    "userModified": true
+    "columns": [
+      {"name":"CUSTOMER","type":"string","maxLength":4194304},
+      {"name":"MIN_REVENUE_DATE","type":"date"}
+    ],
+    "userModified": false
   },
   "dkuProperties": [],
   "metrics": {
