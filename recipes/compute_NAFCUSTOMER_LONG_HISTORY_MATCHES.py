@@ -87,25 +87,34 @@ df_cust_since.head(10)
 df_cust_max_revenue = df.groupby(['CUSTOMER']).REVENUE_DATE.max().reset_index()
 df_cust_max_revenue.columns = ['CUSTOMER','MAX_REVENUE_DATE']
 df_cust_max_revenue = df_cust_max_revenue.sort_values(by=['CUSTOMER'], ascending=True)
-df_cust_max_revenue.head(10)
+print(len(df_cust_max_revenue))
+df_cust_max_revenue = df_cust_max_revenue[df_cust_max_revenue.MAX_REVENUE_DATE.dt.year==2010]
+print(len(df_cust_max_revenue))
+df_cust_max_revenue.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 df_cust_min_revenue = df.groupby(['CUSTOMER']).REVENUE_DATE.min().reset_index()
 df_cust_min_revenue.columns = ['CUSTOMER','MIN_REVENUE_DATE']
 df_cust_min_revenue = df_cust_min_revenue.sort_values(by=['CUSTOMER'], ascending=True)
-df_cust_min_revenue.head(10)
+print(len(df_cust_min_revenue))
+df_cust_min_revenue = df_cust_min_revenue[(df_cust_min_revenue.MIN_REVENUE_DATE.dt.year>=2010)&(df_cust_min_revenue.MIN_REVENUE_DATE.dt.year<2012)]
+print(len(df_cust_min_revenue))
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+df_cust_min_revenue.MIN_REVENUE_DATE.dt.year.value_counts()
 
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+df_cust_min_revenue.head()
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 # Write recipe outputs
 NAFCUST_HISTORY_TENURE_2010_DORMANT = dataiku.Dataset("NAFCUST_HISTORY_TENURE_2010_DORMANT")
-NAFCUST_HISTORY_TENURE_2010_DORMANT.write_with_schema(NAFCUSTOMER_LONG_HISTORY_MATCHES_df)
+NAFCUST_HISTORY_TENURE_2010_DORMANT.write_with_schema(df_cust_max_revenue)
 
 NAFCUST_HISTORY_TENURE_2010_2011_ORIGINATE = dataiku.Dataset("NAFCUST_HISTORY_TENURE_2010_2011_ORIGINATE")
-NAFCUST_HISTORY_TENURE_2010_2011_ORIGINATE.write_with_schema(NAFCUST_HISTORY_TENURE_2010_2011_ORIGINATE_df)
+NAFCUST_HISTORY_TENURE_2010_2011_ORIGINATE.write_with_schema(df_cust_min_revenue)
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-
 #df_account_with_customer = df[['CUSTOMER_ACCOUNT_ID','CUSTOMER']].copy()
 #df_account_with_customer = df_account_with_customer.drop_duplicates(subset='CUSTOMER_ACCOUNT_ID')
 #print(len(df_account_with_customer))
@@ -154,5 +163,3 @@ NAFCUST_HISTORY_TENURE_2010_2011_ORIGINATE.write_with_schema(NAFCUST_HISTORY_TEN
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 #df.head()
-
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
