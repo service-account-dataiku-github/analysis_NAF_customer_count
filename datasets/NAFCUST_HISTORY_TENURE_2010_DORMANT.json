@@ -28,11 +28,11 @@
     "dimensions": []
   },
   "versionTag": {
-    "versionNumber": 3,
+    "versionNumber": 4,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1675908338710
+    "lastModifiedOn": 1675908348875
   },
   "creationTag": {
     "versionNumber": 0,
@@ -48,7 +48,7 @@
     "mode": "table",
     "partitioningType": "custom",
     "normalizeDoubles": true,
-    "table": "NAFCUST_HISTORY_TENURE_2010_DORMANT",
+    "table": "${projectKey}_HISTORY_TENURE_2010_DORMANT",
     "tableCreationMode": "auto",
     "writeInsertBatchSize": 10000,
     "writeJDBCBadDataBehavior": "DISCARD_ROW",
