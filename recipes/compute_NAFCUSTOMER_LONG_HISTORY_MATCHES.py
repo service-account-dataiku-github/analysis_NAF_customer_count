@@ -96,6 +96,16 @@ df_cust_min_revenue = df_cust_min_revenue.sort_values(by=['CUSTOMER'], ascending
 df_cust_min_revenue.head(10)
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+
+# Write recipe outputs
+NAFCUST_HISTORY_TENURE_2010_DORMANT = dataiku.Dataset("NAFCUST_HISTORY_TENURE_2010_DORMANT")
+NAFCUST_HISTORY_TENURE_2010_DORMANT.write_with_schema(NAFCUSTOMER_LONG_HISTORY_MATCHES_df)
+
+NAFCUST_HISTORY_TENURE_2010_2011_ORIGINATE = dataiku.Dataset("NAFCUST_HISTORY_TENURE_2010_2011_ORIGINATE")
+NAFCUST_HISTORY_TENURE_2010_2011_ORIGINATE.write_with_schema(NAFCUST_HISTORY_TENURE_2010_2011_ORIGINATE_df)
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+
 #df_account_with_customer = df[['CUSTOMER_ACCOUNT_ID','CUSTOMER']].copy()
 #df_account_with_customer = df_account_with_customer.drop_duplicates(subset='CUSTOMER_ACCOUNT_ID')
 #print(len(df_account_with_customer))
@@ -146,6 +156,3 @@ df_cust_min_revenue.head(10)
 #df.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-# Write recipe outputs
-#NAFCUSTOMER_LONG_HISTORY_MATCHES = dataiku.Dataset("NAFCUSTOMER_LONG_HISTORY_MATCHES")
-#NAFCUSTOMER_LONG_HISTORY_MATCHES.write_with_schema(NAFCUSTOMER_LONG_HISTORY_MATCHES_df)
