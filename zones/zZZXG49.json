@@ -17,6 +17,10 @@
     {
       "objectId": "NAFCUST_HISTORY_TENURE_2010_DORMANT",
       "objectType": "DATASET"
+    },
+    {
+      "objectId": "NAFCUST_HISTORY_TENURE_2010_2011_ORIGINATE",
+      "objectType": "DATASET"
     }
   ],
   "shared": [
