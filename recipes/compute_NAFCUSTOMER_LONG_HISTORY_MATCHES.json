@@ -32,6 +32,14 @@
         {
           "ref": "ACCOUNT_BUNDLER_LIST",
           "deps": []
+        },
+        {
+          "ref": "NAFCUSTOMER_COMMON_WORDS_IN_NAMES",
+          "deps": []
+        },
+        {
+          "ref": "NAFCUSTOMER_MDM_ACCOUNT_WITH_BUSINESS_ID",
+          "deps": []
         }
       ]
     }
@@ -56,11 +64,11 @@
   },
   "labels": [],
   "versionTag": {
-    "versionNumber": 23,
+    "versionNumber": 24,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1676037493186
+    "lastModifiedOn": 1676038055983
   },
   "creationTag": {
     "versionNumber": 0,
