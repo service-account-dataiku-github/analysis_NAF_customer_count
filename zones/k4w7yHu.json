@@ -9,6 +9,10 @@
     {
       "objectId": "TENURE_CALC",
       "objectType": "DATASET"
+    },
+    {
+      "objectId": "compute_TENURE_CALC",
+      "objectType": "RECIPE"
     }
   ],
   "shared": [],
