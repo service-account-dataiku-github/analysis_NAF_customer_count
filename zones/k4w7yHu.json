@@ -5,6 +5,10 @@
     {
       "objectId": "NAFCUSTOMER_REVENUE_AGGREGATED",
       "objectType": "DATASET"
+    },
+    {
+      "objectId": "TENURE_CALC",
+      "objectType": "DATASET"
     }
   ],
   "shared": [],
