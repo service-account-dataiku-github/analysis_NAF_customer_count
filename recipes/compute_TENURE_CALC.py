@@ -20,11 +20,18 @@ print(len(NAFCUSTOMER_REVENUE_AGGREGATED_df))
 NAFCUSTOMER_REVENUE_AGGREGATED_df.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+# create date column, combining month and year
+# group revenue sum by date column
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 print(len(NAFCUSTOMER_REVENUE_AGGREGATED_df))
 df = NAFCUSTOMER_REVENUE_AGGREGATED_df
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 df.head()
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+df['REVENUE_DATE']
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 # Compute recipe outputs from inputs
