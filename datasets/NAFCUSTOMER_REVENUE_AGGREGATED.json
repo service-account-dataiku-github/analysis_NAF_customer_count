@@ -28,11 +28,11 @@
     "dimensions": []
   },
   "versionTag": {
-    "versionNumber": 0,
+    "versionNumber": 1,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1676236000543
+    "lastModifiedOn": 1676240918769
   },
   "creationTag": {
     "versionNumber": 0,
@@ -61,7 +61,8 @@
     "columns": [
       {"name":"CUSTOMER_ID","type":"bigint","originalType":"NUMBER"},
       {"name":"CUSTOMER","type":"string","originalType":"VARCHAR","maxLength":4194304},
-      {"name":"REVENUE_DATE","type":"string","originalType":"TIMESTAMPNTZ","maxLength":4194304},
+      {"name":"REVENUE_DATE","type":"bigint","originalType":"NUMBER"},
+      {"name":"REVENUE_YEAR","type":"bigint","originalType":"NUMBER"},
       {"name":"SETUP_DATE","type":"date","originalType":"DATE","timestampNoTzAsDate":true},
       {"name":"BI_CUS_PAR","type":"string","originalType":"VARCHAR","maxLength":10},
       {"name":"BI_PRODUCT","type":"string","originalType":"VARCHAR","maxLength":10},
