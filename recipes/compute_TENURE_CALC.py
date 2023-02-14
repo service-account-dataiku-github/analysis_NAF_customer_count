@@ -6,7 +6,7 @@ from dataiku import pandasutils as pdu
 
 import matplotlib.pyplot as plt
 
-# Input View
+# The data going into this step is defined in the follopwing Input View:
 #
 #  CREATE VIEW DATAIKU_ANALYTICS_SUB.DATA_SCIENCE.NAFCUSTOMER_REVENUE_AGGREGATED
 #  AS
