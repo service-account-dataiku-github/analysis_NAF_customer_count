@@ -51,6 +51,9 @@ df = NAFCUSTOMER_REVENUE_AGGREGATED_df
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 # cast year as integer, create a revenue date column at the monthly grain
+df['CUSTOMER_ID'] = df['CUSTOMER_ID'].astype('Int64')
+df['SETUP_DATE_DT'] = pd.to_datetime(df['SETUP_DATE'])
+
 df['REVENUE_YEAR'] = df['REVENUE_YEAR'].astype('Int64')
 df['REVENUE_DATE'] = df['REVENUE_MONTH'].astype(str) + '-' + df['REVENUE_YEAR'].astype(str)
 df['REVENUE_DATE'] = pd.to_datetime(df['REVENUE_DATE'], format='%m-%Y').dt.strftime('%m-%Y')
@@ -58,7 +61,6 @@ df['REVENUE_DATE'] = pd.to_datetime(df['REVENUE_DATE'], format='%m-%Y').dt.strft
 print(len(df))
 df = df[df.REVENUE_YEAR!=2023]
 print(len(df))
-df.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 import matplotlib.dates as mdates
@@ -80,17 +82,97 @@ plt.show()
 df_revenue_per_year.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-print(len(df))
-df['SETUP_DATE_DT'] = pd.to_datetime(df['SETUP_DATE'])
-df = df[df.SETUP_DATE_DT.dt.year<2019]
-print(len(df))
-df.head()
+df_customer_monthly_card_count = df.groupby(['CUSTOMER_ID','REVENUE_DATE']).TOTAL_ACTIVE_CARD_COUNT.sum().reset_index()
+df_customer_monthly_card_count.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-#print(len(df))
-#df = df[df.SETUP_DATE.dt.year<=2019]
-#print(len(df))
-df.head()
+df_customer_max_monthly_card_sum = df.groupby(['CUSTOMER_ID']).TOTAL_ACTIVE_CARD_COUNT.max().reset_index()
+df_customer_max_monthly_card_sum['CUSTOMER_FLEET_SIZE'] = 'NOT SET'
+df_customer_max_monthly_card_sum.loc[df_customer_max_monthly_card_sum["TOTAL_ACTIVE_CARD_COUNT"]>1700,'CUSTOMER_FLEET_SIZE'] = "XL (>1700 Cards)"
+df_customer_max_monthly_card_sum.loc[(df_customer_max_monthly_card_sum["TOTAL_ACTIVE_CARD_COUNT"]>115)&(df_customer_max_monthly_card_sum["TOTAL_ACTIVE_CARD_COUNT"]<=1700),'CUSTOMER_FLEET_SIZE'] = "L (>115 and <=1700 Cards)"
+df_customer_max_monthly_card_sum.loc[(df_customer_max_monthly_card_sum["TOTAL_ACTIVE_CARD_COUNT"]>21)&(df_customer_max_monthly_card_sum["TOTAL_ACTIVE_CARD_COUNT"]<=115),'CUSTOMER_FLEET_SIZE'] = "M (>21 and <=115 Cards)"
+df_customer_max_monthly_card_sum.loc[(df_customer_max_monthly_card_sum["TOTAL_ACTIVE_CARD_COUNT"]<=21),'CUSTOMER_FLEET_SIZE'] = "S (<=21 Cards)"
+df_customer_max_monthly_card_sum.loc[(df_customer_max_monthly_card_sum["TOTAL_ACTIVE_CARD_COUNT"]==0),'CUSTOMER_FLEET_SIZE'] = "No Cards"
+df_customer_max_monthly_card_sum.loc[df_customer_max_monthly_card_sum["TOTAL_ACTIVE_CARD_COUNT"].isnull(),'CUSTOMER_FLEET_SIZE'] = "No Cards"
+
+df_customer_max_monthly_card_sum.CUSTOMER_FLEET_SIZE.value_counts(dropna=False)
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+df_customer_max_monthly_card_sum.head()
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+# aggregate customers at min setup date
+df_customer_min_setup = df.groupby(['CUSTOMER_ID']).SETUP_DATE.min().reset_index()
+df_customer_min_setup.columns = ['CUSTOMER_ID','MIN_SETUP_DATE']
+df_customer_min_setup['CUSTOMER_ID'] = df_customer_min_setup['CUSTOMER_ID'].astype('Int64')
+
+df_customer_min_setup.head()
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+df_customer_min_setup.CUSTOMER_ID.value_counts(dropna=False)
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+print(len(df))
+df_j = pd.merge(df, df_customer_min_setup, on='CUSTOMER_ID', how='inner')
+print(len(df_j))
+
+df_j = pd.merge(df_j, df_customer_max_monthly_card_sum, on='CUSTOMER_ID', how='inner')
+print(len(df_j))
+
+df_j.head()
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+print(len(df_j))
+# retain only those customers that already existed before the analysis period
+df_j = df_j[df_j.MIN_SETUP_DATE.dt.year<2019]
+print(len(df_j))
+df_j.head()
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+df_customer_count = df_j.groupby(['REVENUE_YEAR']).CUSTOMER_ID.nunique().reset_index()
+df_customer_count.columns = ['REVENUE_YEAR','CUSTOMER_COUNT']
+print(len(df_customer_count), 'customer records')
+
+# plot out 
+fig, ax1 = plt.subplots(figsize=(16,5))
+ax1.plot(df_customer_count['REVENUE_YEAR'],df_customer_count['CUSTOMER_COUNT'], marker='o')
+ax1.set_xlabel('YEAR', fontsize=14)
+ax1.set_ylabel('CUSTOMER_COUNT', fontsize=14)
+ax1.grid()
+ax1.set_ylim(ymin=0)
+fig.autofmt_xdate()
+#ax1.xaxis.set_major_locator(mdates.YearLocator())
+plt.show()
+
+df_customer_count.head()
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+#S (<=21 Cards)
+#No Cards
+#M (>21 and <=115 Cards)
+#L (>115 and <=1700 Cards)
+#XL (>1700 Cards)
+
+print(len(df_j))
+df_XL = df_j[df_j.CUSTOMER_FLEET_SIZE=='S (<=21 Cards)']
+print(len(df_XL))
+
+df_XL = df_XL.groupby(['REVENUE_YEAR']).CUSTOMER_ID.nunique().reset_index()
+df_XL.columns = ['REVENUE_YEAR','CUSTOMER_COUNT']
+df_XL.head()
+
+max_y = df_XL.CUSTOMER_COUNT.max()
+max_y = max_y + max_y*0.15
+
+# plot out 
+fig, ax1 = plt.subplots(figsize=(16,5))
+ax1.plot(df_XL['REVENUE_YEAR'],df_XL['CUSTOMER_COUNT'], marker='o')
+ax1.set_xlabel('YEAR', fontsize=14)
+ax1.set_ylabel('CUSTOMER_COUNT', fontsize=14)
+ax1.grid()
+ax1.set_ylim(ymin=0, ymax=max_y)
+fig.autofmt_xdate()
+plt.show()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 # Compute recipe outputs from inputs
