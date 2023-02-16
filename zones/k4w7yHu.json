@@ -17,6 +17,10 @@
     {
       "objectId": "TENURE_BY_GROUP",
       "objectType": "DATASET"
+    },
+    {
+      "objectId": "compute_TENURE_BY_GROUP",
+      "objectType": "RECIPE"
     }
   ],
   "shared": [],
