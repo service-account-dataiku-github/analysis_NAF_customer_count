@@ -13,6 +13,10 @@
     {
       "objectId": "compute_TENURE_CALC",
       "objectType": "RECIPE"
+    },
+    {
+      "objectId": "TENURE_BY_GROUP",
+      "objectType": "DATASET"
     }
   ],
   "shared": [],
