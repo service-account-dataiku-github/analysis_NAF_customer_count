@@ -269,7 +269,7 @@ plt.show()
 groups = ['S (<=21 Cards)', 'M (>21 and <=115 Cards)', 'L (>115 and <=1700 Cards)','XL (>1700 Cards)','No Cards']
 
 df_sub = df_activity[df_activity.SETUP_YEAR<2019]
-df_sub = df_sub[df_sub.CUSTOMER_FLEET_SIZE=='XL (>1700 Cards)']
+#df_sub = df_sub[df_sub.CUSTOMER_FLEET_SIZE=='XL (>1700 Cards)']
 
 df_sub = df_sub.groupby(['REVENUE_YEAR']).CUSTOMER_ID.nunique().reset_index()
 df_sub.columns = ['REVENUE_YEAR','CUSTOMER_COUNT']
@@ -317,6 +317,10 @@ for i in range(forecast_years+1):
     dict = {'REVENUE_YEAR':forecast_year,'CUSTOMERS_LEFT': customers_left, 'SURVIVED_FROM_PREV': avg_retention_rate, 'FORECAST_CUSTOMER_COUNT':forecast_customer_count,'FORECAST_FROM_FIRST_PERCENT':forecast_from_first_percent}
     df_sub = df_sub.append(dict, ignore_index = True)
 
+for i in range(5):
+    dict = {'REVENUE_YEAR':forecast_year+i,'CUSTOMERS_LEFT':0, 'SURVIVED_FROM_PREV':0, 'FORECAST_CUSTOMER_COUNT':0,'FORECAST_FROM_FIRST_PERCENT':0}
+    df_sub = df_sub.append(dict, ignore_index = True)
+
     
 df_sub['CUSTOMERS_LEFT_PERCENT'] = df_sub['CUSTOMERS_LEFT'] / df_sub.iloc[0].CUSTOMER_COUNT
 df_sub.FORECAST_CUSTOMER_COUNT = df_sub.FORECAST_CUSTOMER_COUNT.astype('Int64') 
@@ -327,9 +331,11 @@ chart_customer_count = df_sub.CUSTOMER_COUNT[0:row_index].tolist()
 chart_survived_from_first = df_sub.SURVIVED_FROM_FIRST_PERCENT[0:row_index].tolist()
 
 l = []
+max_i = 0
 for i in df_sub.REVENUE_YEAR[row_index:].tolist():
     l.append(str(int(i)))
-
+    max_i = i
+    
 chart_forecast_year = l
 chart_forecast_customer_count = df_sub.FORECAST_CUSTOMER_COUNT[row_index:].tolist()
 chart_forecast_from_first = df_sub.FORECAST_FROM_FIRST_PERCENT[row_index:].tolist()
@@ -337,18 +343,18 @@ chart_forecast_from_first = df_sub.FORECAST_FROM_FIRST_PERCENT[row_index:].tolis
 max_y = df_sub.CUSTOMER_COUNT.max()
 max_y = max_y + max_y*0.1
 
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-fig, ax1 = plt.subplots(figsize=(10,4))
+fig, ax1 = plt.subplots(figsize=(12,4))
 plt.plot(chart_revenue_year,chart_customer_count, marker='o', c='C0')
 plt.plot(chart_forecast_year,chart_forecast_customer_count, marker='o', c='black', linestyle='dashed')
 ax1.set_ylim(ymin=0, ymax=max_y)
 ax1.set_xlabel('YEAR', fontsize=14)
+ax2.set_xlim(xmin=2019, xmax=2023+forecast_years)
 ax1.set_ylabel('CUSTOMER COUNT', fontsize=14)
 ax1.yaxis.set_major_formatter(FuncFormatter(lambda x, p: format(int(x), ',')))
 plt.title(' Count of Retained Customers')
 plt.legend(['observed','forecasted'])
 
-fig, ax2 = plt.subplots(figsize=(10,4))
+fig, ax2 = plt.subplots(figsize=(12,4))
 plt.plot(chart_revenue_year,chart_survived_from_first, marker='o', c='C0')
 plt.plot(chart_forecast_year,chart_forecast_from_first, marker='o', c='black', linestyle='dashed')
 ax2.set_ylim(ymin=0, ymax=110)
