@@ -127,23 +127,6 @@ plt.show()
 df_revenue_per_year.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-df_customer_monthly_card_count = df.groupby(['CUSTOMER_ID','REVENUE_DATE']).TOTAL_ACTIVE_CARD_COUNT.sum().reset_index()
-
-df_customer_max_monthly_card_sum = df.groupby(['CUSTOMER_ID']).TOTAL_ACTIVE_CARD_COUNT.max().reset_index()
-df_customer_max_monthly_card_sum['CUSTOMER_FLEET_SIZE'] = 'NOT SET'
-df_customer_max_monthly_card_sum.loc[df_customer_max_monthly_card_sum["TOTAL_ACTIVE_CARD_COUNT"]>1700,'CUSTOMER_FLEET_SIZE'] = "XL (>1700 Cards)"
-df_customer_max_monthly_card_sum.loc[(df_customer_max_monthly_card_sum["TOTAL_ACTIVE_CARD_COUNT"]>115)&(df_customer_max_monthly_card_sum["TOTAL_ACTIVE_CARD_COUNT"]<=1700),'CUSTOMER_FLEET_SIZE'] = "L (>115 and <=1700 Cards)"
-df_customer_max_monthly_card_sum.loc[(df_customer_max_monthly_card_sum["TOTAL_ACTIVE_CARD_COUNT"]>21)&(df_customer_max_monthly_card_sum["TOTAL_ACTIVE_CARD_COUNT"]<=115),'CUSTOMER_FLEET_SIZE'] = "M (>21 and <=115 Cards)"
-df_customer_max_monthly_card_sum.loc[(df_customer_max_monthly_card_sum["TOTAL_ACTIVE_CARD_COUNT"]<=21),'CUSTOMER_FLEET_SIZE'] = "S (<=21 Cards)"
-df_customer_max_monthly_card_sum.loc[(df_customer_max_monthly_card_sum["TOTAL_ACTIVE_CARD_COUNT"]==0),'CUSTOMER_FLEET_SIZE'] = "No Cards"
-df_customer_max_monthly_card_sum.loc[df_customer_max_monthly_card_sum["TOTAL_ACTIVE_CARD_COUNT"].isnull(),'CUSTOMER_FLEET_SIZE'] = "No Cards"
-
-df_customer_max_monthly_card_sum.CUSTOMER_FLEET_SIZE.value_counts(dropna=False)
-
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-df_customer_max_monthly_card_sum.head()
-
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 # Fleet Sizes
 # zero cards : 0
 # small      : 1-20
@@ -158,16 +141,29 @@ df_max_monthly_card_count.TOTAL_ACTIVE_CARD_COUNT = df_max_monthly_card_count.TO
 
 df_max_monthly_card_count['FLEET_SIZE'] = 'not set'
 df_max_monthly_card_count.loc[df_max_monthly_card_count.TOTAL_ACTIVE_CARD_COUNT<=0,'FLEET_SIZE'] = 'zero cards'
-df_max_monthly_card_count.loc[df_max_monthly_card_count.TOTAL_ACTIVE_CARD_COUNT.between(1,20),'FLEET_SIZE'] = 'small 1-20'
-df_max_monthly_card_count.loc[df_max_monthly_card_count.TOTAL_ACTIVE_CARD_COUNT.between(21,114),'FLEET_SIZE'] = 'medium 21-114'
-df_max_monthly_card_count.loc[df_max_monthly_card_count.TOTAL_ACTIVE_CARD_COUNT.between(115,1700),'FLEET_SIZE'] = 'large 115-1700'
-df_max_monthly_card_count.loc[df_max_monthly_card_count.TOTAL_ACTIVE_CARD_COUNT>1700,'FLEET_SIZE'] = 'extra large >1700'
+df_max_monthly_card_count.loc[df_max_monthly_card_count.TOTAL_ACTIVE_CARD_COUNT.between(1,20),'FLEET_SIZE'] = 'NAF Small Fleet (<=20 cards)'
+df_max_monthly_card_count.loc[df_max_monthly_card_count.TOTAL_ACTIVE_CARD_COUNT>20,'FLEET_SIZE'] = 'NAF Large Fleet (>20 cards)'
 
+df_max_monthly_card_count['FLEET_SIZE_GRANULAR'] = 'not set'
+df_max_monthly_card_count.loc[df_max_monthly_card_count.TOTAL_ACTIVE_CARD_COUNT<=0,'FLEET_SIZE_GRANULAR'] = 'zero cards'
+for i in range(1,21):
+    df_max_monthly_card_count.loc[df_max_monthly_card_count.TOTAL_ACTIVE_CARD_COUNT==i,'FLEET_SIZE_GRANULAR'] = str(i) + ' card(s)'
+df_max_monthly_card_count.loc[df_max_monthly_card_count.TOTAL_ACTIVE_CARD_COUNT>20,'FLEET_SIZE_GRANULAR'] = '> 20 cards'
+    
+df_max_monthly_card_count.head()
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+df_max_monthly_card_count.FLEET_SIZE_GRANULAR.value_counts()
 df_max_monthly_card_count.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 df_customer_min_setup = df.groupby(['CUSTOMER_ID']).SETUP_YEAR.min().reset_index()
 df_customer_min_setup.head()
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+df_fleet_size_customer_count_granular = df_max_monthly_card_count.groupby(['FLEET_SIZE_GRANULAR']).CUSTOMER_ID.nunique().reset_index()
+df_fleet_size_customer_count_granular.columns = ['FLEET_SIZE_GRANULAR', 'CUSTOMER_COUNT']
+df_fleet_size_customer_count_granular.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 df_fleet_size_customer_count = df_max_monthly_card_count.groupby(['FLEET_SIZE']).CUSTOMER_ID.nunique().reset_index()
@@ -187,7 +183,7 @@ print(len(df_activity))
 df_activity = df_activity[~df_activity.CUSTOMER_ID.isnull()]
 print(len(df_activity))
 
-df_fleet_size = df_customer_max_monthly_card_sum[['CUSTOMER_ID','CUSTOMER_FLEET_SIZE']].copy()
+df_fleet_size = df_max_monthly_card_count[['CUSTOMER_ID','FLEET_SIZE','FLEET_SIZE_GRANULAR']].copy()
 df_fleet_size['CUSTOMER_ID'] = df_fleet_size['CUSTOMER_ID'].astype('Int64')
 
 print(len(df_activity))
@@ -204,12 +200,15 @@ df_activity.head(10)
 df_max_monthly_card_count.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-df_revenue_per_year = df_activity.groupby(['REVENUE_YEAR','CUSTOMER_FLEET_SIZE']).REVENUE_AMOUNT_USD.sum().reset_index()
+df_revenue_per_year = df_activity.groupby(['REVENUE_YEAR','FLEET_SIZE']).REVENUE_AMOUNT_USD.sum().reset_index()
 df_revenue_per_year.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-df_spend_per_year = df_activity.groupby(['REVENUE_YEAR','CUSTOMER_FLEET_SIZE']).GROSS_SPEND_AMOUNT.sum().reset_index()
+df_spend_per_year = df_activity.groupby(['REVENUE_YEAR','FLEET_SIZE']).GROSS_SPEND_AMOUNT.sum().reset_index()
 df_spend_per_year.head()
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+df_revenue_per_year.FLEET_SIZE.unique()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 max_spend = df_spend_per_year.GROSS_SPEND_AMOUNT.max()
@@ -220,16 +219,16 @@ df_spend_per_year['REVENUE_YEAR'] = df_spend_per_year['REVENUE_YEAR'].astype(str
 
 # s = df_revenue_per_year.CUSTOMER_FLEET_SIZE.unique()
 # the following is this same list rearranged
-groups = ['S (<=21 Cards)', 'M (>21 and <=115 Cards)', 'L (>115 and <=1700 Cards)','XL (>1700 Cards)','No Cards']
+groups = ['NAF Large Fleet (>20 cards)', 'NAF Small Fleet (<=20 cards)','zero cards']
 
 legend_items = []
 for s in groups:
-    ax1.plot(df_spend_per_year[df_spend_per_year.CUSTOMER_FLEET_SIZE==s].REVENUE_YEAR,
-             df_spend_per_year[df_spend_per_year.CUSTOMER_FLEET_SIZE==s].GROSS_SPEND_AMOUNT, marker='o')
+    ax1.plot(df_spend_per_year[df_spend_per_year.FLEET_SIZE==s].REVENUE_YEAR,
+             df_spend_per_year[df_spend_per_year.FLEET_SIZE==s].GROSS_SPEND_AMOUNT, marker='o')
     legend_items.append(s)
     
 ax1.set_xlabel('YEAR', fontsize=14)
-ax1.set_ylabel('REVENUE (M)', fontsize=14)
+ax1.set_ylabel('SPEND ($)', fontsize=14)
 ax1.grid()
 ax1.set_ylim(ymin=0, ymax=max_spend*1.15)
 ax1.yaxis.set_major_formatter(FuncFormatter(lambda x, p: format(int(x), ',')))
@@ -247,16 +246,16 @@ df_revenue_per_year['REVENUE_YEAR'] = df_revenue_per_year['REVENUE_YEAR'].astype
 
 # s = df_revenue_per_year.CUSTOMER_FLEET_SIZE.unique()
 # the following is this same list rearranged so that the legend is ordered correctly
-groups = ['S (<=21 Cards)', 'M (>21 and <=115 Cards)', 'L (>115 and <=1700 Cards)','XL (>1700 Cards)','No Cards']
+groups = ['NAF Large Fleet (>20 cards)', 'NAF Small Fleet (<=20 cards)','zero cards']
 
 legend_items = []
 for s in groups:
-    ax1.plot(df_revenue_per_year[df_revenue_per_year.CUSTOMER_FLEET_SIZE==s].REVENUE_YEAR,
-             df_revenue_per_year[df_revenue_per_year.CUSTOMER_FLEET_SIZE==s].REVENUE_AMOUNT_USD, marker='o')
+    ax1.plot(df_revenue_per_year[df_revenue_per_year.FLEET_SIZE==s].REVENUE_YEAR,
+             df_revenue_per_year[df_revenue_per_year.FLEET_SIZE==s].REVENUE_AMOUNT_USD, marker='o')
     legend_items.append(s)
     
 ax1.set_xlabel('YEAR', fontsize=14)
-ax1.set_ylabel('REVENUE (M)', fontsize=14)
+ax1.set_ylabel('REVENUE ($)', fontsize=14)
 ax1.grid()
 ax1.set_ylim(ymin=0, ymax=max_revenue*1.15)
 ax1.yaxis.set_major_formatter(FuncFormatter(lambda x, p: format(int(x), ',')))
@@ -266,116 +265,244 @@ plt.legend(legend_items, bbox_to_anchor=(1.05,1.0), loc='upper left')
 plt.show()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-groups = ['S (<=21 Cards)', 'M (>21 and <=115 Cards)', 'L (>115 and <=1700 Cards)','XL (>1700 Cards)','No Cards']
+df_activity.head()
 
-df_sub = df_activity[df_activity.SETUP_YEAR<2019]
-#df_sub = df_sub[df_sub.CUSTOMER_FLEET_SIZE=='XL (>1700 Cards)']
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+groups = ['NAF Large Fleet (>20 cards)', 'NAF Small Fleet (<=20 cards)','zero cards']
+filter_group = 'NAF Large Fleet (>20 cards)'
 
-df_sub = df_sub.groupby(['REVENUE_YEAR']).CUSTOMER_ID.nunique().reset_index()
-df_sub.columns = ['REVENUE_YEAR','CUSTOMER_COUNT']
-df_sub.REVENUE_YEAR = df_sub.REVENUE_YEAR.astype(str)
-df_sub.CUSTOMER_COUNT = df_sub.CUSTOMER_COUNT.astype('Int64')
+_fleet_size = []
+_observed_avg_retention_rate = []
+_expected_tenure = []
+_revenue_year = []
+_observed_customer_count = []
+_observed_customer_percent = []
+_chart_forecast_year = []
+_chart_forecast_from_first = []
 
-df_sub['SURVIVED_FROM_FIRST'] = (df_sub.CUSTOMER_COUNT / df_sub.iloc[0].CUSTOMER_COUNT)
-df_sub['SURVIVED_FROM_FIRST_PERCENT'] = (df_sub.CUSTOMER_COUNT / df_sub.iloc[0].CUSTOMER_COUNT)*100
-df_sub['CUSTOMERS_LEFT'] = 0
+removed = 'zero cards'
+groups = ['1 card(s)', '2 card(s)','3 card(s)','4 card(s)', 
+          '5 card(s)', '6 card(s)','7 card(s)', '8 card(s)', '9 card(s)', '10 card(s)', 
+          '11 card(s)', '12 card(s)', '13 card(s)','14 card(s)','15 card(s)', 
+          '16 card(s)','17 card(s)','18 card(s)','19 card(s)','20 card(s)','> 20 cards']
 
-row_count = len(df_sub)
+for granular_filter_group in groups:
 
-row_index = 0
-retention_observations = []
-for i in range(row_count):
-    if i>0:
-        survived = df_sub.iloc[i].CUSTOMER_COUNT / df_sub.iloc[i-1].CUSTOMER_COUNT
-        df_sub.loc[i,'SURVIVED_FROM_PREV'] = survived
-        df_sub.loc[i,'CUSTOMERS_LEFT'] = df_sub.iloc[i-1].CUSTOMER_COUNT - df_sub.iloc[i].CUSTOMER_COUNT
-        retention_observations.append(survived)
-    row_index+=1
-        
-avg_retention_rate = sum(retention_observations)/len(retention_observations)                
-print("Observed Average Retention Rate (2020-2022):", 100*round(avg_retention_rate,3), "%")
+    #filter_group = 'NAF Small Fleet (<=20 cards)'
 
-forecast_year = 2022
+    df_sub = df_activity[df_activity.SETUP_YEAR<2019]
+    #df_sub = df_sub[df_sub.FLEET_SIZE==filter_group]
+    df_sub = df_sub[df_sub.FLEET_SIZE_GRANULAR==granular_filter_group]
 
-df_sub['FORECAST_CUSTOMER_COUNT'] = np.nan
-df_sub['FORECAST_FROM_FIRST_PERCENT'] = np.nan
+    df_sub = df_sub.groupby(['REVENUE_YEAR']).CUSTOMER_ID.nunique().reset_index()
+    df_sub.columns = ['REVENUE_YEAR','CUSTOMER_COUNT']
+    df_sub.REVENUE_YEAR = df_sub.REVENUE_YEAR.astype(str)
+    df_sub.CUSTOMER_COUNT = df_sub.CUSTOMER_COUNT.astype('Int64')
 
-forecast_years = 15
+    df_sub['SURVIVED_FROM_FIRST'] = (df_sub.CUSTOMER_COUNT / df_sub.iloc[0].CUSTOMER_COUNT)
+    df_sub['SURVIVED_FROM_FIRST_PERCENT'] = (df_sub.CUSTOMER_COUNT / df_sub.iloc[0].CUSTOMER_COUNT)*100
+    df_sub['CUSTOMERS_LEFT'] = 0
 
-for i in range(forecast_years+1):
+    row_count = len(df_sub)
 
-    forecast_year += 1
-    if i==0:
-        forecast_customer_count = round(avg_retention_rate * df_sub.iloc[i+row_count-1].CUSTOMER_COUNT,0)
-        customers_left = df_sub.iloc[i+row_count-1].CUSTOMER_COUNT - forecast_customer_count
-    else:
-        forecast_customer_count = round(avg_retention_rate * df_sub.iloc[i+row_count-1].FORECAST_CUSTOMER_COUNT,0)
-        customers_left = df_sub.iloc[i+row_count-1].FORECAST_CUSTOMER_COUNT - forecast_customer_count
+    row_index = 0
+    retention_observations = []
+    observed_retentions = 0
+    for i in range(row_count):
+        if i>0:
+            survived = df_sub.iloc[i].CUSTOMER_COUNT / df_sub.iloc[i-1].CUSTOMER_COUNT
+            df_sub.loc[i,'SURVIVED_FROM_PREV'] = survived
+            df_sub.loc[i,'CUSTOMERS_LEFT'] = df_sub.iloc[i-1].CUSTOMER_COUNT - df_sub.iloc[i].CUSTOMER_COUNT
+            retention_observations.append(survived)
+        row_index+=1
+
+    avg_retention_rate = sum(retention_observations)/len(retention_observations)                
+    print("----")
+    print("Observed Average Retention Rate (2019-2022):", 100*round(avg_retention_rate,3), "%")
+    print(retention_observations)
+    len(retention_observations)                
+
+    forecast_year = 2022
+
+    df_sub['FORECAST_CUSTOMER_COUNT'] = np.nan
+    df_sub['FORECAST_FROM_FIRST_PERCENT'] = np.nan
+
+    forecast_years = 15
+
+    for i in range(forecast_years+1):
+
+        forecast_year += 1
+        if i==0:
+            forecast_customer_count = round(avg_retention_rate * df_sub.iloc[i+row_count-1].CUSTOMER_COUNT,0)
+            customers_left = df_sub.iloc[i+row_count-1].CUSTOMER_COUNT - forecast_customer_count
+        else:
+            forecast_customer_count = round(avg_retention_rate * df_sub.iloc[i+row_count-1].FORECAST_CUSTOMER_COUNT,0)
+            customers_left = df_sub.iloc[i+row_count-1].FORECAST_CUSTOMER_COUNT - forecast_customer_count
+
+        forecast_from_first_percent = (forecast_customer_count/df_sub.iloc[0].CUSTOMER_COUNT)*100
+
+        dict = {'REVENUE_YEAR':forecast_year,'CUSTOMERS_LEFT': customers_left, 'SURVIVED_FROM_PREV': avg_retention_rate, 'FORECAST_CUSTOMER_COUNT':forecast_customer_count,'FORECAST_FROM_FIRST_PERCENT':forecast_from_first_percent}
+        df_sub = df_sub.append(dict, ignore_index = True)
+
+
+    df_sub['CUSTOMERS_LEFT_PERCENT'] = df_sub['CUSTOMERS_LEFT'] / df_sub.iloc[0].CUSTOMER_COUNT
+    df_sub.FORECAST_CUSTOMER_COUNT = df_sub.FORECAST_CUSTOMER_COUNT.astype('Int64') 
+
+    chart_revenue_year = df_sub.REVENUE_YEAR[0:row_index].tolist()
+    chart_customer_count = df_sub.CUSTOMER_COUNT[0:row_index].tolist()
+
+    chart_survived_from_first = df_sub.SURVIVED_FROM_FIRST_PERCENT[0:row_index].tolist()
+
+    l = []
+    max_i = 0
+    for i in df_sub.REVENUE_YEAR[row_index:].tolist():
+        l.append(str(int(i)))
+        max_i = i
+
+    chart_forecast_year = l
+    chart_forecast_customer_count = df_sub.FORECAST_CUSTOMER_COUNT[row_index:].tolist()
+    chart_forecast_from_first = df_sub.FORECAST_FROM_FIRST_PERCENT[row_index:].tolist()
+
+    max_y = df_sub.CUSTOMER_COUNT.max()
+    max_y = max_y + max_y*0.1
+
+    _revenue_year.append(chart_revenue_year)
+    _observed_customer_count.append(chart_customer_count)    
     
-    forecast_from_first_percent = (forecast_customer_count/df_sub.iloc[0].CUSTOMER_COUNT)*100
-        
-    dict = {'REVENUE_YEAR':forecast_year,'CUSTOMERS_LEFT': customers_left, 'SURVIVED_FROM_PREV': avg_retention_rate, 'FORECAST_CUSTOMER_COUNT':forecast_customer_count,'FORECAST_FROM_FIRST_PERCENT':forecast_from_first_percent}
-    df_sub = df_sub.append(dict, ignore_index = True)
+    fig, ax1 = plt.subplots(figsize=(10,5))
+    plt.plot(chart_revenue_year,chart_customer_count, marker='o', c='C0')
+    plt.plot(chart_forecast_year,chart_forecast_customer_count, marker='o', c='black', linestyle='dashed')
+    ax1.set_ylim(ymin=0, ymax=max_y)
+    ax1.set_xlabel('YEAR', fontsize=14)
+    #ax1.set_xlim(xmin=2019, xmax=2023+forecast_years)
+    ax1.set_ylabel('CUSTOMER COUNT', fontsize=14)
+    ax1.yaxis.set_major_formatter(FuncFormatter(lambda x, p: format(int(x), ',')))
+    plt.title(' Count of Retained Customers, ' + granular_filter_group)
+    plt.legend(['observed','forecasted'])
 
-for i in range(5):
-    dict = {'REVENUE_YEAR':forecast_year+i,'CUSTOMERS_LEFT':0, 'SURVIVED_FROM_PREV':0, 'FORECAST_CUSTOMER_COUNT':0,'FORECAST_FROM_FIRST_PERCENT':0}
-    df_sub = df_sub.append(dict, ignore_index = True)
-
+    _observed_customer_percent.append(chart_survived_from_first)
+    _chart_forecast_year.append(chart_forecast_year)
+    _chart_forecast_from_first.append(chart_survived_from_first)
     
-df_sub['CUSTOMERS_LEFT_PERCENT'] = df_sub['CUSTOMERS_LEFT'] / df_sub.iloc[0].CUSTOMER_COUNT
-df_sub.FORECAST_CUSTOMER_COUNT = df_sub.FORECAST_CUSTOMER_COUNT.astype('Int64') 
+    fig, ax2 = plt.subplots(figsize=(10,5))
+    plt.plot(chart_revenue_year,chart_survived_from_first, marker='o', c='C0')
+    plt.plot(chart_forecast_year,chart_forecast_from_first, marker='o', c='black', linestyle='dashed')
+    ax2.set_ylim(ymin=0, ymax=110)
+    ax2.set_xlabel('YEAR', fontsize=14)
+    ax2.set_ylabel('Percent Survived (%)', fontsize=14)
+    plt.title(' % of Retained Customers, ' + granular_filter_group)
+    plt.legend(['observed','forecasted'])
+    #plt.subplots_adjust(left=2.0,right=3.0)
+    plt.show()
 
-chart_revenue_year = df_sub.REVENUE_YEAR[0:row_index].tolist()
-chart_customer_count = df_sub.CUSTOMER_COUNT[0:row_index].tolist()
+    fraction_remaining = 1
+    avg_tenure = 0
+    check_sum = 0
+    for i in range(forecast_years):
 
-chart_survived_from_first = df_sub.SURVIVED_FROM_FIRST_PERCENT[0:row_index].tolist()
+        avg_tenure += df_sub.iloc[i].CUSTOMERS_LEFT_PERCENT * i
 
-l = []
-max_i = 0
-for i in df_sub.REVENUE_YEAR[row_index:].tolist():
-    l.append(str(int(i)))
-    max_i = i
+        fraction_remaining -=  df_sub.iloc[i].CUSTOMERS_LEFT_PERCENT
+        check_sum += df_sub.iloc[i].CUSTOMERS_LEFT_PERCENT
+
+    check_sum += fraction_remaining
+
+    avg_tenure += fraction_remaining * i
+    print("forecast period:", forecast_years)
+    print("AVG Tenure (Observed + Forecasted):", round(avg_tenure,2), "Years")
+    print("check_sum:", round(check_sum,2))
     
-chart_forecast_year = l
-chart_forecast_customer_count = df_sub.FORECAST_CUSTOMER_COUNT[row_index:].tolist()
-chart_forecast_from_first = df_sub.FORECAST_FROM_FIRST_PERCENT[row_index:].tolist()
+    _fleet_size.append(granular_filter_group)
+    _observed_avg_retention_rate.append(avg_retention_rate)
+    _expected_tenure.append(avg_tenure)
 
-max_y = df_sub.CUSTOMER_COUNT.max()
-max_y = max_y + max_y*0.1
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 
-fig, ax1 = plt.subplots(figsize=(12,4))
-plt.plot(chart_revenue_year,chart_customer_count, marker='o', c='C0')
-plt.plot(chart_forecast_year,chart_forecast_customer_count, marker='o', c='black', linestyle='dashed')
-ax1.set_ylim(ymin=0, ymax=max_y)
-ax1.set_xlabel('YEAR', fontsize=14)
-ax2.set_xlim(xmin=2019, xmax=2023+forecast_years)
-ax1.set_ylabel('CUSTOMER COUNT', fontsize=14)
-ax1.yaxis.set_major_formatter(FuncFormatter(lambda x, p: format(int(x), ',')))
-plt.title(' Count of Retained Customers')
-plt.legend(['observed','forecasted'])
+def rgb_to_hex(rgb):
+    return '%02x%02x%02x' % rgb
 
-fig, ax2 = plt.subplots(figsize=(12,4))
-plt.plot(chart_revenue_year,chart_survived_from_first, marker='o', c='C0')
-plt.plot(chart_forecast_year,chart_forecast_from_first, marker='o', c='black', linestyle='dashed')
-ax2.set_ylim(ymin=0, ymax=110)
+fig, ax2 = plt.subplots(figsize=(10,6.5))
+
+color_step_size = int(255 / len(_fleet_size))
+color_step_size = 30
+
+current_color_step_size = 255
+for i in range(len(_fleet_size)):
+    
+    color = "#" + rgb_to_hex((current_color_step_size,0,0))
+    current_color_step_size -= color_step_size
+    if current_color_step_size<=0:
+        current_color_step_size = 0
+
+    fleet_size = _fleet_size[i]
+    observed_avg_retention_rate = _observed_avg_retention_rate[i]
+    expected_tenure = _expected_tenure[i]
+    revenue_year = _revenue_year[i]
+    observed_customer_percent = _observed_customer_percent[i]
+    chart_forecast_year = _chart_forecast_year[i]
+    chart_forecast_from_first = _chart_forecast_from_first[i]
+    
+    plt.plot(revenue_year,observed_customer_percent, marker='o', color = color)
+    #plt.plot(chart_forecast_year,chart_forecast_from_first, marker='o', c='black', linestyle='dashed')
+    
+ax2.set_ylim(ymin=0, ymax=103)
 ax2.set_xlabel('YEAR', fontsize=14)
 ax2.set_ylabel('Percent Survived (%)', fontsize=14)
-plt.title(' % of Retained Customers')
-plt.legend(['observed','forecasted'])
-#plt.subplots_adjust(left=2.0,right=3.0)
+ax2.grid()
+plt.title(' % of Retained Customers by Fleet Size')
+plt.legend(_fleet_size, bbox_to_anchor=(1.05,1.0), loc='upper left')
 plt.show()
 
-fraction_remaining = 1
-avg_tenure = 0
-check_sum = 0
-for i in range(len(df_sub)):
-    avg_tenure += df_sub.iloc[i].CUSTOMERS_LEFT_PERCENT * i
-    fraction_remaining -=  df_sub.iloc[i].CUSTOMERS_LEFT_PERCENT
-    check_sum += df_sub.iloc[i].CUSTOMERS_LEFT_PERCENT
-    #print("YEAR", i, df_sub.iloc[i].CUSTOMERS_LEFT, df_sub.iloc[i].CUSTOMERS_LEFT_PERCENT)
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+_color_list = []
+step_size=30
+for i in _fleet_size_num:
+    red_val = 255-i*step_size
+    if red_val<0:
+        red_val=0
+    _color_list.append("#" + rgb_to_hex((red_val,0,0)))
+print(_color_list)
 
-check_sum += fraction_remaining
-avg_tenure += fraction_remaining * i
-print("forecast period:", forecast_years)
-print("AVG Tenure (Observed + Forecasted):", round(avg_tenure,2), "Years")
-print("check_sum:", round(check_sum,2))
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+_fleet_size_num = []
+for i in range(len(_fleet_size)):
+    _fleet_size_num.append(i)
+_fleet_size_num
+
+fig, ax2 = plt.subplots(figsize=(4.5,2.5))
+ax2.set_xlabel('Fleet Size (Number of Cards)', fontsize=14)
+ax2.set_ylabel('Avg Retention (%)', fontsize=14)
+ax2.grid()
+
+plt.scatter(_fleet_size_num, _observed_avg_retention_rate, s=15, c=_color_list)
+plt.title('Fleet Size vs Avg Retention Rate')
+plt.show()
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+fig, ax2 = plt.subplots(figsize=(4.5,2.5))
+ax2.set_xlabel('Fleet Size (Number of Cards)', fontsize=14)
+ax2.set_ylabel('Expected Tenure (Years)', fontsize=14)
+ax2.grid()
+
+plt.scatter(_fleet_size_num, _expected_tenure, s=15,c=_color_list)
+plt.title('Fleet Size vs Expected Tenure')
+plt.show()
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+_fleet_size_num
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+retention_observations
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+print(_fleet_size)
+print()
+print(_observed_avg_retention_rate)
+print()
+print(_expected_tenure)
+print()
+print(_revenue_year)
+print()
+print(_observed_customer_count)
+print()
+print(_observed_customer_percent)
