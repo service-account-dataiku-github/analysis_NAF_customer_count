@@ -21,6 +21,10 @@
     {
       "objectId": "compute_TENURE_BY_GROUP",
       "objectType": "RECIPE"
+    },
+    {
+      "objectId": "NAFCUSTOMER_ACCOUNT_ANNUAL_ACTIVE_CARD_COUNT",
+      "objectType": "DATASET"
     }
   ],
   "shared": [],
