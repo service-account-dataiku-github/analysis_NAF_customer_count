@@ -25,6 +25,10 @@
     {
       "objectId": "NAFCUSTOMER_ACCOUNT_ANNUAL_ACTIVE_CARD_COUNT",
       "objectType": "DATASET"
+    },
+    {
+      "objectId": "RETENTION_RATE_BY_GROUP",
+      "objectType": "DATASET"
     }
   ],
   "shared": [],
