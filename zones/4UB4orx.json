@@ -5,6 +5,10 @@
     {
       "objectId": "vgsales",
       "objectType": "DATASET"
+    },
+    {
+      "objectId": "tutorial_output",
+      "objectType": "DATASET"
     }
   ],
   "shared": [],
