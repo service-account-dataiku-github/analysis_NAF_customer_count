@@ -1,7 +1,12 @@
 {
   "name": "Matplot Lib Tutorials",
   "color": "#C82423",
-  "items": [],
+  "items": [
+    {
+      "objectId": "vgsales",
+      "objectType": "DATASET"
+    }
+  ],
   "shared": [],
   "tags": [],
   "customFields": {},
