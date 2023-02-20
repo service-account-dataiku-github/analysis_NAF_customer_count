@@ -9,6 +9,10 @@
     {
       "objectId": "tutorial_output",
       "objectType": "DATASET"
+    },
+    {
+      "objectId": "compute_tutorial_output",
+      "objectType": "RECIPE"
     }
   ],
   "shared": [],
