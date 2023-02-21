@@ -38,17 +38,21 @@
         {
           "ref": "RETENTION_RATE",
           "appendMode": false
+        },
+        {
+          "ref": "CUSTOMER_FLEET_SIZE",
+          "appendMode": false
         }
       ]
     }
   },
   "labels": [],
   "versionTag": {
-    "versionNumber": 4,
+    "versionNumber": 5,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1677006799725
+    "lastModifiedOn": 1677006851054
   },
   "creationTag": {
     "versionNumber": 0,
