@@ -45,6 +45,10 @@
     {
       "objectId": "CUSTOMER_FLEET_SIZE",
       "objectType": "DATASET"
+    },
+    {
+      "objectId": "REVENUE_PER_CARD",
+      "objectType": "DATASET"
     }
   ],
   "shared": [],
