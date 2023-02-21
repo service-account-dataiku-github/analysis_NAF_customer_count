@@ -38,17 +38,21 @@
         {
           "ref": "RETENTION_RATE_BY_GROUP",
           "appendMode": false
+        },
+        {
+          "ref": "REVENUE_PER_CARD",
+          "appendMode": false
         }
       ]
     }
   },
   "labels": [],
   "versionTag": {
-    "versionNumber": 6,
+    "versionNumber": 7,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1677012779012
+    "lastModifiedOn": 1677014305399
   },
   "creationTag": {
     "versionNumber": 0,
