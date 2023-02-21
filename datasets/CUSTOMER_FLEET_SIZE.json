@@ -28,11 +28,11 @@
     "dimensions": []
   },
   "versionTag": {
-    "versionNumber": 0,
+    "versionNumber": 1,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1677006830739
+    "lastModifiedOn": 1677007896317
   },
   "creationTag": {
     "versionNumber": 0,
@@ -56,8 +56,13 @@
     "readSQLDateColsAsDSSDates": true
   },
   "schema": {
-    "columns": [],
-    "userModified": true
+    "columns": [
+      {"name":"CUSTOMER_ID","type":"bigint"},
+      {"name":"CUSTOMER","type":"string","maxLength":4194304},
+      {"name":"FLEET_SIZE","type":"bigint"},
+      {"name":"FLEET_SIZE_CATEGORY","type":"string","maxLength":4194304}
+    ],
+    "userModified": false
   },
   "dkuProperties": [],
   "metrics": {
