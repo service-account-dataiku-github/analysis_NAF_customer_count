@@ -86,7 +86,7 @@ df_j.head()
 
 #RETENTION_RATE_df = ... # Compute a Pandas dataframe to write into RETENTION_RATE
 
-
+#"CUSTOMER_FLEET_SIZE"
 # Write recipe outputs
 #RETENTION_RATE = dataiku.Dataset("RETENTION_RATE")
 #RETENTION_RATE.write_with_schema(RETENTION_RATE_df)
