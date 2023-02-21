@@ -28,11 +28,11 @@
     "dimensions": []
   },
   "versionTag": {
-    "versionNumber": 0,
+    "versionNumber": 1,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1677014303305
+    "lastModifiedOn": 1677014470454
   },
   "creationTag": {
     "versionNumber": 0,
@@ -56,8 +56,16 @@
     "readSQLDateColsAsDSSDates": true
   },
   "schema": {
-    "columns": [],
-    "userModified": true
+    "columns": [
+      {"name":"CUSTOMER_ID","type":"double"},
+      {"name":"CUSTOMER","type":"string","maxLength":4194304},
+      {"name":"REVENUE_YEAR","type":"bigint"},
+      {"name":"REVENUE_AMOUNT_USD","type":"double"},
+      {"name":"ACTIVE_CARD_COUNT","type":"double"},
+      {"name":"FLEET_CATEGORY","type":"string","maxLength":4194304},
+      {"name":"REVENUE_PER_CARD","type":"double"}
+    ],
+    "userModified": false
   },
   "dkuProperties": [],
   "metrics": {
