@@ -41,6 +41,10 @@
     {
       "objectId": "compute_RETENTION_RATE",
       "objectType": "RECIPE"
+    },
+    {
+      "objectId": "CUSTOMER_FLEET_SIZE",
+      "objectType": "DATASET"
     }
   ],
   "shared": [],
