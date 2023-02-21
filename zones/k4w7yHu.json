@@ -33,6 +33,10 @@
     {
       "objectId": "compute_RETENTION_RATE_BY_GROUP",
       "objectType": "RECIPE"
+    },
+    {
+      "objectId": "RETENTION_RATE",
+      "objectType": "DATASET"
     }
   ],
   "shared": [],
