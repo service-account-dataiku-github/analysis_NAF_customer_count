@@ -27,10 +27,6 @@
       "objectType": "DATASET"
     },
     {
-      "objectId": "RETENTION_RATE_BY_GROUP",
-      "objectType": "DATASET"
-    },
-    {
       "objectId": "RETENTION_RATE",
       "objectType": "DATASET"
     },
