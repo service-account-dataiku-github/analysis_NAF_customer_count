@@ -45,6 +45,10 @@
     {
       "objectId": "NAFCUSTOMER_REVENUE_AGGREGATED_2019",
       "objectType": "DATASET"
+    },
+    {
+      "objectId": "NAFCUSTOMER_REVENUE_AGGREGATED_2020",
+      "objectType": "DATASET"
     }
   ],
   "shared": [],
