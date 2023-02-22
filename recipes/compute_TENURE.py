@@ -68,7 +68,7 @@ from matplotlib.ticker import FuncFormatter
 import matplotlib.pyplot as plt
 
 # plot out sum of revenue per year
-# in order to do a quick reonciliation against 
+# in order to do a quick reonciliation against
 
 # aggregate revenue at annual grain
 df_revenue_per_year = df.groupby(['REVENUE_YEAR']).REVENUE_AMOUNT_USD.sum().reset_index()
@@ -77,10 +77,10 @@ df_revenue_per_year.head()
 
 max_revenue = df_revenue_per_year.REVENUE_AMOUNT_USD.max()
 
-chart_revenue_year = [] 
+chart_revenue_year = []
 for y in df_revenue_per_year.REVENUE_YEAR.tolist():
     chart_revenue_year.append(str(y))
-    
+
 fig, ax1 = plt.subplots(figsize=(8,3))
 ax1.plot(chart_revenue_year,df_revenue_per_year['REVENUE_AMOUNT_USD'], marker='o')
 ax1.set_xlabel('YEAR', fontsize=14)
@@ -159,16 +159,16 @@ _observed_customer_percent = []
 _chart_forecast_year = []
 _chart_forecast_from_first = []
 
-groups =  ['1 card(s)', '2 card(s)', '3 card(s)', '4 card(s)', '5 card(s)', '6 card(s)', 
+groups =  ['1 card(s)', '2 card(s)', '3 card(s)', '4 card(s)', '5 card(s)', '6 card(s)',
            '7 card(s)','8 card(s)','9 card(s)','10 card(s)',  '11 card(s)',
            '12 card(s)','13 card(s)','14 card(s)', '15 card(s)','16 card(s)','17 card(s)'
            ,'18 card(s)','19 card(s)','20 card(s)','> 20 cards']
 
 for granular_filter_group in groups:
-    
+
     df_sub = df_activity[df_activity.SETUP_YEAR<2019]
     df_sub = df_sub[df_sub.FLEET_SIZE_CATEGORY==granular_filter_group]
-    
+
     df_sub = df_sub.groupby(['REVENUE_YEAR']).CUSTOMER_ID.nunique().reset_index()
     df_sub.columns = ['REVENUE_YEAR','CUSTOMER_COUNT']
     df_sub.REVENUE_YEAR = df_sub.REVENUE_YEAR.astype(str)
@@ -191,11 +191,11 @@ for granular_filter_group in groups:
             retention_observations.append(survived)
         row_index+=1
 
-    avg_retention_rate = sum(retention_observations)/len(retention_observations)                
+    avg_retention_rate = sum(retention_observations)/len(retention_observations)
     print("----")
     print("Observed Average Retention Rate (2019-2022):", 100*round(avg_retention_rate,3), "%")
     print(retention_observations)
-    len(retention_observations)                
+    len(retention_observations)
 
     forecast_year = 2022
 
@@ -221,7 +221,7 @@ for granular_filter_group in groups:
 
 
     df_sub['CUSTOMERS_LEFT_PERCENT'] = df_sub['CUSTOMERS_LEFT'] / df_sub.iloc[0].CUSTOMER_COUNT
-    df_sub.FORECAST_CUSTOMER_COUNT = df_sub.FORECAST_CUSTOMER_COUNT.astype('Int64') 
+    df_sub.FORECAST_CUSTOMER_COUNT = df_sub.FORECAST_CUSTOMER_COUNT.astype('Int64')
 
     chart_revenue_year = df_sub.REVENUE_YEAR[0:row_index].tolist()
     chart_customer_count = df_sub.CUSTOMER_COUNT[0:row_index].tolist()
@@ -242,7 +242,7 @@ for granular_filter_group in groups:
     max_y = max_y + max_y*0.1
 
     _revenue_year.append(chart_revenue_year)
-    _observed_customer_count.append(chart_customer_count)    
+    _observed_customer_count.append(chart_customer_count)
 
     fig, ax1 = plt.subplots(figsize=(10,5))
     plt.plot(chart_revenue_year,chart_customer_count, marker='o', c='C0')
@@ -286,7 +286,7 @@ for granular_filter_group in groups:
     print("forecast period:", forecast_years)
     print("AVG Tenure (Observed + Forecasted):", round(avg_tenure,2), "Years")
     print("check_sum:", round(check_sum,2))
-    
+
     _fleet_size.append(granular_filter_group)
     _observed_avg_retention_rate.append(avg_retention_rate)
     _expected_tenure.append(avg_tenure)
@@ -302,7 +302,7 @@ color_step_size = 30
 
 current_color_step_size = 255
 for i in range(len(_fleet_size)):
-    
+
     color = "#" + rgb_to_hex((current_color_step_size,0,0))
     current_color_step_size -= color_step_size
     if current_color_step_size<=0:
@@ -315,10 +315,10 @@ for i in range(len(_fleet_size)):
     observed_customer_percent = _observed_customer_percent[i]
     chart_forecast_year = _chart_forecast_year[i]
     chart_forecast_from_first = _chart_forecast_from_first[i]
-    
+
     plt.plot(revenue_year,observed_customer_percent, marker='o', color = color)
     #plt.plot(chart_forecast_year,chart_forecast_from_first, marker='o', c='black', linestyle='dashed')
-    
+
 ax2.set_ylim(ymin=0, ymax=103)
 ax2.set_xlabel('YEAR', fontsize=14)
 ax2.set_ylabel('Percent Survived (%)', fontsize=14)
@@ -384,13 +384,13 @@ divider = 1000000
 max_value = 0
 bottom = len(df_revenue_by_year.REVENUE_YEAR.unique()) * [0]
 for idx,s in enumerate(labels):
-    
+
     dim1 = list(map(str,df_revenue_by_year[df_revenue_by_year.FLEET_SIZE_GROUP==s].REVENUE_YEAR))
     data1 = df_revenue_by_year[df_revenue_by_year.FLEET_SIZE_GROUP==s].REVENUE_AMOUNT_USD/divider
-    
+
     ax.bar(dim1, data1, bottom=bottom, color=colors[idx])
-    bottom = [sum(i) for i in zip(data1, bottom )] 
-    
+    bottom = [sum(i) for i in zip(data1, bottom )]
+
 ax.set_xlabel('YEAR', fontsize=14)
 ax.set_ylabel('REVENUE (M)', fontsize=14)
 ax.yaxis.set_major_formatter(FuncFormatter(lambda x, p: format(int(x), ',')))
@@ -413,13 +413,13 @@ divider = 1000000000
 max_value = 0
 bottom = len(df_spend_by_year.REVENUE_YEAR.unique()) * [0]
 for idx,s in enumerate(labels):
-    
+
     dim1 = list(map(str,df_spend_by_year[df_spend_by_year.FLEET_SIZE_GROUP==s].REVENUE_YEAR))
     data1 = df_spend_by_year[df_spend_by_year.FLEET_SIZE_GROUP==s].GROSS_SPEND_AMOUNT/divider
-    
+
     ax.bar(dim1, data1, bottom=bottom, color=colors[idx])
-    bottom = [sum(i) for i in zip(data1, bottom )] 
-    
+    bottom = [sum(i) for i in zip(data1, bottom )]
+
 ax.set_xlabel('YEAR', fontsize=14)
 ax.set_ylabel('SPEND (B)', fontsize=14)
 ax.yaxis.set_major_formatter(FuncFormatter(lambda x, p: format(int(x), ',')))
@@ -441,13 +441,13 @@ fig, ax = plt.subplots(1, figsize=(5,3))
 max_value = 0
 bottom = len(df_customer_by_year.REVENUE_YEAR.unique()) * [0]
 for idx,s in enumerate(labels):
-    
+
     dim1 = list(map(str,df_customer_by_year[df_customer_by_year.FLEET_SIZE_GROUP==s].REVENUE_YEAR))
     data1 = df_customer_by_year[df_customer_by_year.FLEET_SIZE_GROUP==s].CUSTOMER_COUNT
-    
+
     ax.bar(dim1, data1, bottom=bottom, color=colors[idx])
-    bottom = [sum(i) for i in zip(data1, bottom )] 
-    
+    bottom = [sum(i) for i in zip(data1, bottom )]
+
 ax.set_xlabel('YEAR', fontsize=14)
 ax.set_ylabel('CUSTOMERS', fontsize=14)
 ax.yaxis.set_major_formatter(FuncFormatter(lambda x, p: format(int(x), ',')))
@@ -469,13 +469,13 @@ fig, ax = plt.subplots(1, figsize=(5,3))
 max_value = 0
 bottom = len(df_active_cards_by_year.REVENUE_YEAR.unique()) * [0]
 for idx,s in enumerate(labels):
-    
+
     dim1 = list(map(str,df_active_cards_by_year[df_active_cards_by_year.FLEET_SIZE_GROUP==s].REVENUE_YEAR))
     data1 = df_active_cards_by_year[df_active_cards_by_year.FLEET_SIZE_GROUP==s].ACTIVE_CARD_COUNT/divider
-    
+
     ax.bar(dim1, data1, bottom=bottom, color=colors[idx])
-    bottom = [sum(i) for i in zip(data1, bottom )] 
-    
+    bottom = [sum(i) for i in zip(data1, bottom )]
+
 ax.set_xlabel('YEAR', fontsize=14)
 ax.set_ylabel('ACTIVE CARDS (M)', fontsize=14)
 ax.yaxis.set_major_formatter(FuncFormatter(lambda x, p: format(int(x), ',')))
@@ -507,19 +507,19 @@ max_value = 0
 x_axis = np.arange(len(df_revenue_per_card_by_year[df_revenue_per_card_by_year.FLEET_SIZE_GROUP==s]))
 
 for idx,s in enumerate(labels):
-    
+
     dim1 = list(map(str,df_revenue_per_card_by_year[df_revenue_per_card_by_year.FLEET_SIZE_GROUP==s].REVENUE_YEAR))
     data1 = df_revenue_per_card_by_year[df_revenue_per_card_by_year.FLEET_SIZE_GROUP==s].REVENUE_PER_CARD
     if idx==0:
         ax.bar(x_axis-0.2, data1, color=colors[idx], width=bar_width)
-    
+
     if idx==1:
         ax.bar(x_axis, data1, color=colors[idx], width=bar_width)
-    
+
     if idx==2:
         ax.bar(x_axis+0.2, data1, color=colors[idx], width=bar_width)
-    
-    
+
+
 ax.set_xlabel('YEAR', fontsize=14)
 ax.set_ylabel('REVENUE per CARD', fontsize=14)
 ax.yaxis.set_major_formatter(FuncFormatter(lambda x, p: format(int(x), ',')))
