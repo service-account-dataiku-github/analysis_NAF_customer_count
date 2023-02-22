@@ -483,6 +483,54 @@ plt.legend(labels, bbox_to_anchor=(1.05,1.0), loc='upper left')
 plt.show()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+print(len(df_revenue_by_year))
+print(len(df_active_cards_by_year))
+
+df_revenue_per_card_by_year = pd.merge(df_revenue_by_year,df_active_cards_by_year)
+print(len(df_revenue_per_card_by_year))
+
+df_revenue_per_card_by_year['REVENUE_PER_CARD'] = df_revenue_per_card_by_year.REVENUE_AMOUNT_USD / df_revenue_per_card_by_year.ACTIVE_CARD_COUNT
+df_revenue_per_card_by_year.head(100)
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+colors = ['#006BA2','#758D99','#EBB434']
+labels = ['(>100 cards)','(between 6 and 100 cards)','(<=5 cards)']
+
+fig, ax = plt.subplots(1, figsize=(5,3))
+
+bar_width = 0.2
+max_value = 0
+
+x_axis = np.arange(len(df_revenue_per_card_by_year[df_revenue_per_card_by_year.FLEET_SIZE_GROUP==s]))
+
+for idx,s in enumerate(labels):
+    
+    dim1 = list(map(str,df_revenue_per_card_by_year[df_revenue_per_card_by_year.FLEET_SIZE_GROUP==s].REVENUE_YEAR))
+    data1 = df_revenue_per_card_by_year[df_revenue_per_card_by_year.FLEET_SIZE_GROUP==s].REVENUE_PER_CARD
+    if idx==0:
+        ax.bar(x_axis-0.2, data1, color=colors[idx], width=bar_width)
+    
+    if idx==1:
+        ax.bar(x_axis, data1, color=colors[idx], width=bar_width)
+    
+    if idx==2:
+        ax.bar(x_axis+0.2, data1, color=colors[idx], width=bar_width)
+    
+    
+ax.set_xlabel('YEAR', fontsize=14)
+ax.set_ylabel('REVENUE per CARD', fontsize=14)
+ax.yaxis.set_major_formatter(FuncFormatter(lambda x, p: format(int(x), ',')))
+ax.grid(color='#95a5a6', linestyle='--', linewidth=1, axis='y', alpha=0.6)
+fig.autofmt_xdate()
+plt.title('REVENUE per CARD BY FLEET SIZE')
+plt.legend(labels, bbox_to_anchor=(1.05,1.0), loc='upper left')
+plt.xticks(x_axis, dim1)
+plt.show()
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+df_revenue_per_card_by_year.groupby(['FLEET_SIZE_GROUP']).REVENUE_PER_CARD.mean().reset_index()
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 # Compute recipe outputs
 # TODO: Write here your actual code that computes the outputs
 # NB: DSS supports several kinds of APIs for reading and writing data. Please see doc.
