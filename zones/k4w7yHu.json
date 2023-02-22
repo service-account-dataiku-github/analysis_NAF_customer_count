@@ -43,10 +43,6 @@
       "objectType": "DATASET"
     },
     {
-      "objectId": "REVENUE_PER_CARD",
-      "objectType": "DATASET"
-    },
-    {
       "objectId": "TENURE",
       "objectType": "DATASET"
     },
