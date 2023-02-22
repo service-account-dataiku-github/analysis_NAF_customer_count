@@ -66,140 +66,120 @@ df_j.loc[df_j.FLEET_SIZE.isnull(),'FLEET_SIZE'] = 0
 df_j['FLEET_CATEGORY'] = 'NOT SET'
 df_j.loc[df_j.FLEET_SIZE.between(0,5),'FLEET_CATEGORY'] = '(<=5 cards)'
 df_j.loc[df_j.FLEET_SIZE.between(6,100),'FLEET_CATEGORY'] = '(between 6 and 100 cards)'
-df_j.loc[df_j.FLEET_SIZE>50,'FLEET_CATEGORY'] = '(>100 cards)'
+df_j.loc[df_j.FLEET_SIZE>100,'FLEET_CATEGORY'] = '(>100 cards)'
 df_j.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-df_j.FLEET_CATEGORY.unique()
-
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 df_revenue_by_year = df_j.groupby(['REVENUE_YEAR','FLEET_CATEGORY']).REVENUE_AMOUNT_USD.sum().reset_index()
-df_revenue_by_year.head(10)
 
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-df_revenue_by_year.REVENUE_YEAR.value_counts()
+colors = ['#006BA2','#758D99','#EBB434']
+labels = ['(>100 cards)','(between 6 and 100 cards)','(<=5 cards)']
 
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-import matplotlib.dates as mdates
-from matplotlib.ticker import FuncFormatter
+fig, ax = plt.subplots(1, figsize=(5,3))
+divider = 1000000
 
-fig, ax1 = plt.subplots(figsize=(9,4))
-
-#['(<=5 cards)', '(between 6 and 100 cards)', '(>100 cards)']
-
-dim1 = list(map(str,df_revenue_by_year[df_revenue_by_year.FLEET_CATEGORY=='(>100 cards)'].REVENUE_YEAR))
-data1 = df_revenue_by_year[df_revenue_by_year.FLEET_CATEGORY=='(>100 cards)'].REVENUE_AMOUNT_USD
-
-dim2 = list(map(str,df_revenue_by_year[df_revenue_by_year.FLEET_CATEGORY=='(between 6 and 100 cards)'].REVENUE_YEAR))
-data2 = df_revenue_by_year[df_revenue_by_year.FLEET_CATEGORY=='(between 6 and 100 cards)'].REVENUE_AMOUNT_USD
-
-dim3 = list(map(str,df_revenue_by_year[df_revenue_by_year.FLEET_CATEGORY=='(<=5 cards)'].REVENUE_YEAR))
-data3 = df_revenue_by_year[df_revenue_by_year.FLEET_CATEGORY=='(<=5 cards)'].REVENUE_AMOUNT_USD
-
-#ax1.bar(dim1,data1, color='#006BA2', width=0.75)
-#ax1.bar(dim2,data2, bottom=data1, color='#758D99', width=0.75)
-#ax1.bar(dim3,data3, bottom=data2+data1, color='#EBB434', width=0.75)
-
-ax1.plot(dim1,data1, color='#006BA2')
-ax1.plot(dim2,data2, color='#758D99')
-ax1.plot(dim3,data3, color='#EBB434')
-
-ax1.set_xlabel('YEAR', fontsize=14)
-ax1.set_ylabel('REVENUE', fontsize=14)
-#ax1.set_ylim(ymin=0, ymax=max_value*1.15)
-ax1.yaxis.set_major_formatter(FuncFormatter(lambda x, p: format(int(x), ',')))
-ax1.grid(color='#95a5a6', linestyle='--', linewidth=1, axis='y', alpha=0.6)
+max_value = 0
+bottom = len(df_revenue_by_year.REVENUE_YEAR.unique()) * [0]
+for idx,s in enumerate(labels):
+    
+    dim1 = list(map(str,df_revenue_by_year[df_revenue_by_year.FLEET_CATEGORY==s].REVENUE_YEAR))
+    data1 = df_revenue_by_year[df_revenue_by_year.FLEET_CATEGORY==s].REVENUE_AMOUNT_USD/divider
+    
+    ax.bar(dim1, data1, bottom=bottom, color=colors[idx])
+    bottom = [sum(i) for i in zip(data1, bottom )] 
+    
+ax.set_xlabel('YEAR', fontsize=14)
+ax.set_ylabel('REVENUE (M)', fontsize=14)
+ax.yaxis.set_major_formatter(FuncFormatter(lambda x, p: format(int(x), ',')))
+ax.grid(color='#95a5a6', linestyle='--', linewidth=1, axis='y', alpha=0.6)
 fig.autofmt_xdate()
-plt.title('TURN THIS INTO A PROPER BAR')
-plt.legend(['(>100 cards)','(between 6 and 100 cards)','(<=5 cards)'], bbox_to_anchor=(1.05,1.0), loc='upper left')
+plt.title('REVENUE BY FLEET SIZE')
+plt.legend(labels, bbox_to_anchor=(1.05,1.0), loc='upper left')
 plt.show()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 df_spend_by_year = df_j.groupby(['REVENUE_YEAR','FLEET_CATEGORY']).GROSS_SPEND_AMOUNT.sum().reset_index()
-df_spend_by_year.head(10)
 
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-import matplotlib.dates as mdates
-from matplotlib.ticker import FuncFormatter
+colors = ['#006BA2','#758D99','#EBB434']
+labels = ['(>100 cards)','(between 6 and 100 cards)','(<=5 cards)']
 
-fig, ax1 = plt.subplots(figsize=(9,4))
+fig, ax = plt.subplots(1, figsize=(5,3))
 
-dim1 = list(map(str,df_spend_by_year[df_spend_by_year.FLEET_CATEGORY=='(>20 cards)'].REVENUE_YEAR))
-data1 = df_spend_by_year[df_spend_by_year.FLEET_CATEGORY=='(>20 cards)'].GROSS_SPEND_AMOUNT
+divider = 1000000000
 
-dim2 = list(map(str,df_spend_by_year[df_spend_by_year.FLEET_CATEGORY=='(<=20 cards)'].REVENUE_YEAR))
-data2 = df_spend_by_year[df_spend_by_year.FLEET_CATEGORY=='(<=20 cards)'].GROSS_SPEND_AMOUNT
-
-ax1.bar(dim1,data1, color='#006BA2', width=0.75)
-ax1.bar(dim2,data2, bottom=data1, color='#758D99', width=0.75)
-
-ax1.set_xlabel('YEAR', fontsize=14)
-ax1.set_ylabel('SPEND', fontsize=14)
-#ax1.set_ylim(ymin=0, ymax=max_value*1.15)
-ax1.yaxis.set_major_formatter(FuncFormatter(lambda x, p: format(int(x), ',')))
-ax1.grid(color='#95a5a6', linestyle='--', linewidth=1, axis='y', alpha=0.6)
+max_value = 0
+bottom = len(df_spend_by_year.REVENUE_YEAR.unique()) * [0]
+for idx,s in enumerate(labels):
+    
+    dim1 = list(map(str,df_spend_by_year[df_spend_by_year.FLEET_CATEGORY==s].REVENUE_YEAR))
+    data1 = df_spend_by_year[df_spend_by_year.FLEET_CATEGORY==s].GROSS_SPEND_AMOUNT/divider
+    
+    ax.bar(dim1, data1, bottom=bottom, color=colors[idx])
+    bottom = [sum(i) for i in zip(data1, bottom )] 
+    
+ax.set_xlabel('YEAR', fontsize=14)
+ax.set_ylabel('SPEND (B)', fontsize=14)
+ax.yaxis.set_major_formatter(FuncFormatter(lambda x, p: format(int(x), ',')))
+ax.grid(color='#95a5a6', linestyle='--', linewidth=1, axis='y', alpha=0.6)
 fig.autofmt_xdate()
-plt.title('SPEND by YEAR')
-plt.legend(['(>20 cards)','(<=20 cards)'], bbox_to_anchor=(1.05,1.0), loc='upper left')
+plt.title('SPEND BY FLEET SIZE')
+plt.legend(labels, bbox_to_anchor=(1.05,1.0), loc='upper left')
 plt.show()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 df_customer_by_year = df_j.groupby(['REVENUE_YEAR','FLEET_CATEGORY']).CUSTOMER_ID.nunique().reset_index()
 df_customer_by_year.columns = ['REVENUE_YEAR', 'FLEET_CATEGORY', 'CUSTOMER_COUNT']
-df_customer_by_year.head(10)
 
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-import matplotlib.dates as mdates
-from matplotlib.ticker import FuncFormatter
+colors = ['#006BA2','#758D99','#EBB434']
+labels = ['(>100 cards)','(between 6 and 100 cards)','(<=5 cards)']
 
-fig, ax1 = plt.subplots(figsize=(9,4))
+fig, ax = plt.subplots(1, figsize=(5,3))
 
-dim1 = list(map(str,df_customer_by_year[df_customer_by_year.FLEET_CATEGORY=='(>20 cards)'].REVENUE_YEAR))
-data1 = df_customer_by_year[df_customer_by_year.FLEET_CATEGORY=='(>20 cards)'].CUSTOMER_COUNT
-
-dim2 = list(map(str,df_customer_by_year[df_customer_by_year.FLEET_CATEGORY=='(<=20 cards)'].REVENUE_YEAR))
-data2 = df_customer_by_year[df_customer_by_year.FLEET_CATEGORY=='(<=20 cards)'].CUSTOMER_COUNT
-
-ax1.bar(dim1,data1, color='#006BA2', width=0.75)
-ax1.bar(dim2,data2, bottom=data1, color='#758D99', width=0.75)
-
-ax1.set_xlabel('YEAR', fontsize=14)
-ax1.set_ylabel('CUSTOMER COUNT', fontsize=14)
-#ax1.set_ylim(ymin=0, ymax=max_value*1.15)
-ax1.yaxis.set_major_formatter(FuncFormatter(lambda x, p: format(int(x), ',')))
-ax1.grid(color='#95a5a6', linestyle='--', linewidth=1, axis='y', alpha=0.6)
+max_value = 0
+bottom = len(df_customer_by_year.REVENUE_YEAR.unique()) * [0]
+for idx,s in enumerate(labels):
+    
+    dim1 = list(map(str,df_customer_by_year[df_customer_by_year.FLEET_CATEGORY==s].REVENUE_YEAR))
+    data1 = df_customer_by_year[df_customer_by_year.FLEET_CATEGORY==s].CUSTOMER_COUNT
+    
+    ax.bar(dim1, data1, bottom=bottom, color=colors[idx])
+    bottom = [sum(i) for i in zip(data1, bottom )] 
+    
+ax.set_xlabel('YEAR', fontsize=14)
+ax.set_ylabel('CUSTOMERS', fontsize=14)
+ax.yaxis.set_major_formatter(FuncFormatter(lambda x, p: format(int(x), ',')))
+ax.grid(color='#95a5a6', linestyle='--', linewidth=1, axis='y', alpha=0.6)
 fig.autofmt_xdate()
-plt.title('CUSTOMER COUNT by YEAR')
-plt.legend(['(>20 cards)','(<=20 cards)'], bbox_to_anchor=(1.05,1.0), loc='upper left')
+plt.title('CUSTOMER COUNT BY FLEET SIZE')
+plt.legend(labels, bbox_to_anchor=(1.05,1.0), loc='upper left')
 plt.show()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 df_active_cards_by_year = df_j.groupby(['REVENUE_YEAR','FLEET_CATEGORY']).ACTIVE_CARD_COUNT.sum().reset_index()
-df_active_cards_by_year.head(10)
 
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-import matplotlib.dates as mdates
-from matplotlib.ticker import FuncFormatter
+colors = ['#006BA2','#758D99','#EBB434']
+labels = ['(>100 cards)','(between 6 and 100 cards)','(<=5 cards)']
 
-fig, ax1 = plt.subplots(figsize=(9,4))
+divider = 1000000
+fig, ax = plt.subplots(1, figsize=(5,3))
 
-dim1 = list(map(str,df_active_cards_by_year[df_active_cards_by_year.FLEET_CATEGORY=='(>20 cards)'].REVENUE_YEAR))
-data1 = df_active_cards_by_year[df_active_cards_by_year.FLEET_CATEGORY=='(>20 cards)'].ACTIVE_CARD_COUNT
-
-dim2 = list(map(str,df_active_cards_by_year[df_active_cards_by_year.FLEET_CATEGORY=='(<=20 cards)'].REVENUE_YEAR))
-data2 = df_active_cards_by_year[df_active_cards_by_year.FLEET_CATEGORY=='(<=20 cards)'].ACTIVE_CARD_COUNT
-
-ax1.bar(dim1,data1, color='#006BA2', width=0.75)
-ax1.bar(dim2,data2, bottom=data1, color='#758D99', width=0.75)
-
-ax1.set_xlabel('YEAR', fontsize=14)
-ax1.set_ylabel('ACTIVE CARDS', fontsize=14)
-#ax1.set_ylim(ymin=0, ymax=max_value*1.15)
-ax1.yaxis.set_major_formatter(FuncFormatter(lambda x, p: format(int(x), ',')))
-ax1.grid(color='#95a5a6', linestyle='--', linewidth=1, axis='y', alpha=0.6)
+max_value = 0
+bottom = len(df_active_cards_by_year.REVENUE_YEAR.unique()) * [0]
+for idx,s in enumerate(labels):
+    
+    dim1 = list(map(str,df_active_cards_by_year[df_active_cards_by_year.FLEET_CATEGORY==s].REVENUE_YEAR))
+    data1 = df_active_cards_by_year[df_active_cards_by_year.FLEET_CATEGORY==s].ACTIVE_CARD_COUNT/divider
+    
+    ax.bar(dim1, data1, bottom=bottom, color=colors[idx])
+    bottom = [sum(i) for i in zip(data1, bottom )] 
+    
+ax.set_xlabel('YEAR', fontsize=14)
+ax.set_ylabel('ACTIVE CARDS (M)', fontsize=14)
+ax.yaxis.set_major_formatter(FuncFormatter(lambda x, p: format(int(x), ',')))
+ax.grid(color='#95a5a6', linestyle='--', linewidth=1, axis='y', alpha=0.6)
 fig.autofmt_xdate()
-plt.title('ACTIVE CARD COUNT by YEAR')
-plt.legend(['(>20 cards)','(<=20 cards)'], bbox_to_anchor=(1.05,1.0), loc='upper left')
+plt.title('ACTIVE CARD COUNT BY FLEET SIZE')
+plt.legend(labels, bbox_to_anchor=(1.05,1.0), loc='upper left')
 plt.show()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
@@ -208,6 +188,9 @@ plt.show()
 # NB: DSS supports several kinds of APIs for reading and writing data. Please see doc.
 
 #RETENTION_RATE_BY_GROUP_df = ... # Compute a Pandas dataframe to write into RETENTION_RATE_BY_GROUP
+
+REVENUE_PER_CARD = dataiku.Dataset("REVENUE_PER_CARD")
+REVENUE_PER_CARD.write_with_schema(df_customer_revenue_per_card)
 
 # Write recipe outputs
 #RETENTION_RATE_BY_GROUP = dataiku.Dataset("RETENTION_RATE_BY_GROUP")
