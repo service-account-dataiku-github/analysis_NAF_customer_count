@@ -41,6 +41,10 @@
     {
       "objectId": "REVENUE_CODE_WITH_GROUP",
       "objectType": "DATASET"
+    },
+    {
+      "objectId": "NAFCUSTOMER_REVENUE_AGGREGATED_2019",
+      "objectType": "DATASET"
     }
   ],
   "shared": [],
