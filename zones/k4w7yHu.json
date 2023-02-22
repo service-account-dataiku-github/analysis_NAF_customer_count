@@ -53,6 +53,10 @@
     {
       "objectId": "TENURE",
       "objectType": "DATASET"
+    },
+    {
+      "objectId": "compute_TENURE",
+      "objectType": "RECIPE"
     }
   ],
   "shared": [],
