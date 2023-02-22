@@ -22,6 +22,9 @@ t1 = time.time()
 print("load duration", (t1-t0)/60.0, "minutes")
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+df.head()
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 # create a copy of the input datasets
 # this leaves the original dataset in memory and allows for a quick reload without having to back to Snowflake
 
