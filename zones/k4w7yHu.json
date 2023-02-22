@@ -7,10 +7,6 @@
       "objectType": "DATASET"
     },
     {
-      "objectId": "TENURE_CALC",
-      "objectType": "DATASET"
-    },
-    {
       "objectId": "TENURE_BY_GROUP",
       "objectType": "DATASET"
     },
