@@ -53,6 +53,10 @@
     {
       "objectId": "NAFCUSTOMER_REVENUE_AGGREGATED_2021",
       "objectType": "DATASET"
+    },
+    {
+      "objectId": "NAFCUSTOMER_REVENUE_AGGREGATED_2022",
+      "objectType": "DATASET"
     }
   ],
   "shared": [],
