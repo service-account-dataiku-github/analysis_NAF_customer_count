@@ -33,6 +33,14 @@
     {
       "objectId": "revenue_codes",
       "objectType": "DATASET"
+    },
+    {
+      "objectId": "compute_REVENUE_CODE_WITH_GROUP",
+      "objectType": "RECIPE"
+    },
+    {
+      "objectId": "REVENUE_CODE_WITH_GROUP",
+      "objectType": "DATASET"
     }
   ],
   "shared": [],
