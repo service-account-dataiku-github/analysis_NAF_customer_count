@@ -7,10 +7,6 @@
       "objectType": "DATASET"
     },
     {
-      "objectId": "TENURE_BY_GROUP",
-      "objectType": "DATASET"
-    },
-    {
       "objectId": "NAFCUSTOMER_ACCOUNT_ANNUAL_ACTIVE_CARD_COUNT",
       "objectType": "DATASET"
     },
