@@ -1,7 +1,15 @@
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 # -*- coding: utf-8 -*-
 import dataiku
 import pandas as pd, numpy as np
 from dataiku import pandasutils as pdu
+
+from datetime import date, datetime, timedelta
+import time
+
+import matplotlib.pyplot as plt
+
+t0 = time.time()
 
 # Read recipe inputs
 NAFCUSTOMER_REVENUE_AGGREGATED_MRU_2019 = dataiku.Dataset("NAFCUSTOMER_REVENUE_AGGREGATED_MRU_2019")
@@ -15,6 +23,12 @@ NAFCUSTOMER_REVENUE_AGGREGATED_MRU_2020_df = NAFCUSTOMER_REVENUE_AGGREGATED_MRU_
 
 NAFCUSTOMER_REVENUE_AGGREGATED_MRU_2022 = dataiku.Dataset("NAFCUSTOMER_REVENUE_AGGREGATED_MRU_2022")
 NAFCUSTOMER_REVENUE_AGGREGATED_MRU_2022_df = NAFCUSTOMER_REVENUE_AGGREGATED_MRU_2022.get_dataframe()
+
+
+print('loaded annual card count')
+
+t1 = time.time()
+print("load duration", (t1-t0)/60.0, "minutes")
 
 # Compute recipe outputs
 # TODO: Write here your actual code that computes the outputs
