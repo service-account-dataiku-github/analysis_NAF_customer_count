@@ -57,6 +57,10 @@
     {
       "objectId": "NAFCUSTOMER_REVENUE_AGGREGATED_2022",
       "objectType": "DATASET"
+    },
+    {
+      "objectId": "NAFCUSTOMER_REVENUE_AGGREGATED_MRU_2019",
+      "objectType": "DATASET"
     }
   ],
   "shared": [],
