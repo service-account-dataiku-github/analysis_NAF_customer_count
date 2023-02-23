@@ -40,6 +40,10 @@
         {
           "ref": "NAFCUSTOMER_ACCOUNT_ANNUAL_ACTIVE_CARD_COUNT",
           "deps": []
+        },
+        {
+          "ref": "HFM_cost_by_MRU",
+          "deps": []
         }
       ]
     }
@@ -56,11 +60,11 @@
   },
   "labels": [],
   "versionTag": {
-    "versionNumber": 6,
+    "versionNumber": 7,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1677165259214
+    "lastModifiedOn": 1677165286940
   },
   "creationTag": {
     "versionNumber": 0,
