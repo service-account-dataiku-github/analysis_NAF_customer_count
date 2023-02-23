@@ -40,6 +40,22 @@
         {
           "ref": "NAFCUSTOMER_REVENUE_AGGREGATED_2022",
           "deps": []
+        },
+        {
+          "ref": "NAFCUSTOMER_REVENUE_AGGREGATED_MRU_2019",
+          "deps": []
+        },
+        {
+          "ref": "NAFCUSTOMER_REVENUE_AGGREGATED_MRU_2020",
+          "deps": []
+        },
+        {
+          "ref": "NAFCUSTOMER_REVENUE_AGGREGATED_MRU_2021",
+          "deps": []
+        },
+        {
+          "ref": "NAFCUSTOMER_REVENUE_AGGREGATED_MRU_2022",
+          "deps": []
         }
       ]
     }
@@ -56,11 +72,11 @@
   },
   "labels": [],
   "versionTag": {
-    "versionNumber": 21,
+    "versionNumber": 22,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1677119639916
+    "lastModifiedOn": 1677119669420
   },
   "creationTag": {
     "versionNumber": 0,
