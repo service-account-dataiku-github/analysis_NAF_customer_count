@@ -11,38 +11,51 @@ import matplotlib.pyplot as plt
 
 t0 = time.time()
 
-"NAFCUSTOMER_REVENUE_AGGREGATED_2019"
-"NAFCUSTOMER_REVENUE_AGGREGATED_2020"
-"NAFCUSTOMER_REVENUE_AGGREGATED_2021"
 "NAFCUSTOMER_REVENUE_AGGREGATED_2022"
 
 # Read recipe inputs
-NAFCUSTOMER_REVENUE_AGGREGATED = dataiku.Dataset("NAFCUSTOMER_REVENUE_AGGREGATED")
-NAFCUSTOMER_REVENUE_AGGREGATED_df = NAFCUSTOMER_REVENUE_AGGREGATED.get_dataframe()
+NAFCUSTOMER_REVENUE_AGGREGATED_2019 = dataiku.Dataset("NAFCUSTOMER_REVENUE_AGGREGATED_2019")
+NAFCUSTOMER_REVENUE_AGGREGATED_2019_df = NAFCUSTOMER_REVENUE_AGGREGATED_2019.get_dataframe()
+print('loaded file 2019')
 
-print('loaded file 1')
+NAFCUSTOMER_REVENUE_AGGREGATED_2020 = dataiku.Dataset("NAFCUSTOMER_REVENUE_AGGREGATED_2020")
+NAFCUSTOMER_REVENUE_AGGREGATED_2020_df = NAFCUSTOMER_REVENUE_AGGREGATED_2020.get_dataframe()
+print('loaded file 2020')
+
+NAFCUSTOMER_REVENUE_AGGREGATED_2021 = dataiku.Dataset("NAFCUSTOMER_REVENUE_AGGREGATED_2021")
+NAFCUSTOMER_REVENUE_AGGREGATED_2021_df = NAFCUSTOMER_REVENUE_AGGREGATED_2021.get_dataframe()
+print('loaded file 2021')
+
+NAFCUSTOMER_REVENUE_AGGREGATED_2022 = dataiku.Dataset("NAFCUSTOMER_REVENUE_AGGREGATED_2022")
+NAFCUSTOMER_REVENUE_AGGREGATED_2022_df = NAFCUSTOMER_REVENUE_AGGREGATED_2022.get_dataframe()
+print('loaded file 2022')
 
 NAFCUSTOMER_ACCOUNT_ANNUAL_ACTIVE_CARD_COUNT = dataiku.Dataset("NAFCUSTOMER_ACCOUNT_ANNUAL_ACTIVE_CARD_COUNT")
 NAFCUSTOMER_ACCOUNT_ANNUAL_ACTIVE_CARD_COUNT_df = NAFCUSTOMER_ACCOUNT_ANNUAL_ACTIVE_CARD_COUNT.get_dataframe()
+
+print('loaded annual card count')
 
 t1 = time.time()
 print("load duration", (t1-t0)/60.0, "minutes")
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-df.head()
-
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 # create a copy of the input datasets
 # this leaves the original dataset in memory and allows for a quick reload without having to back to Snowflake
 
-print(len(NAFCUSTOMER_REVENUE_AGGREGATED_df), "rows in NAFCUSTOMER_REVENUE_AGGREGATED")
-df = NAFCUSTOMER_REVENUE_AGGREGATED_df.copy()
+print(len(NAFCUSTOMER_REVENUE_AGGREGATED_2019_df))
+print(len(NAFCUSTOMER_REVENUE_AGGREGATED_2020_df))
+print(len(NAFCUSTOMER_REVENUE_AGGREGATED_2021_df))
+print(len(NAFCUSTOMER_REVENUE_AGGREGATED_2022_df))
+
+df = pd.concat([NAFCUSTOMER_REVENUE_AGGREGATED_2019_df,NAFCUSTOMER_REVENUE_AGGREGATED_2020_df,
+               NAFCUSTOMER_REVENUE_AGGREGATED_2021_df,NAFCUSTOMER_REVENUE_AGGREGATED_2022_df])
+print(len(df))
 
 print(len(NAFCUSTOMER_ACCOUNT_ANNUAL_ACTIVE_CARD_COUNT_df), "rows in NAFCUSTOMER_ACCOUNT_ANNUAL_ACTIVE_CARD_COUNT")
 df_a = NAFCUSTOMER_ACCOUNT_ANNUAL_ACTIVE_CARD_COUNT_df
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-df.columns.tolist()
+df.REVENUE_CLASS.value_counts()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 # Prep data
@@ -57,6 +70,9 @@ df['SETUP_YEAR'] = df.SETUP_DATE_DT.dt.year
 df['REVENUE_YEAR'] = df['REVENUE_YEAR'].astype('Int64')
 df['REVENUE_DATE'] = df['REVENUE_MONTH'].astype(str) + '-' + df['REVENUE_YEAR'].astype(str)
 df['REVENUE_DATE'] = pd.to_datetime(df['REVENUE_DATE'], format='%m-%Y').dt.strftime('%m-%Y')
+
+df['REVENUE_CLASS'] = df.REVENUE_CATEGORY
+df.loc[df.REVENUE_CODE_GROUP=='Rebate','REVENUE_CLASS'] = 'Rebate'
 
 #
 # filter out Jan 2023 as it represents only a partial year
@@ -124,6 +140,19 @@ for i in range(1,21):
     df_customer_fleet_size.loc[df_customer_fleet_size.FLEET_SIZE==i, 'FLEET_SIZE_CATEGORY'] = str(i) + ' card(s)'
 df_customer_fleet_size.loc[df_customer_fleet_size.FLEET_SIZE>20, 'FLEET_SIZE_CATEGORY'] = '> 20 cards'
 print(len(df_customer_fleet_size))
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+df_revenue_by_customer_revenue_category_and_year = df.groupby(['CUSTOMER_ID','CUSTOMER','REVENUE_CLASS','REVENUE_YEAR']).REVENUE_AMOUNT_USD.sum().reset_index()
+print(len(df_revenue_by_customer_revenue_category_and_year))
+df_revenue_by_customer_revenue_category_and_year = pd.merge(df_revenue_by_customer_revenue_category_and_year, df_customer_fleet_size, how='left', on=['CUSTOMER_ID','CUSTOMER'])
+print(len(df_revenue_by_customer_revenue_category_and_year))
+
+df_revenue_by_customer_revenue_category_and_year.loc[df_revenue_by_customer_revenue_category_and_year.FLEET_SIZE.isnull(),'FLEET_SIZE'] = 0
+df_revenue_by_customer_revenue_category_and_year['FLEET_SIZE_GROUP'] = 'NOT SET'
+df_revenue_by_customer_revenue_category_and_year.loc[df_revenue_by_customer_revenue_category_and_year.FLEET_SIZE.between(0,5),'FLEET_SIZE_GROUP'] = '(<=5 cards)'
+df_revenue_by_customer_revenue_category_and_year.loc[df_revenue_by_customer_revenue_category_and_year.FLEET_SIZE.between(6,100),'FLEET_SIZE_GROUP'] = '(between 6 and 100 cards)'
+df_revenue_by_customer_revenue_category_and_year.loc[df_revenue_by_customer_revenue_category_and_year.FLEET_SIZE>100,'FLEET_SIZE_GROUP'] = '(>100 cards)'
+df_revenue_by_customer_revenue_category_and_year.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 print(len(df_revenue_by_customer_and_year))
@@ -539,6 +568,23 @@ plt.show()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 df_revenue_per_card_by_year.groupby(['FLEET_SIZE_GROUP']).REVENUE_PER_CARD.mean().reset_index()
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+df_revenue_by_class_year_and_fleet_size = df_revenue_by_customer_revenue_category_and_year.groupby(['FLEET_SIZE_GROUP','REVENUE_CLASS','REVENUE_YEAR']).REVENUE_AMOUNT_USD.sum().reset_index()
+print(len(df_revenue_by_class_year_and_fleet_size))
+
+df_revenue_by_class_year_and_fleet_size = pd.merge(df_revenue_by_class_year_and_fleet_size, df_active_cards_by_year, on=['REVENUE_YEAR','FLEET_SIZE_GROUP'])
+print(len(df_revenue_by_class_year_and_fleet_size))
+
+df_revenue_by_class_year_and_fleet_size['REVENUE_PER_CARD'] = df_revenue_by_class_year_and_fleet_size.REVENUE_AMOUNT_USD / df_revenue_by_class_year_and_fleet_size.ACTIVE_CARD_COUNT
+print(len(df_revenue_by_class_year_and_fleet_size))
+
+df_revenue_by_class_year_and_fleet_size.head(60)
+df_revenue_class_mean = df_revenue_by_class_year_and_fleet_size.groupby(['FLEET_SIZE_GROUP','REVENUE_CLASS']).REVENUE_PER_CARD.mean().reset_index()
+df_revenue_class_mean
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+df_revenue_class_mean[df_revenue_class_mean.FLEET_SIZE_GROUP=='(<=5 cards)'].round(2)
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 # Compute recipe outputs
