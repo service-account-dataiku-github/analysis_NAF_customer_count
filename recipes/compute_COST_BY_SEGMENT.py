@@ -31,8 +31,12 @@ print('loaded file 2022')
 
 NAFCUSTOMER_ACCOUNT_ANNUAL_ACTIVE_CARD_COUNT = dataiku.Dataset("NAFCUSTOMER_ACCOUNT_ANNUAL_ACTIVE_CARD_COUNT")
 NAFCUSTOMER_ACCOUNT_ANNUAL_ACTIVE_CARD_COUNT_df = NAFCUSTOMER_ACCOUNT_ANNUAL_ACTIVE_CARD_COUNT.get_dataframe()
-
 print('loaded annual card count')
+
+HFM_cost_by_MRU = dataiku.Dataset("HFM_cost_by_MRU")
+HFM_cost_by_MRU_df = HFM_cost_by_MRU.get_dataframe()
+print('loaded HFM cost data')
+
 
 t1 = time.time()
 print("load duration", (t1-t0)/60.0, "minutes")
