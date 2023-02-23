@@ -81,10 +81,6 @@
     {
       "objectId": "compute_COST_BY_SEGMENT",
       "objectType": "RECIPE"
-    },
-    {
-      "objectId": "HFM_cost_by_MRU",
-      "objectType": "DATASET"
     }
   ],
   "shared": [],
