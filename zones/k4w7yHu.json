@@ -77,6 +77,10 @@
     {
       "objectId": "COST_BY_SEGMENT",
       "objectType": "DATASET"
+    },
+    {
+      "objectId": "compute_COST_BY_SEGMENT",
+      "objectType": "RECIPE"
     }
   ],
   "shared": [],
