@@ -73,6 +73,10 @@
     {
       "objectId": "NAFCUSTOMER_REVENUE_AGGREGATED_MRU_2022",
       "objectType": "DATASET"
+    },
+    {
+      "objectId": "COST_BY_SEGMENT",
+      "objectType": "DATASET"
     }
   ],
   "shared": [],
