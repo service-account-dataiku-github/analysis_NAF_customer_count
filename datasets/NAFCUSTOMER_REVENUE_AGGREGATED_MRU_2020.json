@@ -1,0 +1,156 @@
+{
+  "type": "Snowflake",
+  "managed": false,
+  "checklists": {
+    "checklists": []
+  },
+  "checks": [],
+  "customMeta": {
+    "kv": {}
+  },
+  "flowOptions": {
+    "virtualizable": false,
+    "rebuildBehavior": "NORMAL",
+    "crossProjectBuildBehavior": "DEFAULT"
+  },
+  "readWriteOptions": {
+    "preserveOrder": false,
+    "writeBuckets": 1,
+    "forceSingleOutputFile": false,
+    "defaultReadOrdering": {
+      "enabled": false,
+      "rules": []
+    }
+  },
+  "partitioning": {
+    "ignoreNonMatchingFile": false,
+    "considerMissingRequestedPartitionsAsEmpty": false,
+    "dimensions": []
+  },
+  "versionTag": {
+    "versionNumber": 0,
+    "lastModifiedBy": {
+      "login": "Daniel.Vandermeer"
+    },
+    "lastModifiedOn": 1677119427697
+  },
+  "creationTag": {
+    "versionNumber": 0,
+    "lastModifiedBy": {
+      "login": "Daniel.Vandermeer"
+    },
+    "lastModifiedOn": 1677119427697
+  },
+  "tags": [],
+  "params": {
+    "connection": "SNOWFLAKE-DATAIKU_ANALYTICS_SUB-DATA_SCIENCE",
+    "notReadyIfEmpty": false,
+    "mode": "table",
+    "partitioningType": "custom",
+    "normalizeDoubles": true,
+    "table": "NAFCUSTOMER_REVENUE_AGGREGATED_MRU_2020",
+    "tableCreationMode": "auto",
+    "writeInsertBatchSize": 10000,
+    "writeJDBCBadDataBehavior": "DISCARD_ROW",
+    "readColsWithUnknownTzAsDates": false,
+    "readSQLDateColsAsDSSDates": true
+  },
+  "schema": {
+    "columns": [
+      {"name":"CUSTOMER_ID","type":"bigint","originalType":"NUMBER"},
+      {"name":"CUSTOMER","type":"string","originalType":"VARCHAR","maxLength":4194304},
+      {"name":"REVENUE_YEAR","type":"bigint","originalType":"NUMBER"},
+      {"name":"REVENUE_MONTH","type":"bigint","originalType":"NUMBER"},
+      {"name":"CUSTOMER_BUSINESS_PROGRAM_NAME","type":"string","originalType":"VARCHAR","maxLength":200},
+      {"name":"BI_CUS_PAR","type":"string","originalType":"VARCHAR","maxLength":10},
+      {"name":"BI_PRODUCT","type":"string","originalType":"VARCHAR","maxLength":10},
+      {"name":"BI_MRU","type":"string","originalType":"VARCHAR","maxLength":10},
+      {"name":"SETUP_DATE","type":"date","originalType":"DATE","timestampNoTzAsDate":true},
+      {"name":"REVENUE_AMOUNT_USD","type":"double","originalType":"NUMBER"},
+      {"name":"GROSS_SPEND_AMOUNT","type":"double","originalType":"NUMBER"},
+      {"name":"PURCHASE_GALLONS_QTY","type":"double","originalType":"NUMBER"},
+      {"name":"TOTAL_ACTIVE_CARD_COUNT","type":"bigint","originalType":"NUMBER"}
+    ],
+    "userModified": true
+  },
+  "dkuProperties": [],
+  "metrics": {
+    "probes": [
+      {
+        "type": "basic",
+        "enabled": true,
+        "computeOnBuildMode": "PARTITION",
+        "meta": {
+          "name": "Basic data",
+          "level": 0
+        },
+        "configuration": {}
+      },
+      {
+        "type": "records",
+        "enabled": true,
+        "computeOnBuildMode": "NO",
+        "meta": {
+          "name": "Record count",
+          "level": 0
+        },
+        "configuration": {}
+      }
+    ],
+    "engineConfig": {
+      "padRunsWithMetrics": false,
+      "hive": {
+        "active": true,
+        "extraConf": []
+      },
+      "basic": {},
+      "dss": {
+        "active": true,
+        "selection": {
+          "useMemTable": false,
+          "filter": {
+            "distinct": false,
+            "enabled": false
+          },
+          "partitionSelectionMethod": "ALL",
+          "latestPartitionsN": 1,
+          "ordering": {
+            "enabled": false,
+            "rules": []
+          },
+          "samplingMethod": "FULL",
+          "maxRecords": -1,
+          "targetRatio": 0.02,
+          "withinFirstN": -1,
+          "maxReadUncompressedBytes": -1
+        }
+      },
+      "sql": {
+        "active": true
+      },
+      "impala": {
+        "active": true
+      },
+      "spark": {
+        "active": true,
+        "extraConf": []
+      },
+      "python": {}
+    },
+    "displayedState": {
+      "columns": [],
+      "metrics": [
+        "basic:COUNT_COLUMNS",
+        "records:COUNT_RECORDS"
+      ]
+    }
+  },
+  "metricsChecks": {
+    "runOnBuild": false,
+    "checks": [],
+    "displayedState": {
+      "checks": []
+    }
+  },
+  "customFields": {}
+}
