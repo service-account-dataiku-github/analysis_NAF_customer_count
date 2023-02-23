@@ -65,6 +65,10 @@
     {
       "objectId": "NAFCUSTOMER_REVENUE_AGGREGATED_MRU_2020",
       "objectType": "DATASET"
+    },
+    {
+      "objectId": "NAFCUSTOMER_REVENUE_AGGREGATED_MRU_2021",
+      "objectType": "DATASET"
     }
   ],
   "shared": [],
