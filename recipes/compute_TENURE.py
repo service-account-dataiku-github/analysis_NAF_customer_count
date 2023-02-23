@@ -11,7 +11,6 @@ import matplotlib.pyplot as plt
 
 t0 = time.time()
 
-
 # Read recipe inputs
 NAFCUSTOMER_REVENUE_AGGREGATED_2019 = dataiku.Dataset("NAFCUSTOMER_REVENUE_AGGREGATED_2019")
 NAFCUSTOMER_REVENUE_AGGREGATED_2019_df = NAFCUSTOMER_REVENUE_AGGREGATED_2019.get_dataframe()
@@ -54,7 +53,7 @@ print(len(NAFCUSTOMER_ACCOUNT_ANNUAL_ACTIVE_CARD_COUNT_df), "rows in NAFCUSTOMER
 df_a = NAFCUSTOMER_ACCOUNT_ANNUAL_ACTIVE_CARD_COUNT_df
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-df.REVENUE_CLASS.value_counts()
+df.head()
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 # Prep data
