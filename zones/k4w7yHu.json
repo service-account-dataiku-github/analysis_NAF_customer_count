@@ -93,6 +93,10 @@
     {
       "objectId": "CARD_COUNT_NEW_IN_2022",
       "objectType": "DATASET"
+    },
+    {
+      "objectId": "compute_CARD_COUNT_NEW_IN_2022",
+      "objectType": "RECIPE"
     }
   ],
   "shared": [],
