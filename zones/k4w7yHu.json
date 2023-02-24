@@ -97,6 +97,10 @@
     {
       "objectId": "compute_CARD_COUNT_NEW_IN_2022",
       "objectType": "RECIPE"
+    },
+    {
+      "objectId": "NAFCUSTOMER_NEW_ACCOUNTS_IN_2021",
+      "objectType": "DATASET"
     }
   ],
   "shared": [],
