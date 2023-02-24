@@ -101,6 +101,10 @@
     {
       "objectId": "NAFCUSTOMER_NEW_ACCOUNTS_IN_2021",
       "objectType": "DATASET"
+    },
+    {
+      "objectId": "CALCULATED_CLV",
+      "objectType": "DATASET"
     }
   ],
   "shared": [],
