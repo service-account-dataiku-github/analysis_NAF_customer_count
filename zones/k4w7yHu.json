@@ -89,6 +89,10 @@
     {
       "objectId": "NAFCUSTOMER_NEW_CUSTOMERS_IN_2022_WITH_SALES_FLAG_AND_ACTIVE_CARDS",
       "objectType": "DATASET"
+    },
+    {
+      "objectId": "CARD_COUNT_NEW_IN_2022",
+      "objectType": "DATASET"
     }
   ],
   "shared": [],
