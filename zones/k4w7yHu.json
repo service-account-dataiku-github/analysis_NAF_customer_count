@@ -105,6 +105,10 @@
     {
       "objectId": "CALCULATED_CLV",
       "objectType": "DATASET"
+    },
+    {
+      "objectId": "compute_CALCULATED_CLV",
+      "objectType": "RECIPE"
     }
   ],
   "shared": [],
