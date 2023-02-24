@@ -85,6 +85,10 @@
     {
       "objectId": "HFM_cost_by_MRU",
       "objectType": "DATASET"
+    },
+    {
+      "objectId": "NAFCUSTOMER_NEW_CUSTOMERS_IN_2022_WITH_SALES_FLAG_AND_ACTIVE_CARDS",
+      "objectType": "DATASET"
     }
   ],
   "shared": [],
