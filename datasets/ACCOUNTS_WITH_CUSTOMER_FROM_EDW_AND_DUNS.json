@@ -1,6 +1,7 @@
 {
   "type": "Snowflake",
   "managed": true,
+  "featureGroup": false,
   "checklists": {
     "checklists": []
   },
@@ -28,11 +29,11 @@
     "dimensions": []
   },
   "versionTag": {
-    "versionNumber": 26,
+    "versionNumber": 27,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1675908310283
+    "lastModifiedOn": 1677881656687
   },
   "creationTag": {
     "versionNumber": 0,
@@ -53,7 +54,9 @@
     "writeInsertBatchSize": 10000,
     "writeJDBCBadDataBehavior": "DISCARD_ROW",
     "readColsWithUnknownTzAsDates": false,
-    "readSQLDateColsAsDSSDates": true
+    "readSQLDateColsAsDSSDates": true,
+    "sparkJdbcAccess": "NONE",
+    "numPartitions": -1
   },
   "schema": {
     "columns": [
@@ -90,7 +93,7 @@
       {"name":"SALES_DATA_SOURCE","type":"string","maxLength":4194304},
       {"name":"HAS_SALES_FLAG","type":"string","maxLength":4194304}
     ],
-    "userModified": true
+    "userModified": false
   },
   "dkuProperties": [],
   "metrics": {
