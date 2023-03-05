@@ -29,11 +29,11 @@
     "dimensions": []
   },
   "versionTag": {
-    "versionNumber": 27,
+    "versionNumber": 28,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1677881656687
+    "lastModifiedOn": 1678031759043
   },
   "creationTag": {
     "versionNumber": 0,
@@ -63,15 +63,15 @@
       {"name":"CUSTOMER_ACCOUNT_ID","type":"bigint"},
       {"name":"CUSTOMER_ACCOUNT_NAME","type":"string","maxLength":4194304},
       {"name":"EDW_CUSTOMER_NAME","type":"string","maxLength":4194304},
-      {"name":"DUNS","type":"double"},
+      {"name":"DUNS","type":"bigint"},
       {"name":"IS_BUNDLER","type":"boolean"},
-      {"name":"DNB_GLOBAL_ULT_NUMBER","type":"double"},
+      {"name":"DNB_GLOBAL_ULT_NUMBER","type":"bigint"},
       {"name":"DNB_GLOBAL_ULT_NAME","type":"string","maxLength":4194304},
-      {"name":"DNB_DOMESTIC_ULT_NUMBER","type":"double"},
+      {"name":"DNB_DOMESTIC_ULT_NUMBER","type":"bigint"},
       {"name":"DNB_DOMESTIC_ULTIMATE_NAME","type":"string","maxLength":4194304},
-      {"name":"DNB_HQ_NUMBER","type":"double"},
+      {"name":"DNB_HQ_NUMBER","type":"bigint"},
       {"name":"DNB_HQ_NAME","type":"string","maxLength":4194304},
-      {"name":"DNB_DUNS_NUMBER","type":"double"},
+      {"name":"DNB_DUNS_NUMBER","type":"bigint"},
       {"name":"DNB_BUSINESS_NAME","type":"string","maxLength":4194304},
       {"name":"DNB_CUSTOMER_NAME","type":"string","maxLength":4194304},
       {"name":"DNB_LEVEL","type":"string","maxLength":4194304},
@@ -79,7 +79,7 @@
       {"name":"CUSTOMER","type":"string","maxLength":4194304},
       {"name":"CUST_CALC_SOURCE","type":"string","maxLength":4194304},
       {"name":"CUST_CALC_RULE","type":"string","maxLength":4194304},
-      {"name":"WEX_BUSINESS_ID","type":"double"},
+      {"name":"WEX_BUSINESS_ID","type":"bigint"},
       {"name":"WEX_BUSINESS_NAME","type":"string","maxLength":4194304},
       {"name":"CUSTOMER_ID","type":"bigint"},
       {"name":"SALES_MARKETING_PARTNER_NM","type":"string","maxLength":4194304},
