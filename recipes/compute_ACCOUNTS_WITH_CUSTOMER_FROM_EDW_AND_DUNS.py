@@ -199,7 +199,7 @@ def apply_rule_with_list(df, filter_name_list,final_name):
 
 def apply_rule_starts_with(df, compares_to, starts_with_string,final_name):
 
-    # rule: all customers with rows that have compares_to field value that starts with starts_with_string 
+    # rule: all customers with rows that have compares_to field value that starts with starts_with_string
     # are replaced with final_name
     # compares_to field uses include 'CUSTOMER' or 'DNB_CUSTOMER_NAME', but can be extended to other fields as well
 
@@ -419,13 +419,13 @@ df_mdm = df_mdm[df_mdm.WEX_BUSINESS_NAME!='ELEMENT 2']
 print(len(df_mdm), "MDM account rows after filter rules")
 
 # join with customer hierarchy and drop duplicates
-print(len(df_j))
+print(len(df_j), "df_j")
 df_j_with_mdm = pd.merge(df_j, df_mdm, on='CUSTOMER_ACCOUNT_ID', how='left')
 df_j_with_mdm.drop_duplicates(subset=['CUSTOMER_ACCOUNT_ID'],inplace=True)
-print(len(df_j_with_mdm))
+print(len(df_j_with_mdm), "df_j_with_mdm")
 df_j_with_mdm.head()
 
-# group by WEX Business Id and WEX Business Name, counting unique customers
+## group by WEX Business Id and WEX Business Name, counting unique customers
 # Those WEX Business Ids with a customer count > 1 is retained
 df_g = df_j_with_mdm.groupby(['WEX_BUSINESS_ID','WEX_BUSINESS_NAME']).CUSTOMER.nunique().reset_index()
 print(len(df_g))
@@ -437,7 +437,9 @@ df_g.head()
 
 # drop null WEX Business IDs, join back to customer hierarchy on WEX_BUSINESS_ID in order to get WEX_BUSINESS_NAME on the dataset
 print(len(df_j_with_mdm))
-df_j_with_mdm.dropna(subset=['WEX_BUSINESS_ID'],inplace=True)
+df_j_with_mdm.loc[df_j_with_mdm.WEX_BUSINESS_ID.isnull(), 'WEX_BUSINESS_ID'] =0
+#df_j_with_mdm.dropna(subset=['WEX_BUSINESS_ID'],inplace=True)
+print(len(df_j_with_mdm))
 df_j_with_mdm_with_matches = pd.merge(df_j_with_mdm,df_g, left_on='WEX_BUSINESS_ID',right_on='MATCH_WEX_BUSINESS_ID', how='left')
 print(len(df_j_with_mdm_with_matches))
 
