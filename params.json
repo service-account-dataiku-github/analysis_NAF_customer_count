@@ -8,11 +8,28 @@
   },
   "projectType": "REGULAR",
   "projectAppType": "REGULAR",
+  "hasSetupSection": false,
   "owner": "Daniel.Vandermeer",
   "permissionsVersion": "V2",
   "permissions": [
     {
       "user": "Ivy.Mead",
+      "admin": false,
+      "readProjectContent": false,
+      "writeProjectContent": true,
+      "exportDatasetsData": true,
+      "readDashboards": false,
+      "writeDashboards": false,
+      "moderateDashboards": false,
+      "shareToWorkspaces": true,
+      "runScenarios": false,
+      "manageDashboardAuthorizations": false,
+      "manageExposedElements": false,
+      "manageAdditionalDashboardUsers": false,
+      "executeApp": false
+    },
+    {
+      "user": "Alaina.Cellini",
       "admin": false,
       "readProjectContent": false,
       "writeProjectContent": true,
@@ -49,6 +66,9 @@
       "mergeSqlPipelines": false,
       "pruneBeforeSqlPipelines": true
     },
+    "sharingRequestsEnabled": "INHERIT",
+    "limitedVisibilityEnabled": "INHERIT",
+    "accessRequestsEnabled": "INHERIT",
     "limitsSettings": {
       "memSampleBytes": {
         "soft": -1,
@@ -201,11 +221,11 @@
     }
   },
   "versionTag": {
-    "versionNumber": 2,
+    "versionNumber": 3,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1670435098123
+    "lastModifiedOn": 1680627011650
   },
   "creationTag": {
     "versionNumber": 0,
