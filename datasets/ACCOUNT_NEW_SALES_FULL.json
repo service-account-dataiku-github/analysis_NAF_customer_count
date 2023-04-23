@@ -1,6 +1,7 @@
 {
   "type": "Snowflake",
   "managed": true,
+  "featureGroup": false,
   "checklists": {
     "checklists": []
   },
@@ -28,11 +29,11 @@
     "dimensions": []
   },
   "versionTag": {
-    "versionNumber": 1,
+    "versionNumber": 2,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1668683077689
+    "lastModifiedOn": 1682246776810
   },
   "creationTag": {
     "versionNumber": 0,
@@ -53,7 +54,9 @@
     "writeInsertBatchSize": 10000,
     "writeJDBCBadDataBehavior": "DISCARD_ROW",
     "readColsWithUnknownTzAsDates": false,
-    "readSQLDateColsAsDSSDates": true
+    "readSQLDateColsAsDSSDates": true,
+    "sparkJdbcAccess": "NONE",
+    "numPartitions": -1
   },
   "schema": {
     "columns": [
@@ -65,8 +68,7 @@
       {"name":"COUPON_CODE","type":"string","maxLength":4194304},
       {"name":"SALES_CHANNEL","type":"string","maxLength":4194304},
       {"name":"SALES_REP","type":"string","maxLength":4194304},
-      {"name":"TRANS_RECORDS","type":"bigint"},
-      {"name":"DATA_SOURCE","type":"string","maxLength":4194304}
+      {"name":"TRANS_RECORDS","type":"bigint"}
     ],
     "userModified": false
   },
