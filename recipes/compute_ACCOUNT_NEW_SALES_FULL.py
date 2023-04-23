@@ -7,9 +7,15 @@ from dataiku import pandasutils as pdu
 # Read recipe inputs
 WEX_and_Non_Managed_Sold_20190101_20230130 = dataiku.Dataset("WEX_and_Non_Managed_Sold_20190101_20230130")
 WEX_and_Non_Managed_Sold_20190101_20230130_df = WEX_and_Non_Managed_Sold_20190101_20230130.get_dataframe()
+print(len(WEX_and_Non_Managed_Sold_20190101_20230130_df))
 
 Managed_Sold_20190101_20230130 = dataiku.Dataset("Managed_Sold_20190101_20230130")
 Managed_Sold_20190101_20230130_df = Managed_Sold_20190101_20230130.get_dataframe()
+print(len(Managed_Sold_20190101_20230130_df))
+
+Sold_20230101_20230331 = dataiku.Dataset("Sold_20230101_20230331")
+Sold_20230101_20230331_df = Sold_20230101_20230331.get_dataframe()
+print(len(Sold_20230101_20230331_df))
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 WEX_and_Non_Managed_Sold_20190101_20230130_df['DATA_SOURCE'] = 'WEX_and_Non_Managed_Sold'
