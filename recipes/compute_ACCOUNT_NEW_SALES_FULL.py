@@ -18,13 +18,14 @@ Sold_20230101_20230331_df = Sold_20230101_20230331.get_dataframe()
 print(len(Sold_20230101_20230331_df))
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-WEX_and_Non_Managed_Sold_20190101_20230130_df['DATA_SOURCE'] = 'WEX_and_Non_Managed_Sold'
-Managed_Sold_20190101_20230130_df['DATA_SOURCE'] = 'Managed_Sold'
+#WEX_and_Non_Managed_Sold_20190101_20230130_df['DATA_SOURCE'] = 'WEX_and_Non_Managed_Sold'
+#Managed_Sold_20190101_20230130_df['DATA_SOURCE'] = 'Managed_Sold'
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 print(len(WEX_and_Non_Managed_Sold_20190101_20230130_df))
 print(len(Managed_Sold_20190101_20230130_df))
-df = pd.concat([WEX_and_Non_Managed_Sold_20190101_20230130_df,Managed_Sold_20190101_20230130_df])
+print(len(Sold_20230101_20230331_df))
+df = pd.concat([WEX_and_Non_Managed_Sold_20190101_20230130_df,Managed_Sold_20190101_20230130_df,Sold_20230101_20230331_df])
 print(len(df))
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
