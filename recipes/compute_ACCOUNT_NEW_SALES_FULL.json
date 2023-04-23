@@ -36,6 +36,10 @@
         {
           "ref": "WEX_and_Non_Managed_Sold_20190101_20230130",
           "deps": []
+        },
+        {
+          "ref": "Sold_20230101_20230331",
+          "deps": []
         }
       ]
     }
@@ -52,11 +56,11 @@
   },
   "labels": [],
   "versionTag": {
-    "versionNumber": 10,
+    "versionNumber": 11,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1682246032592
+    "lastModifiedOn": 1682246246477
   },
   "creationTag": {
     "versionNumber": 0,
