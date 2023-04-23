@@ -516,9 +516,14 @@ ACCOUNT_NEW_SALES_FULL_df.columns.tolist()
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 print(len(df_jj))
 print(len(ACCOUNT_NEW_SALES_FULL_df))
-ACCOUNT_NEW_SALES_FULL_df.columns = ['SALES_MARKETING_PARTNER_NM','SALES_BUSINESS_PROGRAM_NM','SALES_PROGRAM_ID','CUSTOMER_ACCOUNT_ID','SALES_CAMPAIGN_TYPE','SALES_COUPON_CODE','SALES_CHANNEL','SALES_REP','SALES_TRANS_RECORDS','SALES_DATA_SOURCE']
+#ACCOUNT_NEW_SALES_FULL_df.columns = ['SALES_MARKETING_PARTNER_NM','SALES_BUSINESS_PROGRAM_NM','SALES_PROGRAM_ID','CUSTOMER_ACCOUNT_ID','SALES_CAMPAIGN_TYPE','SALES_COUPON_CODE','SALES_CHANNEL','SALES_REP','SALES_TRANS_RECORDS','SALES_DATA_SOURCE']
+ACCOUNT_NEW_SALES_FULL_df.columns = ['SALES_MARKETING_PARTNER_NM','SALES_BUSINESS_PROGRAM_NM','SALES_PROGRAM_ID','CUSTOMER_ACCOUNT_ID','SALES_CAMPAIGN_TYPE','SALES_COUPON_CODE','SALES_CHANNEL','SALES_REP','SALES_TRANS_RECORDS']
 ACCOUNT_NEW_SALES_FULL_df['HAS_SALES_FLAG'] = True
 df_j_with_sales = pd.merge(df_jj, ACCOUNT_NEW_SALES_FULL_df, on='CUSTOMER_ACCOUNT_ID', how='left')
+print(len(df_j_with_sales))
+
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+print(len(df_by_account))
 print(len(df_j_with_sales))
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
