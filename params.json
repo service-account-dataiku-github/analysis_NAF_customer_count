@@ -43,6 +43,22 @@
       "manageExposedElements": false,
       "manageAdditionalDashboardUsers": false,
       "executeApp": false
+    },
+    {
+      "user": "Austin.Smith",
+      "admin": true,
+      "readProjectContent": false,
+      "writeProjectContent": true,
+      "exportDatasetsData": true,
+      "readDashboards": false,
+      "writeDashboards": false,
+      "moderateDashboards": false,
+      "shareToWorkspaces": true,
+      "runScenarios": false,
+      "manageDashboardAuthorizations": false,
+      "manageExposedElements": false,
+      "manageAdditionalDashboardUsers": false,
+      "executeApp": false
     }
   ],
   "additionalDashboardUsers": {
@@ -151,6 +167,7 @@
         },
         "scaling": {
           "initialReplicas": 1,
+          "progressDeadlineSeconds": 600,
           "hpa": false,
           "hpaTargetCPUPercent": 0,
           "hpaMetrics": [],
@@ -158,7 +175,9 @@
           "hpaMaxPods": 0,
           "hpaAnnotations": []
         },
-        "deploymentModifier": {}
+        "deploymentModifier": {
+          "config": {}
+        }
       }
     },
     "dkuProperties": []
@@ -221,11 +240,11 @@
     }
   },
   "versionTag": {
-    "versionNumber": 3,
+    "versionNumber": 4,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1680627011650
+    "lastModifiedOn": 1691086111775
   },
   "creationTag": {
     "versionNumber": 0,
