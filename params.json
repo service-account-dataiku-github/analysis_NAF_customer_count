@@ -21,6 +21,7 @@
       "readDashboards": false,
       "writeDashboards": false,
       "moderateDashboards": false,
+      "publishToDataCollections": false,
       "shareToWorkspaces": true,
       "runScenarios": false,
       "manageDashboardAuthorizations": false,
@@ -37,6 +38,7 @@
       "readDashboards": false,
       "writeDashboards": false,
       "moderateDashboards": false,
+      "publishToDataCollections": false,
       "shareToWorkspaces": true,
       "runScenarios": false,
       "manageDashboardAuthorizations": false,
@@ -53,6 +55,7 @@
       "readDashboards": false,
       "writeDashboards": false,
       "moderateDashboards": false,
+      "publishToDataCollections": false,
       "shareToWorkspaces": true,
       "runScenarios": false,
       "manageDashboardAuthorizations": false,
@@ -69,6 +72,7 @@
       "readDashboards": false,
       "writeDashboards": false,
       "moderateDashboards": false,
+      "publishToDataCollections": false,
       "shareToWorkspaces": false,
       "runScenarios": false,
       "manageDashboardAuthorizations": false,
@@ -85,7 +89,8 @@
     "flowAnchorSourcesAndSinks": true,
     "flowDisplaySettings": {
       "zonesGraphRenderingAlgorithm": "DOT_OLDRANK",
-      "zonesGraphConnectZones": true
+      "zonesGraphConnectZones": true,
+      "zonesGraphForJobs": true
     },
     "gitCommitMode": "AUTO",
     "disableAutomaticTriggers": false,
@@ -227,6 +232,7 @@
           "samplingMethod": "FULL",
           "maxRecords": -1,
           "targetRatio": 0.02,
+          "ascending": true,
           "withinFirstN": -1,
           "maxReadUncompressedBytes": -1
         }
@@ -256,18 +262,20 @@
     }
   },
   "versionTag": {
-    "versionNumber": 1349,
+    "versionNumber": 1350,
     "lastModifiedBy": {
       "login": "Austin.Smith"
     },
-    "lastModifiedOn": 1696618812521
+    "lastModifiedOn": 1696622409338,
+    "extendedProperties": {}
   },
   "creationTag": {
     "versionNumber": 0,
     "lastModifiedBy": {
       "login": "Daniel.Vandermeer"
     },
-    "lastModifiedOn": 1664881533617
+    "lastModifiedOn": 1664881533617,
+    "extendedProperties": {}
   },
   "description": "Customer Hiearchy for NAF\n\nThe NAF Customer Hiearchy groups Tandem and Siebel source accounts together into logical customers using the following data sources:\n- Customer 360\n- DUNS\n- EBX\n- CLC Algorithm",
   "shortDesc": "The project *NAF Customer* was created by Daniel Vandermeer on Oct 04th 2022",
